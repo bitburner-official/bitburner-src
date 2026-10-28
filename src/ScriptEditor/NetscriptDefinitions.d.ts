@@ -2159,7 +2159,7 @@ export interface Singularity {
    * - This function returns true when the UI is showing the infiltration UI or the BitVerse.
    *
    * - This function does not take Bladeburner actions into account. You can use {@link Bladeburner.getCurrentAction | getCurrentAction}
-   *  to check if you are performing a Bladeburner action.
+   * to check if you are performing a Bladeburner action.
    *
    * @returns True if the player is currently performing an action, false otherwise.
    */
@@ -2671,8 +2671,8 @@ export interface Singularity {
    * This function returns an array containing the names (as strings) of all Augmentations you have.
    *
    * @param purchased - Specifies whether the returned array should include Augmentations you have purchased but not
-   *   yet installed. By default, this argument is false which means that the return value will NOT have the purchased
-   *   Augmentations.
+   * yet installed. By default, this argument is false which means that the return value will NOT have the purchased
+   * Augmentations.
    * @returns Array containing the names (as strings) of all Augmentations you have.
    */
   getOwnedAugmentations(purchased?: boolean): string[];
@@ -2984,9 +2984,7 @@ export interface Singularity {
    * @remarks
    * RAM cost: 32 GB * 16/4/1
    *
-   * You must have the special augment installed and the required hacking level
-   *   OR
-   * Completed the final black op.
+   * You must have the special augment installed and the required hacking level OR completed the final black op.
    *
    * If you do not want to move on to the next BN and instead stay on the BitVerse screen, you can set nextBN
    * to undefined. Note that with the hacking route, using {@link Singularity.installBackdoor | installBackdoor} is a
@@ -4155,7 +4153,7 @@ export interface CodingContract {
    * @param answer - Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
    * @param filename - Filename of the contract.
    * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not
-   *   provided.
+   * provided.
    * @returns A reward description string on success, or an empty string on failure.
    */
   attempt(answer: any, filename: string, host?: string): string;
@@ -5694,8 +5692,8 @@ export interface GoCheat {
  */
 export interface Go {
   /**
-   *  Make a move on the IPvGO subnet game board, and await the opponent's response.
-   *  x:0 y:0 represents the bottom-left corner of the board in the UI.
+   * Make a move on the IPvGO subnet game board, and await the opponent's response.
+   * \{"x":0,"y":0\} represents the bottom-left corner of the board in the UI.
    *
    * @remarks
    * RAM cost: 4 GB
@@ -5717,7 +5715,7 @@ export interface Go {
 
   /**
    * Pass the player's turn rather than making a move, and await the opponent's response. This ends the game if the opponent
-   *   passed on the previous turn, or if the opponent passes on their following turn.
+   * passed on the previous turn, or if the opponent passes on their following turn.
    *
    * This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was
    * closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
@@ -5736,8 +5734,8 @@ export interface Go {
   }>;
 
   /**
-   *  Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable.
-   *  x:0 y:0 represents the bottom-left corner of the board in the UI.
+   * Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable.
+   * \{"x":0,"y":0\} represents the bottom-left corner of the board in the UI.
    *
    * @remarks
    * RAM cost: 0 GB
@@ -7763,17 +7761,17 @@ export interface NS {
    * string with one of these strings:
    *
    * - `"ERROR"`: The whole string will be printed in red. Use this prefix to indicate
-   *   that an error has occurred.
+   * that an error has occurred.
    *
    * - `"SUCCESS"`: The whole string will be printed in green, similar to the default
-   *   theme of the Terminal. Use this prefix to indicate that something is correct.
+   * theme of the Terminal. Use this prefix to indicate that something is correct.
    *
    * - `"WARN"`: The whole string will be printed in yellow. Use this prefix to
-   *   indicate that you or a user of your script should be careful of something.
+   * indicate that you or a user of your script should be careful of something.
    *
    * - `"INFO"`: The whole string will be printed in purplish blue. Use this prefix to
-   *   remind yourself or a user of your script of something. Think of this prefix as
-   *   indicating an FYI (for your information).
+   * remind yourself or a user of your script of something. Think of this prefix as
+   * indicating an FYI (for your information).
    *
    * For custom coloring, use ANSI escape sequences. The examples below use the Unicode
    * escape code `\u001b`. The color coding also works if `\u001b` is replaced with
