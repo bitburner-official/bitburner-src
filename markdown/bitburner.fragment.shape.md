@@ -4,6 +4,8 @@
 
 ## Fragment.shape property
 
+A two-dimensional array representing with `true` the slots a fragment will obstruct, with no rotations applied.
+
 **Signature:**
 
 ```typescript

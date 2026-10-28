@@ -887,6 +887,49 @@ export type GangTaskNameEnumType = {
 /** @public */
 type GangTaskName = _ValueOf<GangTaskNameEnumType>;
 
+/** @public */
+export type GangMemberUpgradeNameEnumType = {
+  Bat: "Baseball Bat";
+  Katana: "Katana";
+  Malorian: "Malorian-3516";
+  Hansen: "Hansen-HA7";
+  Arasaka: "Arasaka-HJSH18";
+  Militech: "Militech-M251s";
+  Nokota: "Nokota-D5";
+  Techtronika: "Techtronika-SPT32";
+
+  Vest: "Bulletproof Vest";
+  FullArmor: "Full Body Armor";
+  LiquidArmor: "Liquid Body Armor";
+  GrapheneArmor: "Graphene Plating Armor";
+
+  Herrera: "Herrera Outlaw GTS";
+  Yaiba: "Yaiba ASM-R250 Muramasa";
+  Rayfield: "Rayfield Caliburn";
+  Quadra: "Quadra Sport R-7";
+
+  NukeRootkit: "NUKE Rootkit";
+  SoulstealerRootkit: "Soulstealer Rootkit";
+  DemonRootkit: "Demon Rootkit";
+  HmapNode: "Hmap Node";
+  JackRipper: "Jack the Ripper";
+
+  BionicArms: "Bionic Arms";
+  BionicLegs: "Bionic Legs";
+  BionicSpine: "Bionic Spine";
+  BrachiBlades: "BrachiBlades";
+  Nanofiber: "Nanofiber Weave";
+  SyntheticHeart: "Synthetic Heart";
+  SynfibrilMuscle: "Synfibril Muscle";
+  BitWire: "BitWire";
+  Neuralstimulator: "Neuralstimulator";
+  DataJack: "DataJack";
+  GrapheneBoneLacings: "Graphene Bone Lacings";
+};
+
+/** @public */
+type GangMemberUpgradeName = _ValueOf<GangMemberUpgradeNameEnumType>;
+
 /**
  * Gang general info.
  * @public
@@ -3294,7 +3337,7 @@ export interface Hacknet {
   /**
    * Get the list of hash upgrades
    * @remarks
-   * RAM cost: 0.5 GB
+   * RAM cost: 0 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
@@ -6696,24 +6739,58 @@ type FragmentType = _ValueOf<FragmentEnumType>;
 
 /** @public */
 interface Fragment {
+  /**
+   * A unique integer ID assigned to the combination of a fragment's shape, effect, and power.
+   */
   id: number;
+  /**
+   * A two-dimensional array representing with `true` the slots a fragment will obstruct, with no rotations applied.
+   */
   shape: boolean[][];
+  /**
+   * An enumerated value for the fragment's bonus type.
+   */
   type: FragmentType;
+  /**
+   * A fixed multiplier influencing the fragment's final chargedEffect value.
+   */
   power: number;
+  /**
+   * The maximum number of concurrent placements allowed, for fragments with this ID.
+   */
   limit: number;
+  /**
+   * The fragment's effect description.
+   */
   effect: string;
 }
 
 /** @public */
 interface ActiveFragment extends Fragment {
+  /**
+   * The highest effective (including server core bonus) number of threads ever used in a single script's {@link Stanek.chargeFragment | chargeFragment()} call on this fragment.
+   *
+   * This value persists for as long as the fragment remains placed, and is only updated when a higher effective thread count is used.
+   */
   highestCharge: number;
+  /**
+   * The current charge value in play for this fragment. This is the cumulative effective threads used to charge across all cycles, divided by the (current) highestCharge.
+   *
+   * This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged.
+   */
   numCharge: number;
   /**
    * A non-negative integer representing the number of clockwise 90-degree turns to apply. Values greater than 3 wrap
    * around to the 0–3 range.
    */
   rotation: number;
+  /**
+   * The root x coordinate against which the top left of the fragment was aligned.
+   */
   x: number;
+  /**
+   * The root y coordinate against which the top left of the fragment was aligned.
+   */
   y: number;
   /**
    * This is the raw value of the modifier used to calculate the effect on your multipliers. It may not be a multiplier.
@@ -6753,7 +6830,9 @@ interface Stanek {
   giftHeight(): number;
 
   /**
-   * Charge a fragment, increasing its power.
+   * Charge a fragment, increasing its effect strength.
+   *
+   * See {@link ActiveFragment | ActiveFragment} for additional information.
    * @remarks
    * RAM cost: 0.4 GB
    * @param rootX - Root X against which to align the top left of the fragment.
@@ -9935,6 +10014,7 @@ type NSEnums = {
   DarknetResponseCode: DarknetResponseCodeType;
   ProgramName: ProgramNameEnumType;
   GangTaskName: GangTaskNameEnumType;
+  GangMemberUpgradeName: GangMemberUpgradeNameEnumType;
 };
 
 /**
