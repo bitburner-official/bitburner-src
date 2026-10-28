@@ -234,21 +234,21 @@ export function NetscriptGang(): InternalAPI<IGang> {
       return gangMemberUpgradesMetadata.map((e) => e.name);
     },
     getEquipmentCost: (ctx, _equipName) => {
-      const equipName = helpers.string(ctx, "equipName", _equipName);
+      const equipName = getEnumHelper("GangMemberUpgradeNameEnum").nsGetMember(ctx, _equipName, "equipName");
       const gang = getGang(ctx);
       const upg = GangMemberUpgrades[equipName];
       if (upg === null) return Infinity;
       return gang.getUpgradeCost(upg);
     },
     getEquipmentType: (ctx, _equipName) => {
-      const equipName = helpers.string(ctx, "equipName", _equipName);
+      const equipName = getEnumHelper("GangMemberUpgradeNameEnum").nsGetMember(ctx, _equipName, "equipName");
       getGang(ctx);
       const upg = GangMemberUpgrades[equipName];
       if (upg == null) return "";
       return upg.getType();
     },
     getEquipmentStats: (ctx, _equipName) => {
-      const equipName = helpers.string(ctx, "equipName", _equipName);
+      const equipName = getEnumHelper("GangMemberUpgradeNameEnum").nsGetMember(ctx, _equipName, "equipName");
       getGang(ctx);
       const equipment = GangMemberUpgrades[equipName];
       if (!equipment) {
@@ -259,7 +259,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     },
     purchaseEquipment: (ctx, _memberName, _equipName) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
-      const equipName = helpers.string(ctx, "equipName", _equipName);
+      const equipName = getEnumHelper("GangMemberUpgradeNameEnum").nsGetMember(ctx, _equipName, "equipName");
       getGang(ctx);
       const member = getGangMember(ctx, memberName);
       const equipment = GangMemberUpgrades[equipName];
