@@ -72,3 +72,15 @@ export function canAcceptStaneksGift(): Result {
   }
   return { success: true };
 }
+
+/**
+ * Normalizes a rotation value to the range [0, 3].
+ *
+ * Fragment.fullAt only handles rotations correctly within this range, so it must call this function to avoid issues
+ * caused by callers passing out-of-range rotation values. Code that sets rotation (e.g., UI code and code handling
+ * player input) should also call this function to ensure that the fragment's rotation value stays within the documented
+ * range.
+ */
+export const normalizeFragmentRotation = (rotation: number): number => {
+  return ((rotation % 4) + 4) % 4;
+};

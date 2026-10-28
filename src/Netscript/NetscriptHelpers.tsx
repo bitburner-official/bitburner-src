@@ -41,14 +41,16 @@ import { BaseServer } from "../Server/BaseServer";
 import { RamCostConstants } from "./RamCostGenerator";
 import {
   isPositiveInteger,
-  PositiveInteger,
-  Unknownify,
+  type PositiveInteger,
+  type Unknownify,
   isPositiveNumber,
-  PositiveNumber,
-  PositiveSafeInteger,
+  type PositiveNumber,
+  type PositiveSafeInteger,
   isPositiveSafeInteger,
   isInteger,
   type Integer,
+  type NonNegativeInteger,
+  isNonNegativeInteger,
 } from "../types";
 import { processFactionInvitations } from "../Faction/FactionHelpers";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
@@ -76,6 +78,7 @@ export const helpers = {
   number,
   integer,
   positiveInteger,
+  nonNegativeInteger,
   positiveSafeInteger,
   positiveNumber,
   scriptArgs,
@@ -169,6 +172,15 @@ function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): Po
   const n = number(ctx, argName, v);
   if (!isPositiveInteger(n)) {
     throw errorMessage(ctx, `${argName} must be a positive integer, was ${n}`, "TYPE");
+  }
+  return n;
+}
+
+/** Convert provided value v for argument argName to a non-negative integer, throwing if it looks like something else. */
+function nonNegativeInteger(ctx: NetscriptContext, argName: string, v: unknown): NonNegativeInteger {
+  const n = number(ctx, argName, v);
+  if (!isNonNegativeInteger(n)) {
+    throw errorMessage(ctx, `${argName} must be a non-negative integer, was ${n}`, "TYPE");
   }
   return n;
 }
