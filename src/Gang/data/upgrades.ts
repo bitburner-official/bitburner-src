@@ -1,4 +1,4 @@
-import { GangMemberUpgradeNameEnum } from "../Enums";
+import { GangMemberUpgradeNameEnum, GangMemberUpgradeName } from "../Enums";
 
 export interface IMults {
   hack?: number;
@@ -25,7 +25,7 @@ export enum UpgradeType {
 interface IGangMemberUpgradeMetadata {
   cost: number;
   mults: IMults;
-  name: string;
+  name: GangMemberUpgradeName;
   upgType: UpgradeType;
 }
 

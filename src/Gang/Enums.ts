@@ -68,3 +68,5 @@ export const GangMemberUpgradeNameEnum = {
   DataJack: AugmentationName.DataJack,
   GrapheneBoneLacings: AugmentationName.GrapheneBoneLacings,
 } as const;
+
+export type GangMemberUpgradeName = (typeof GangMemberUpgradeNameEnum)[keyof typeof GangMemberUpgradeNameEnum];

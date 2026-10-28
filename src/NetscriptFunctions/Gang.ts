@@ -10,6 +10,7 @@ import { FactionName } from "@enums";
 import { AllGangs } from "../Gang/AllGangs";
 import { GangMemberTasks } from "../Gang/GangMemberTasks";
 import { GangMemberUpgrades } from "../Gang/GangMemberUpgrades";
+import { gangMemberUpgradesMetadata } from "../Gang/data/upgrades";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { CONSTANTS } from "../Constants";
@@ -230,7 +231,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     },
     getEquipmentNames: (ctx) => {
       getGang(ctx);
-      return Object.keys(GangMemberUpgrades);
+      return gangMemberUpgradesMetadata.map((e) => e.name);
     },
     getEquipmentCost: (ctx, _equipName) => {
       const equipName = helpers.string(ctx, "equipName", _equipName);
