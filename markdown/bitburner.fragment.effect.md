@@ -4,6 +4,8 @@
 
 ## Fragment.effect property
 
+The fragment's effect description.
+
 **Signature:**
 
 ```typescript

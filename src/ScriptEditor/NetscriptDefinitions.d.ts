@@ -6696,24 +6696,58 @@ type FragmentType = _ValueOf<FragmentEnumType>;
 
 /** @public */
 interface Fragment {
+  /**
+   * A unique integer ID assigned to the combination of a fragment's shape, effect, and power.
+   */
   id: number;
+  /**
+   * A two-dimensional array representing with `true` the slots a fragment will obstruct, with no rotations applied.
+   */
   shape: boolean[][];
+  /**
+   * An enumerated value for the fragment's bonus type.
+   */
   type: FragmentType;
+  /**
+   * A fixed multiplier influencing the fragment's final chargedEffect value.
+   */
   power: number;
+  /**
+   * The maximum number of concurrent placements allowed, for fragments with this ID.
+   */
   limit: number;
+  /**
+   * The fragment's effect description.
+   */
   effect: string;
 }
 
 /** @public */
 interface ActiveFragment extends Fragment {
+  /**
+   * The highest effective (including server core bonus) number of threads ever used in a single script's {@link Stanek.chargeFragment | chargeFragment()} call on this fragment.
+   *
+   * This value persists for as long as the fragment remains placed, and is only updated when a higher effective thread count is used.
+   */
   highestCharge: number;
+  /**
+   * The current charge value in play for this fragment. This is the cumulative effective threads used to charge across all cycles, divided by the (current) highestCharge.
+   *
+   * This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged.
+   */
   numCharge: number;
   /**
    * A non-negative integer representing the number of clockwise 90-degree turns to apply. Values greater than 3 wrap
    * around to the 0–3 range.
    */
   rotation: number;
+  /**
+   * The root x coordinate against which the top left of the fragment was aligned.
+   */
   x: number;
+  /**
+   * The root y coordinate against which the top left of the fragment was aligned.
+   */
   y: number;
   /**
    * This is the raw value of the modifier used to calculate the effect on your multipliers. It may not be a multiplier.
@@ -6753,7 +6787,9 @@ interface Stanek {
   giftHeight(): number;
 
   /**
-   * Charge a fragment, increasing its power.
+   * Charge a fragment, increasing its effect strength.
+   *
+   * See {@link ActiveFragment | ActiveFragment} for additional information.
    * @remarks
    * RAM cost: 0.4 GB
    * @param rootX - Root X against which to align the top left of the fragment.

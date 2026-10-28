@@ -4,7 +4,9 @@
 
 ## Stanek.chargeFragment() method
 
-Charge a fragment, increasing its power.
+Charge a fragment, increasing its effect strength.
+
+See [ActiveFragment](./bitburner.activefragment.md) for additional information.
 
 **Signature:**
 
