@@ -107,24 +107,24 @@ export function PlayerMultipliers(): React.ReactElement {
   const leftColData: MultiplierListItemData[] = [
     ...[
       {
-        mult: "Hacking Chance",
-        current: Player.mults.hacking_chance,
-        augmented: Player.mults.hacking_chance * mults.hacking_chance,
-      },
-      {
         mult: "Hacking Speed",
         current: Player.mults.hacking_speed,
         augmented: Player.mults.hacking_speed * mults.hacking_speed,
         bnMult: currentNodeMults.HackingSpeedMultiplier,
       },
       {
-        mult: "Hacking Money",
+        mult: "Hack Success Chance",
+        current: Player.mults.hacking_chance,
+        augmented: Player.mults.hacking_chance * mults.hacking_chance,
+      },
+      {
+        mult: "Hack Power",
         current: Player.mults.hacking_money,
         augmented: Player.mults.hacking_money * mults.hacking_money,
         bnMult: currentNodeMults.ScriptHackMoney,
       },
       {
-        mult: "Hacking Growth",
+        mult: "Grow Power",
         current: Player.mults.hacking_grow,
         augmented: Player.mults.hacking_grow * mults.hacking_grow,
       },
@@ -298,7 +298,7 @@ export function PlayerMultipliers(): React.ReactElement {
         augmented: Player.mults.bladeburner_stamina_gain * mults.bladeburner_stamina_gain,
       },
       {
-        mult: "Bladeburner Field Analysis",
+        mult: "Bladeburner Field Analysis Effectiveness",
         current: Player.mults.bladeburner_analysis,
         augmented: Player.mults.bladeburner_analysis * mults.bladeburner_analysis,
       },

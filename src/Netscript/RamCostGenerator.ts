@@ -114,7 +114,7 @@ const hacknet = {
   spendHashes: RamCostConstants.Hacknet,
   maxNumNodes: RamCostConstants.Hacknet,
   hashCapacity: RamCostConstants.Hacknet,
-  getHashUpgrades: RamCostConstants.Hacknet,
+  getHashUpgrades: 0,
   getHashUpgradeLevel: RamCostConstants.Hacknet,
   getStudyMult: RamCostConstants.Hacknet,
   getTrainingMult: RamCostConstants.Hacknet,
@@ -725,6 +725,7 @@ export const RamCosts: RamCostTree<NSFull> = {
     gang: {
       wantedPenalty: 0,
       respectGain: 0,
+      reputationGain: 0,
       wantedLevelGain: 0,
       moneyGain: 0,
       ascensionPointsGain: 0,

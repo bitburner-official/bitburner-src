@@ -12,7 +12,7 @@ Errors:
 
 - NotFound: The API requires a specific resource (e.g., an exe file), but it does not exist on the server.
 
-- RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by network instability.
+- RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by [Darknet Instability](./bitburner.darknet.getdarknetinstability.md) penalties.
 
 - ServiceUnavailable: The server is offline.
 

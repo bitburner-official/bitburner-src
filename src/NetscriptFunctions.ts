@@ -33,6 +33,7 @@ import {
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
   GangTaskNameEnum,
+  GangMemberUpgradeNameEnum,
   HashUpgradeEnum,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
@@ -102,8 +103,7 @@ import { getRamCost, RamCostConstants } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { ServerConstants } from "./Server/data/Constants";
 import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
-import { Router } from "./ui/GameRoot";
-import { Page } from "./ui/Router";
+import { Page, Router } from "./ui/Router";
 import { getDarknetPropertiesForDeprecationSupport, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { validBitNodes } from "./BitNode/Constants";
@@ -141,6 +141,7 @@ export const enums: NSEnums = {
   DarknetResponseCode: ResponseCodeEnum,
   ProgramName: CompletedProgramName,
   GangTaskName: GangTaskNameEnum,
+  GangMemberUpgradeName: GangMemberUpgradeNameEnum,
   HacknetServerHashUpgrade: HashUpgradeEnum,
 };
 for (const val of Object.values(enums)) Object.freeze(val);

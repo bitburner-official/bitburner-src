@@ -12,8 +12,7 @@ import { FactionName } from "@enums";
 import { Factions } from "../Faction/Factions";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Router } from "../ui/GameRoot";
-import { Page } from "../ui/Router";
+import { Page, Router } from "../ui/Router";
 import { defaultMultipliers, mergeMultipliers } from "../PersonObjects/Multipliers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { prestigeWorkerScripts } from "../NetscriptWorker";

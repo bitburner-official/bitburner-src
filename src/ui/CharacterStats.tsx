@@ -54,6 +54,9 @@ interface IMultRow {
 
   // Whether to format as percent or scalar
   isNumber?: boolean;
+
+  // If specified, adds an Info icon with tooltip text
+  tooltipText?: string;
 }
 
 interface MultTableProps {
@@ -67,11 +70,22 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
     <Table sx={{ display: "table", width: "100%", mb: props.noMargin ? 0 : 2 }}>
       <TableBody>
         {props.rows.map((data) => {
-          const { mult, value, effValue = null, color = props.color } = data;
+          const { mult, value, effValue = null, color = props.color, tooltipText } = data;
+
+          const multText = tooltipText ? (
+            <Tooltip title={<span>{tooltipText}</span>}>
+              <span>
+                {mult}
+                <Info sx={{ ml: 1, fontSize: "1.25rem", verticalAlign: "middle" }} color="info" />
+              </span>
+            </Tooltip>
+          ) : (
+            mult
+          );
 
           if (effValue !== null && effValue !== value && canAccessBitNodeFeature(5)) {
             return (
-              <StatsRow key={mult} name={mult} color={color} data={{}}>
+              <StatsRow key={mult} name={multText} color={color} data={{}}>
                 <>
                   <Typography color={color}>
                     {data.isNumber ? (
@@ -89,7 +103,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
           return (
             <StatsRow
               key={mult}
-              name={mult}
+              name={multText}
               color={color}
               data={{ content: data.isNumber ? formatNumber(value, 0) : formatPercent(value) }}
             />
@@ -361,21 +375,22 @@ export function CharacterStats(): React.ReactElement {
             <MultiplierTable
               rows={[
                 {
-                  mult: "Hacking Chance",
-                  value: Player.mults.hacking_chance,
-                },
-                {
                   mult: "Hacking Speed",
                   value: Player.mults.hacking_speed,
                   effValue: Player.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier,
+                  tooltipText: "Affects hack(), grow() and weaken()",
                 },
                 {
-                  mult: "Hacking Money",
+                  mult: "Hack Success Chance",
+                  value: Player.mults.hacking_chance,
+                },
+                {
+                  mult: "Hack Power",
                   value: Player.mults.hacking_money,
                   effValue: Player.mults.hacking_money * currentNodeMults.ScriptHackMoney,
                 },
                 {
-                  mult: "Hacking Growth",
+                  mult: "Grow Power",
                   value: Player.mults.hacking_grow,
                   effValue: Player.mults.hacking_grow * currentNodeMults.ServerGrowthRate,
                 },
@@ -562,7 +577,7 @@ export function CharacterStats(): React.ReactElement {
                     value: Player.mults.bladeburner_stamina_gain,
                   },
                   {
-                    mult: "Bladeburner Field Analysis",
+                    mult: "Bladeburner Field Analysis Effectiveness",
                     value: Player.mults.bladeburner_analysis,
                   },
                 ]}
@@ -574,13 +589,16 @@ export function CharacterStats(): React.ReactElement {
               <MultiplierTable
                 rows={[
                   {
-                    mult: "IPvGO Node Power bonus",
+                    mult: "IPvGO Node Power Bonus",
                     value: Player.activeSourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
                   },
                   {
                     mult: "IPvGO Max Rep Converted to Favor",
                     value: getMaxRep(),
                     isNumber: true,
+                    tooltipText: `IPvGO winstreaks award favor by giving reputation that's immediately converted to favor.
+                    Max Rep Converted To Favor limits how much converted rep you can gain for a single faction, and determines
+                    converted rep gained per winstreak bonus.`,
                   },
                 ]}
                 color={Settings.theme.combat}

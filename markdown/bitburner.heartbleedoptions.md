@@ -4,7 +4,7 @@
 
 ## HeartbleedOptions interface
 
-Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
+Options to change the behavior of [heartbleed()](./bitburner.darknet.heartbleed.md) API.
 
 **Signature:**
 

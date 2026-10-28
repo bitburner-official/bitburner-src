@@ -4,6 +4,8 @@
 
 ## Fragment.limit property
 
+The maximum number of concurrent placements allowed, for fragments with this ID.
+
 **Signature:**
 
 ```typescript
