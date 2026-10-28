@@ -164,7 +164,7 @@ interface Multipliers {
   charisma_exp: number;
   /** Multiplier to chance of successfully performing a hack */
   hacking_chance: number;
-  /** Multiplier to hacking speed */
+  /** Multiplier to the speed of hack(), grow() and weaken() */
   hacking_speed: number;
   /** Multiplier to amount of money the player gains from hacking */
   hacking_money: number;
@@ -518,13 +518,13 @@ interface ProcessInfo {
  * @public
  */
 interface HackingMultipliers {
-  /** Player's hacking chance multiplier. */
+  /** Player's hack() success chance multiplier. */
   chance: number;
-  /** Player's hacking speed multiplier. */
+  /** Player's hack(), grow() and weaken() speed multiplier. */
   speed: number;
   /** Player's hacking money stolen multiplier. */
   money: number;
-  /** Player's hacking growth multiplier */
+  /** Player's grow() power multiplier */
   growth: number;
 }
 

@@ -73,7 +73,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
           const { mult, value, effValue = null, color = props.color, tooltipText } = data;
 
           const multText = tooltipText ? (
-            <Tooltip title={<span>{tooltipText}</span>}>
+            <Tooltip title={<Typography sx={{ whiteSpace: "pre-line" }}>{tooltipText}</Typography>}>
               <span>
                 {mult}
                 <Info sx={{ ml: 1, fontSize: "1.25rem", verticalAlign: "middle" }} color="info" />
@@ -375,21 +375,22 @@ export function CharacterStats(): React.ReactElement {
             <MultiplierTable
               rows={[
                 {
-                  mult: "Hacking Chance",
-                  value: Player.mults.hacking_chance,
-                },
-                {
                   mult: "Hacking Speed",
                   value: Player.mults.hacking_speed,
                   effValue: Player.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier,
+                  tooltipText: "Affects hack(), grow() and weaken()",
                 },
                 {
-                  mult: "Hacking Money",
+                  mult: "Hack Success Chance",
+                  value: Player.mults.hacking_chance,
+                },
+                {
+                  mult: "Hack Power",
                   value: Player.mults.hacking_money,
                   effValue: Player.mults.hacking_money * currentNodeMults.ScriptHackMoney,
                 },
                 {
-                  mult: "Hacking Growth",
+                  mult: "Grow Power",
                   value: Player.mults.hacking_grow,
                   effValue: Player.mults.hacking_grow * currentNodeMults.ServerGrowthRate,
                 },
