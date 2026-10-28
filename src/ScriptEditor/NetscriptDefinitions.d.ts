@@ -887,6 +887,49 @@ export type GangTaskNameEnumType = {
 /** @public */
 type GangTaskName = _ValueOf<GangTaskNameEnumType>;
 
+/** @public */
+export type GangMemberUpgradeNameEnumType = {
+  Bat: "Baseball Bat";
+  Katana: "Katana";
+  Malorian: "Malorian-3516";
+  Hansen: "Hansen-HA7";
+  Arasaka: "Arasaka-HJSH18";
+  Militech: "Militech-M251s";
+  Nokota: "Nokota-D5";
+  Techtronika: "Techtronika-SPT32";
+
+  Vest: "Bulletproof Vest";
+  FullArmor: "Full Body Armor";
+  LiquidArmor: "Liquid Body Armor";
+  GrapheneArmor: "Graphene Plating Armor";
+
+  Herrera: "Herrera Outlaw GTS";
+  Yaiba: "Yaiba ASM-R250 Muramasa";
+  Rayfield: "Rayfield Caliburn";
+  Quadra: "Quadra Sport R-7";
+
+  NukeRootkit: "NUKE Rootkit";
+  SoulstealerRootkit: "Soulstealer Rootkit";
+  DemonRootkit: "Demon Rootkit";
+  HmapNode: "Hmap Node";
+  JackRipper: "Jack the Ripper";
+
+  BionicArms: "Bionic Arms";
+  BionicLegs: "Bionic Legs";
+  BionicSpine: "Bionic Spine";
+  BrachiBlades: "BrachiBlades";
+  Nanofiber: "Nanofiber Weave";
+  SyntheticHeart: "Synthetic Heart";
+  SynfibrilMuscle: "Synfibril Muscle";
+  BitWire: "BitWire";
+  Neuralstimulator: "Neuralstimulator";
+  DataJack: "DataJack";
+  GrapheneBoneLacings: "Graphene Bone Lacings";
+};
+
+/** @public */
+type GangMemberUpgradeName = _ValueOf<GangMemberUpgradeNameEnumType>;
+
 /**
  * Gang general info.
  * @public
@@ -9971,6 +10014,7 @@ type NSEnums = {
   DarknetResponseCode: DarknetResponseCodeType;
   ProgramName: ProgramNameEnumType;
   GangTaskName: GangTaskNameEnumType;
+  GangMemberUpgradeName: GangMemberUpgradeNameEnumType;
 };
 
 /**
