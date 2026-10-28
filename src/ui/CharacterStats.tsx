@@ -52,6 +52,7 @@ interface IMultRow {
   // The text color for the row
   color?: string;
 
+  // Whether to format as percent or scalar
   isNumber?: boolean;
 
   // If specified, adds an Info icon with tooltip text
