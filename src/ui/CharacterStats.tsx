@@ -73,7 +73,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
           const { mult, value, effValue = null, color = props.color, tooltipText } = data;
 
           const multText = tooltipText ? (
-            <Tooltip title={<Typography sx={{ whiteSpace: "pre-line" }}>{tooltipText}</Typography>}>
+            <Tooltip title={<span>{tooltipText}</span>}>
               <span>
                 {mult}
                 <Info sx={{ ml: 1, fontSize: "1.25rem", verticalAlign: "middle" }} color="info" />
