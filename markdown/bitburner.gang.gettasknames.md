@@ -4,16 +4,16 @@
 
 ## Gang.getTaskNames() method
 
-List member task names.
+List member task names. You can also use 
 
 **Signature:**
 
 ```typescript
-getTaskNames(): string[];
+getTaskNames(): GangTaskName[];
 ```
 **Returns:**
 
-string\[\]
+[GangTaskName](./bitburner.gangtaskname.md)<!-- -->\[\]
 
 All valid tasks that Gang members can be assigned to.
 
