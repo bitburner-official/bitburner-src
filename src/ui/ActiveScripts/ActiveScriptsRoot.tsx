@@ -13,7 +13,7 @@ import { errorModalsAreSuppressed, ErrorState, toggleSuppressErrorModals } from 
 import { OptionSwitch } from "../React/OptionSwitch";
 import { killAllScripts } from "../../Netscript/killWorkerScript";
 import { ComplexPage, SimplePage } from "@enums";
-import { Router } from "../GameRoot";
+import { Router } from "../Router";
 import { Settings } from "../../Settings/Settings";
 
 type ActiveScriptsTab = ComplexPage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors;

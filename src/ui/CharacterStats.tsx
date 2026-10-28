@@ -576,7 +576,7 @@ export function CharacterStats(): React.ReactElement {
                     value: Player.mults.bladeburner_stamina_gain,
                   },
                   {
-                    mult: "Bladeburner Field Analysis",
+                    mult: "Bladeburner Field Analysis Effectiveness",
                     value: Player.mults.bladeburner_analysis,
                   },
                 ]}
@@ -588,13 +588,16 @@ export function CharacterStats(): React.ReactElement {
               <MultiplierTable
                 rows={[
                   {
-                    mult: "IPvGO Node Power bonus",
+                    mult: "IPvGO Node Power Bonus",
                     value: Player.activeSourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
                   },
                   {
                     mult: "IPvGO Max Rep Converted to Favor",
                     value: getMaxRep(),
                     isNumber: true,
+                    tooltipText: `IPvGO winstreaks award favor by giving reputation that's immediately converted to favor.
+                    Max Rep Converted To Favor limits how much converted rep you can gain for a single faction, and determines
+                    converted rep gained per winstreak bonus.`,
                   },
                 ]}
                 color={Settings.theme.combat}

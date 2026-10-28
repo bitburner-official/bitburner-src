@@ -4,6 +4,8 @@
 
 ## Fragment.power property
 
+A fixed multiplier influencing the fragment's final chargedEffect value.
+
 **Signature:**
 
 ```typescript
