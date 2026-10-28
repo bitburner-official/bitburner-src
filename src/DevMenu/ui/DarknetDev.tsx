@@ -16,7 +16,7 @@ import { clearDarknet, populateDarknet } from "../../DarkNet/controllers/Network
 import { DarknetEvents, DarknetState } from "../../DarkNet/models/DarknetState";
 import { launchWebstorm } from "../../DarkNet/effects/webstorm";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
-import { Router } from "../../ui/GameRoot";
+import { Router } from "../../ui/Router";
 import { CompletedProgramName, SimplePage, ToastVariant } from "@enums";
 import { getDarkscapeNavigator, handleSuccessfulAuth } from "../../DarkNet/effects/effects";
 import { isLabyrinthServer } from "../../DarkNet/effects/labyrinth";

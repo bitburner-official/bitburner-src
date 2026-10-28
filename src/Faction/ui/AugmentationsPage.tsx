@@ -10,7 +10,7 @@ import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
 import { formatBigNumber } from "../../ui/formatNumber";
-import { Router } from "../../ui/GameRoot";
+import { Router } from "../../ui/Router";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, hasAugmentationPrereqs, purchaseAugmentation } from "../FactionHelpers";
 import { CONSTANTS } from "../../Constants";

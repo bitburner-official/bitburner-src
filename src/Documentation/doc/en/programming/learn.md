@@ -10,10 +10,6 @@ Here are some good tutorials for learning programming/JavaScript as a beginner:
 
 - [Learn-JS](https://www.learn-js.org/en/Welcome)
 - [programiz](https://www.programiz.com/javascript/get-started)
-- [Speaking JavaScript](https://exploringjs.com/es5/)
-  This is a bit on the longer side.
-  You can skip all of the historical background stuff.
-  Recommended chapters: 1, 7-18
 
 ## For Experienced Programmers
 

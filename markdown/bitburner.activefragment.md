@@ -109,6 +109,8 @@ number
 
 </td><td>
 
+A non-negative integer representing the number of clockwise 90-degree turns to apply. Values greater than 3 wrap around to the 0–3 range.
+
 
 </td></tr>
 <tr><td>

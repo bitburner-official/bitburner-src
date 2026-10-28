@@ -6535,6 +6535,22 @@ interface GangFormulas {
    */
   respectGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
   /**
+   * Calculate faction reputation gain per tick.
+   * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
+   * @param member - Member info from {@link Gang.getMemberInformation | getMemberInformation}
+   * @param task - Task info from {@link Gang.getTaskStats | getTaskStats}
+   * @param favor - Faction favor from {@link Singularity.getFactionFavor | getFactionFavor}
+   * @param factionRepMult - faction_rep multiplier from {@link NS.getPlayer | getPlayer}.
+   * @returns The calculated faction reputation gain.
+   */
+  reputationGain(
+    gang: GangGenInfo,
+    member: GangMemberInfo,
+    task: GangTaskStats,
+    favor: number,
+    factionRepMult: number,
+  ): number;
+  /**
    * Calculate wanted gain per tick.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
    * @param member - Member info from {@link Gang.getMemberInformation | getMemberInformation}
@@ -6692,6 +6708,10 @@ interface Fragment {
 interface ActiveFragment extends Fragment {
   highestCharge: number;
   numCharge: number;
+  /**
+   * A non-negative integer representing the number of clockwise 90-degree turns to apply. Values greater than 3 wrap
+   * around to the 0–3 range.
+   */
   rotation: number;
   x: number;
   y: number;
@@ -6774,7 +6794,8 @@ interface Stanek {
    *
    * @param rootX - Root X against which to align the top left of the fragment.
    * @param rootY - Root Y against which to align the top left of the fragment.
-   * @param rotation - A number from 0 to 3, the amount of 90-degree turns to take.
+   * @param rotation - A non-negative integer representing the number of clockwise 90-degree turns to apply. Values
+   * greater than 3 wrap around to the 0–3 range.
    * @param fragmentId - ID of the fragment to place.
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
@@ -6786,7 +6807,8 @@ interface Stanek {
    *
    * @param rootX - X against which to align the top left of the fragment.
    * @param rootY - Y against which to align the top left of the fragment.
-   * @param rotation - A number from 0 to 3, the mount of 90 degree turn to take.
+   * @param rotation - A non-negative integer representing the number of clockwise 90-degree turns to apply. Values
+   * greater than 3 wrap around to the 0–3 range.
    * @param fragmentId - ID of the fragment to place.
    * @returns true if the fragment can be placed at that position. false otherwise.
    */

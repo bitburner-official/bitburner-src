@@ -725,6 +725,7 @@ export const RamCosts: RamCostTree<NSFull> = {
     gang: {
       wantedPenalty: 0,
       respectGain: 0,
+      reputationGain: 0,
       wantedLevelGain: 0,
       moneyGain: 0,
       ascensionPointsGain: 0,
