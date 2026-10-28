@@ -114,7 +114,7 @@ const hacknet = {
   spendHashes: RamCostConstants.Hacknet,
   maxNumNodes: RamCostConstants.Hacknet,
   hashCapacity: RamCostConstants.Hacknet,
-  getHashUpgrades: RamCostConstants.Hacknet,
+  getHashUpgrades: 0,
   getHashUpgradeLevel: RamCostConstants.Hacknet,
   getStudyMult: RamCostConstants.Hacknet,
   getTrainingMult: RamCostConstants.Hacknet,
