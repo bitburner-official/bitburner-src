@@ -1341,6 +1341,9 @@ export interface NetscriptPort {
 
 /**
  * Stock market API
+ * @remarks
+ * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Stock {
@@ -1995,8 +1998,10 @@ export interface BitNodeBooleanOptions {
 /**
  * Singularity API
  * @remarks
- * This API requires Source-File 4 to use outside of BitNode 4. Additionally, outside of BitNode 4 the RAM cost of all these functions is multiplied by 16/4/1 based on
- * Source-File 4 levels.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
+ *
+ * Additionally, the RAM cost of functions in this namespace change based on your current BN and Source-Files.
  * @public
  */
 export interface Singularity {
@@ -3048,7 +3053,8 @@ type HacknetServerHashUpgrade =
 /**
  * Hacknet API
  * @remarks
- * Not all these functions are immediately available.
+ * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Hacknet {
@@ -3535,8 +3541,8 @@ export type BladeburnerActionTypeForSleeve =
 /**
  * Bladeburner API
  * @remarks
- * You have to be employed in the Bladeburner division and be in BitNode 6/7 or have Source-File 6/7 in order to use
- * this API.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Bladeburner {
@@ -4617,6 +4623,9 @@ interface DarknetInstability {
 
 /**
  * Darknet API
+ * @remarks
+ * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Darknet {
@@ -4968,7 +4977,8 @@ export interface Darknet {
 /**
  * Gang API
  * @remarks
- * If you are not in BitNode-2, then you must have Source-File 2 in order to use this API.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Gang {
@@ -5535,8 +5545,11 @@ export interface GoAnalysis {
 }
 
 /**
- * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
+ * Illicit and dangerous IPvGO tools. Not for the faint of heart.
  *
+ * @remarks
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface GoCheat {
@@ -5867,7 +5880,8 @@ export interface Go {
 /**
  * Sleeve API
  * @remarks
- * If you are not in BitNode-10, then you must have Source-File 10 in order to use this API.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Sleeve {
@@ -6167,7 +6181,8 @@ export interface Sleeve {
 /**
  * Grafting API
  * @remarks
- * This API requires Source-File 10 to use.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Grafting {
@@ -7354,12 +7369,20 @@ interface UserInterface {
  */
 export interface NS {
   /**
-   * Namespace for {@link Hacknet | hacknet} functions. Some of this API contains spoilers.
+   * Namespace for {@link Hacknet | hacknet} functions. Some of this namespace contains spoilers.
+   *
+   * @remarks
+   * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly hacknet: Hacknet;
 
   /**
-   * Namespace for {@link Bladeburner | Bladeburner} functions. Contains spoilers.
+   * Namespace for {@link Bladeburner | Bladeburner} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly bladeburner: Bladeburner;
 
@@ -7374,7 +7397,11 @@ export interface NS {
   readonly cloud: Cloud;
 
   /**
-   * Namespace for darknet functions. Contains spoilers.
+   * Namespace for darknet functions. Some of this namespace contains spoilers.
+   *
+   * @remarks
+   * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly dnet: Darknet;
 
@@ -7384,7 +7411,11 @@ export interface NS {
   readonly format: Format;
 
   /**
-   * Namespace for {@link Gang | gang} functions. Contains spoilers.
+   * Namespace for {@link Gang | gang} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly gang: Gang;
 
@@ -7394,12 +7425,20 @@ export interface NS {
   readonly go: Go;
 
   /**
-   * Namespace for {@link Sleeve | sleeve} functions. Contains spoilers.
+   * Namespace for {@link Sleeve | sleeve} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly sleeve: Sleeve;
 
   /**
    * Namespace for {@link Stock | stock} functions.
+   *
+   * @remarks
+   * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly stock: Stock;
 
@@ -7409,7 +7448,11 @@ export interface NS {
   readonly formulas: Formulas;
 
   /**
-   * Namespace for {@link Stanek | Stanek} functions. Contains spoilers.
+   * Namespace for {@link Stanek | Stanek} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly stanek: Stanek;
 
@@ -7419,7 +7462,11 @@ export interface NS {
   readonly infiltration: Infiltration;
 
   /**
-   * Namespace for {@link Corporation | corporation} functions. Contains spoilers.
+   * Namespace for {@link Corporation | corporation} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly corporation: Corporation;
 
@@ -7429,12 +7476,20 @@ export interface NS {
   readonly ui: UserInterface;
 
   /**
-   * Namespace for {@link Singularity | singularity} functions. Contains spoilers.
+   * Namespace for {@link Singularity | singularity} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly singularity: Singularity;
 
   /**
-   * Namespace for {@link Grafting | grafting} functions. Contains spoilers.
+   * Namespace for {@link Grafting | grafting} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly grafting: Grafting;
 
@@ -10587,6 +10642,9 @@ type CreatingCorporationCheckResult = _ValueOf<CreatingCorporationCheckResultEnu
 
 /**
  * Corporation API
+ * @remarks
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Corporation extends WarehouseAPI, OfficeAPI {

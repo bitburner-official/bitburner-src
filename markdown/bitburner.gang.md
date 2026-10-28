@@ -14,7 +14,7 @@ export interface Gang
 
 ## Remarks
 
-If you are not in BitNode-2, then you must have Source-File 2 in order to use this API.
+This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
 
 ## Methods
 

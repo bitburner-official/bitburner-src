@@ -14,7 +14,7 @@ export interface Grafting
 
 ## Remarks
 
-This API requires Source-File 10 to use.
+This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
 
 ## Methods
 

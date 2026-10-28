@@ -4,10 +4,15 @@
 
 ## NS.dnet property
 
-Namespace for darknet functions. Contains spoilers.
+Namespace for darknet functions. Some of this namespace contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly dnet: Darknet;
 ```
+
+## Remarks
+
+Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
+
