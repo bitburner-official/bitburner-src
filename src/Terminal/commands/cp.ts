@@ -6,7 +6,7 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 
 export function cp(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 2) {
-    return Terminal.error("Incorrect usage of cp command. Usage: cp [source filename] [destination]");
+    return Terminal.error("Incorrect usage of cp command. Usage: cp SOURCE DESTINATION");
   }
   // Find the source file
   const sourceFilePath = Terminal.getFilepath(String(args[0]));

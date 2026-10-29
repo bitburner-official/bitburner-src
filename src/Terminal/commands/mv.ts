@@ -5,7 +5,7 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 
 export function mv(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 2) {
-    Terminal.error(`Incorrect number of arguments. Usage: mv [src] [dest]`);
+    Terminal.error(`Incorrect number of arguments. Usage: mv SOURCE DESTINATION`);
     return;
   }
   const [source, destination] = args.map((arg) => arg + "");
