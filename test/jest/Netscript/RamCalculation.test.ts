@@ -192,3 +192,67 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     });
   });
 });
+
+describe("RAM usage cache invalidation", () => {
+  it("invalidates a script's cached RAM usage when an imported script changes", () => {
+    const server = "testserver" as const;
+
+    const dependency = new Script();
+    dependency.server = server;
+    dependency.filename = "dependency.js" as ScriptFilePath;
+    dependency.code = `
+      export function test() {
+        return hack;
+      }
+    `;
+
+    const script = new Script();
+    script.server = server;
+    script.filename = "script.js" as ScriptFilePath;
+    script.code = `
+      import { test } from "./dependency.js";
+      export function main(ns) {
+        ns.tprint(test);
+      }
+    `;
+
+    const scripts = new Map<ScriptFilePath, Script>([
+      [dependency.filename, dependency],
+      [script.filename, script],
+    ]);
+
+    // Calculate and cache the initial RAM usage.
+    const initialRam = script.getRamUsage(scripts);
+
+    expect(initialRam).toBeCloseTo(RamCostConstants.Base + 0.1);
+
+    // Simulate the dependency being changed and invalidated.
+    dependency.invalidateModule();
+
+    // The dependent script's cached RAM usage must also be invalidated.
+    expect(script.ramUsage).toBeNull();
+
+    // Recalculate RAM after the dependency changed.
+    dependency.code = `
+      export function test() {
+        return hack;
+      }
+
+      export function test2() {
+        return grow;
+      }
+    `;
+
+    script.code = `
+      import { test, test2 } from "./dependency.js";
+      export function main(ns) {
+        ns.tprint(test);
+        ns.tprint(test2);
+      }
+    `;
+
+    const updatedRam = script.getRamUsage(scripts);
+
+    expect(updatedRam).toBeCloseTo(RamCostConstants.Base + 0.1 + 0.15);
+  });
+});
