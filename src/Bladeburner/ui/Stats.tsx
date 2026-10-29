@@ -157,7 +157,7 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
             title={
               <Typography>
                 This is your Bladeburner division's estimate of how many Synthoid communities exist in your current
-                city.
+                city. Having more communities does not increase a city's Synthoid population growth rate.
               </Typography>
             }
           >

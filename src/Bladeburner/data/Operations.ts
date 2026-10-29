@@ -80,7 +80,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Conduct a sting operation to bait and capture particularly notorious Synthoid criminals.\n" +
         "Completing this operation will increase the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
-      warning: "This action decreases population by percentage.",
+      warning: "This action decreases population by a percentage.",
       successScaling:
         "Significantly affected by Hacking skill and Dexterity. Major bonus from Charisma. Minor bonus from combat stats.",
       baseDifficulty: 650,
@@ -115,8 +115,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your " +
         "current city in order for this Operation to be successful.\n" +
-        "Completing this operation will decrease the Synthoid population of your current city and increase its chaos level.",
-      warning: "This action decreases population and increases chaos by percentage.",
+        "Completing this operation will increase the chaos level of your current city, and decrease its Synthoid population.",
+      warning: "This action decreases population and increases chaos, both by a percentage.",
       successScaling: "Affected by combat stats. Minor bonus from Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 800,
       difficultyFac: 1.045,
@@ -155,7 +155,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
         "Lead a covert operation to retire Synthoids. The objective is to complete the task without drawing any " +
         "attention. Stealth and discretion are key.\n" +
         "Completing this operation will DECREASE the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
-      warning: "This action decreases population by percentage.",
+      warning: "This action decreases population by a percentage.",
       successScaling:
         "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 1000,
@@ -191,8 +191,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Assassinate Synthoids that have been identified as important, high-profile social and political leaders in the " +
         "Synthoid communities.\n" +
-        "Completing this operation may increase the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
-      warning: "This action may increase chaos by percentage.",
+        "Completing this operation may increase or decrease the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
+      warning: "This action may increase chaos by a percentage.",
       successScaling:
         "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill.\n" +
         "Unaffected by Charisma.",
