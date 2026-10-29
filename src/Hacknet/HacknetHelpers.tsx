@@ -17,7 +17,6 @@ import { HashManager } from "./HashManager";
 import { HashUpgrades } from "./HashUpgrades";
 
 import { generateRandomContract } from "../CodingContract/ContractGenerator";
-import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../InteractiveTutorial";
 import { Player } from "@player";
 import { GetServer } from "../Server/AllServers";
 import { Server } from "../Server/Server";
@@ -36,16 +35,6 @@ export function hasHacknetServers(): boolean {
 }
 
 export function purchaseHacknet(): number {
-  /* INTERACTIVE TUTORIAL */
-  if (ITutorial.isRunning) {
-    if (ITutorial.currStep === iTutorialSteps.HacknetNodesIntroduction) {
-      iTutorialNextStep();
-    } else {
-      return -1;
-    }
-  }
-  /* END INTERACTIVE TUTORIAL */
-
   const numOwned = Player.hacknetNodes.length;
   if (hasHacknetServers()) {
     const cost = getCostOfNextHacknetServer();
