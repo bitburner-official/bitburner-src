@@ -14,7 +14,7 @@ import { GangMember } from "../GangMember";
 import { Settings } from "../../Settings/Settings";
 import { MoneyRate } from "../../ui/React/MoneyRate";
 import { StatsRow } from "../../ui/React/StatsRow";
-import { useStyles } from "../../ui/React/CharacterOverview";
+import { cellNoneSx } from "../../ui/React/CharacterOverview";
 import { getKeyFromReactElements } from "../../utils/StringHelperFunctions";
 
 interface IProps {
@@ -22,8 +22,6 @@ interface IProps {
 }
 
 export function GangMemberStats(props: IProps): React.ReactElement {
-  const { classes } = useStyles();
-
   const asc = {
     hack: props.member.calculateAscensionMult(props.member.hack_asc_points),
     str: props.member.calculateAscensionMult(props.member.str_asc_points),
@@ -99,16 +97,16 @@ export function GangMemberStats(props: IProps): React.ReactElement {
               data={{ level: props.member.cha, exp: props.member.cha_exp }}
             />
             <TableRow>
-              <TableCell classes={{ root: classes.cellNone }}>
+              <TableCell sx={cellNoneSx}>
                 <br />
               </TableCell>
             </TableRow>
             {data.map(([a, b]) => (
               <TableRow key={getKeyFromReactElements(a, b)}>
-                <TableCell classes={{ root: classes.cellNone }}>
+                <TableCell sx={cellNoneSx}>
                   <Typography>{a}</Typography>
                 </TableCell>
-                <TableCell align="right" classes={{ root: classes.cellNone }}>
+                <TableCell align="right" sx={cellNoneSx}>
                   <Typography>{b}</Typography>
                 </TableCell>
               </TableRow>
