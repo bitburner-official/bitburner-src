@@ -4,6 +4,11 @@
 
 ## NS.nextPortWrite() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [Port.nextWrite](./bitburner.port.nextwrite.md) instead
+> 
+
 Listen for a port write.
 
 **Signature:**

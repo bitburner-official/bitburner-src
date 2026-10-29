@@ -4,6 +4,11 @@
 
 ## NS.tryWritePort() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [Port.tryWrite](./bitburner.port.trywrite.md) instead.
+> 
+
 Attempt to write to a port.
 
 **Signature:**

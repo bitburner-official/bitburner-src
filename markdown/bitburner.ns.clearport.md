@@ -4,6 +4,11 @@
 
 ## NS.clearPort() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [Port.clear](./bitburner.port.clear.md) instead
+> 
+
 Clear data from a port.
 
 **Signature:**

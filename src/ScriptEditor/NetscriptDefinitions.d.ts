@@ -4264,6 +4264,136 @@ export interface CodingContract {
 }
 
 /**
+ * Port API
+ * @public
+ */
+export interface Port {
+  /**
+   * Get all data on a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Get a handle to a Netscript Port.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port number. Must be a positive integer.
+   */
+  getHandle(portNumber: number): NetscriptPort;
+
+  /**
+   * Check if a port is full.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Returns true if the port's data queue is full, and false otherwise.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port number. Must be a positive integer.
+   */
+  isFull(portNumber: number): boolean;
+
+  /**
+   * Check if a port is empty.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Returns true if the port's data queue is empty, and false otherwise.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port number. Must be a positive integer.
+   */
+  isEmpty(portNumber: number): boolean;
+
+  /**
+   * Get a copy of the data from a port without popping it.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This function is used to peek at the data from a port. It returns the
+   * first element in the specified port without removing that element. If
+   * the port is empty, the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port to peek. Must be a positive integer.
+   * @returns Data in the specified port.
+   */
+  peek(portNumber: number): any;
+
+  /**
+   * Read data from a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Read data from that port. A port is a serialized queue.
+   * This function will remove the first element from that queue and return it.
+   * If the queue is empty, then the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port to read from. Must be a positive integer.
+   * @returns The data read.
+   */
+  read(portNumber: number): any;
+
+  /**
+   * Write data to a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Write data to the given Netscript port.
+   *
+   * There is a limit on the maximum number of ports, but you won't reach that limit in normal situations. If you do, it
+   * usually means that there is a bug in your script that leaks port data. A port is freed when it does not have any
+   * data in its underlying queue. `ns.port.clear` deletes all data on a port. `ns.port.read` reads the first element in
+   * the port's queue, then removes it from the queue.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port to write to. Must be a positive integer.
+   * @param data - Data to write, it's cloned with structuredClone().
+   * @returns The data popped off the queue if it was full, or null if it was not full.
+   */
+  write(portNumber: number, data: any): any;
+
+  /**
+   * Attempt to write to a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Attempts to write data to the specified Netscript port.
+   * If the port is full, the data will not be written.
+   * Otherwise, the data will be written normally.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port to attempt to write to. Must be a positive integer.
+   * @param data - Data to write, it's cloned with structuredClone().
+   * @returns True if the data is successfully written to the port, and false otherwise.
+   */
+  tryWrite(portNumber: number, data: any): boolean;
+
+  /**
+   * Listen for a port write.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Sleeps until the port is written to.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param port - Port to listen for a write on. Must be a positive integer.
+   */
+  nextWrite(port: number): Promise<void>;
+
+  /**
+   * Clear data from a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Delete all data from the underlying queue.
+   *
+   * @param portNumber - Port to clear data from. Must be a positive integer.
+   */
+  clear(portNumber: number): void;
+}
+
+/**
  * Cloud API
  * @public
  */
@@ -7374,6 +7504,11 @@ export interface NS {
   readonly cloud: Cloud;
 
   /**
+   * Namespace for {@link Port | port} functions.
+   */
+  readonly port: Port;
+
+  /**
    * Namespace for darknet functions. Contains spoilers.
    */
   readonly dnet: Darknet;
@@ -8785,6 +8920,10 @@ export interface NS {
 
   /**
    * Attempt to write to a port.
+   *
+   * @deprecated
+   * Use {@link Port.tryWrite | Port.tryWrite} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8801,6 +8940,10 @@ export interface NS {
 
   /**
    * Listen for a port write.
+   *
+   * @deprecated
+   * Use {@link Port.nextWrite | Port.nextWrite} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8846,6 +8989,10 @@ export interface NS {
 
   /**
    * Get a copy of the data from a port without popping it.
+   *
+   * @deprecated
+   * Use {@link Port.peek | Port.peek} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8872,6 +9019,10 @@ export interface NS {
 
   /**
    * Clear data from a port.
+   *
+   * @deprecated
+   * Use {@link Port.clear | Port.clear} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8883,6 +9034,10 @@ export interface NS {
 
   /**
    * Write data to a port.
+   *
+   * @deprecated
+   * Use {@link Port.write | Port.write} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8902,6 +9057,10 @@ export interface NS {
 
   /**
    * Read data from a port.
+   *
+   * @deprecated
+   * Use {@link Port.read | Port.read} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8917,6 +9076,10 @@ export interface NS {
 
   /**
    * Get all data on a port.
+   *
+   * @deprecated
+   * Use {@link Port.getHandle | Port.getHandle} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8933,6 +9096,10 @@ export interface NS {
 
   /**
    * Check if a port is full.
+   *
+   * @deprecated
+   * Use {@link Port.isFull | Port.isFull} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8945,6 +9112,10 @@ export interface NS {
 
   /**
    * Check if a port is empty.
+   *
+   * @deprecated
+   * Use {@link Port.isEmpty | Port.isEmpty} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
