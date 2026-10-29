@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.GangSoftcap property
 
-Influences the respect gain and money gain of your gang.
+Influences an exponential modifier applied to money and respect gain.
 
 **Signature:**
 
