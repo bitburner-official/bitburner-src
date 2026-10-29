@@ -25,7 +25,7 @@ declare interface WebSocket {
   intentionallyClosed?: boolean;
 }
 
-declare module "monaco-vim" {
+declare module "@catloversg/monaco-vim" {
   export const initVimMode: (...args: unknown[]) => { dispose: () => void };
   export const VimMode: {
     Vim: {

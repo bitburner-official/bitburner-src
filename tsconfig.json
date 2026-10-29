@@ -4,7 +4,11 @@
     "paths": {
       "@player": ["src/Player"],
       "@enums": ["src/Enums"],
-      "@nsdefs": ["src/ScriptEditor/NetscriptDefinitions"]
+      "@nsdefs": ["src/ScriptEditor/NetscriptDefinitions"],
+      // Monaco's "typings" field points to esm/vs/editor/editor.main.d.ts, which no longer exists starting with 0.56.0.
+      // Although the "exports" map specifies the correct type definition, the legacy "node" module resolution does not
+      // support package "exports".
+      "monaco-editor": ["node_modules/monaco-editor/esm/vs/index.d.ts"]
     },
     "esModuleInterop": true,
     "isolatedModules": true,
