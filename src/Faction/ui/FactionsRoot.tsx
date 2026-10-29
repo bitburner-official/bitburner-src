@@ -310,7 +310,7 @@ export function FactionsRoot(): React.ReactElement {
       </Box>
       <div style={{ margin: "15px 0" }}>
         <Typography variant="h5" color="primary">
-          Share RAM
+          Share home RAM
         </Typography>
         <ShareOption rerender={rerender} />
       </div>
