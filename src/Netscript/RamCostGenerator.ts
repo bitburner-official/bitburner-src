@@ -77,8 +77,6 @@ export const RamCostConstants = {
   InfiltrationGetInfiltrations: 15,
 
   CycleTiming: 0,
-
-  PortAPI: 0,
 } as const;
 
 function SF4Cost(cost: number): () => number {
@@ -238,15 +236,15 @@ const cloud = {
 
 // Port API
 const port = {
-  getHandle: RamCostConstants.PortAPI,
-  isEmpty: RamCostConstants.PortAPI,
-  isFull: RamCostConstants.PortAPI,
-  peek: RamCostConstants.PortAPI,
-  read: RamCostConstants.PortAPI,
-  write: RamCostConstants.PortAPI,
-  tryWrite: RamCostConstants.PortAPI,
-  nextWrite: RamCostConstants.PortAPI,
-  clear: RamCostConstants.PortAPI,
+  getHandle: 0,
+  isEmpty: 0,
+  isFull: 0,
+  peek: 0,
+  read: 0,
+  write: 0,
+  tryWrite: 0,
+  nextWrite: 0,
+  clear: 0,
 };
 
 // Darknet API

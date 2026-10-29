@@ -1,4 +1,4 @@
-import { Port as IPort } from "@nsdefs";
+import type { Port as IPort } from "@nsdefs";
 import { InternalAPI } from "src/Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 
