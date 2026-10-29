@@ -9,7 +9,7 @@ export const totalWaysToSum: Pick<
   [CodingContractName.TotalWaysToSum]: {
     desc: (n: number): string => {
       return [
-        "It is possible write four as a sum in exactly four different ways:\n\n",
+        "It is possible to write four as a sum in exactly four different ways:\n\n",
         "    3 + 1\n",
         "    2 + 2\n",
         "    2 + 1 + 1\n",
