@@ -166,7 +166,7 @@ export const LabyrinthSummary = ({ isAuthenticating }: LabyrinthSummaryProps): R
         </div>
         <div style={{ width: "50%" }}>
           <Typography variant="caption" color="secondary">
-            Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
+            Logs scraped via <pre style={{ display: "inline" }}>ns.dnet.heartbleed</pre>:
           </Typography>
           <Card style={{ padding: "8px", minHeight: "270px", marginBottom: "8px" }}>
             <div style={{ color: Settings.theme.maplocation }}>

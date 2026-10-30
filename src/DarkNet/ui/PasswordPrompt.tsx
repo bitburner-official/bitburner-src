@@ -139,7 +139,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
           <br />
           {!isLabServer && (
             <Typography variant="caption" color="secondary">
-              Logs scraped via <pre style={{ display: "inline" }}>heartbleed</pre>:
+              Logs scraped via <pre style={{ display: "inline" }}>ns.dnet.heartbleed</pre>:
             </Typography>
           )}
         </div>

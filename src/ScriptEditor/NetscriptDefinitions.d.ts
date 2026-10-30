@@ -4567,11 +4567,16 @@ interface DarknetServerDetails {
    * You are supposed to experiment and discover the models.
    */
   modelId: string;
-  /** Static password reminder text set for this server. */
+  /**
+   * Static password reminder text set for this server.
+   *
+   * This is a static hint, which does not change when you try to authenticate with different passwords. For interactive
+   * feedback after attempting authentication, use {@link Darknet.heartbleed | heartbleed()}.
+   */
   passwordHint: string;
   /** Data from the passwordHint, if any. */
   data: string;
-  /** The frequency (in seconds) of the server adding its own messages to its logs, visible with heartBleed(). */
+  /** The frequency (in seconds) of the server adding its own messages to its logs, visible with {@link Darknet.heartbleed | heartbleed()}. */
   logTrafficInterval: number;
   /** The number of characters in the password */
   passwordLength: number;
@@ -4639,8 +4644,9 @@ export interface Darknet {
    * @param password - Password to attempt to authenticate with.
    * @param additionalMsec - Optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
    * @returns A promise that resolves to a {@link DarknetResult} object. The resolved object may contain an optional
-   * property. The type of this property is intentionaly undocumented. You are supposed to experiment and discover the
-   * content of this property.
+   * property. The type of this property is intentionally undocumented. You are supposed to experiment and discover the
+   * content of this property. This property only exists when authenticating with some very special servers. For
+   * interactive feedback after attempting authentication, in most cases, use {@link Darknet.heartbleed | heartbleed()}.
    */
   authenticate(host: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
 
