@@ -1619,6 +1619,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 0.9,
       crime_money: 0.9,
       crime_success: 0.9,
+      dnet_money: 0.9,
       hacknet_node_money: 0.9,
       hacknet_node_purchase_cost: 1.1,
       hacknet_node_ram_cost: 1.1,
@@ -1634,7 +1635,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "The next evolution is near, a union of man and machine. A synthesis greater than the birth of the human " +
         "organism. Time spent with the gift has allowed for acclimatization of the invasive augment and the toll it takes upon " +
-        "your frame, granting a 5% reduced penalty to all stats.",
+        "your frame, reducing the stat penalty to 5%.",
       prereqs: [AugmentationName.StaneksGift1],
       isSpecial: true,
       hacking_chance: 0.95 / 0.9,
@@ -1657,6 +1658,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 0.95 / 0.9,
       crime_money: 0.95 / 0.9,
       crime_success: 0.95 / 0.9,
+      dnet_money: 0.95 / 0.9,
       hacknet_node_money: 0.95 / 0.9,
       hacknet_node_purchase_cost: 1.05 / 1.1,
       hacknet_node_ram_cost: 1.05 / 1.1,
@@ -1696,6 +1698,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 1 / 0.95,
       crime_money: 1 / 0.95,
       crime_success: 1 / 0.95,
+      dnet_money: 1 / 0.9,
       hacknet_node_money: 1 / 0.95,
       hacknet_node_purchase_cost: 1 / 1.05,
       hacknet_node_ram_cost: 1 / 1.05,
