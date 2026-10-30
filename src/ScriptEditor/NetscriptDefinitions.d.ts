@@ -4570,7 +4570,7 @@ interface DarknetServerDetails {
   /**
    * Static password reminder text set for this server.
    *
-   * This is a static hint, which does not change when trying to authenticate with different passwords. For interactive
+   * This is a static hint, which does not change when you try to authenticate with different passwords. For interactive
    * feedback after attempting authentication, use {@link Darknet.heartbleed | heartbleed()}.
    */
   passwordHint: string;
