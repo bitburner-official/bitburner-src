@@ -4576,7 +4576,7 @@ interface DarknetServerDetails {
   passwordHint: string;
   /** Data from the passwordHint, if any. */
   data: string;
-  /** The frequency (in seconds) of the server adding its own messages to its logs, visible with {@link Darknet.heartbleed | heartbleed()}(). */
+  /** The frequency (in seconds) of the server adding its own messages to its logs, visible with {@link Darknet.heartbleed | heartbleed()}. */
   logTrafficInterval: number;
   /** The number of characters in the password */
   passwordLength: number;

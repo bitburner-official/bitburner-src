@@ -183,7 +183,7 @@ number
 
 </td><td>
 
-The frequency (in seconds) of the server adding its own messages to its logs, visible with [heartbleed()](./bitburner.darknet.heartbleed.md)<!-- -->().
+The frequency (in seconds) of the server adding its own messages to its logs, visible with [heartbleed()](./bitburner.darknet.heartbleed.md)<!-- -->.
 
 
 </td></tr>
