@@ -4570,9 +4570,8 @@ interface DarknetServerDetails {
   /**
    * Static password reminder text set for this server.
    *
-   * This is a static hint, which does not change when you try to authenticate with different passwords. If you are
-   * looking for interactive feedback after attempting authentication, you need to use
-   * {@link Darknet.heartbleed | heartbleed()}.
+   * This is a static hint, which does not change when trying to authenticate with different passwords. For interactive
+   * feedback after attempting authentication, use {@link Darknet.heartbleed | heartbleed()}.
    */
   passwordHint: string;
   /** Data from the passwordHint, if any. */
@@ -4646,9 +4645,8 @@ export interface Darknet {
    * @param additionalMsec - Optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
    * @returns A promise that resolves to a {@link DarknetResult} object. The resolved object may contain an optional
    * property. The type of this property is intentionally undocumented. You are supposed to experiment and discover the
-   * content of this property. This property only exists when authenticating with some very special servers. If you are
-   * looking for interactive feedback after attempting authentication, in most cases, you need to use
-   * {@link Darknet.heartbleed | heartbleed()}.
+   * content of this property. This property only exists when authenticating with some very special servers. For
+   * interactive feedback after attempting authentication, in most cases, use {@link Darknet.heartbleed | heartbleed()}.
    */
   authenticate(host: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
 

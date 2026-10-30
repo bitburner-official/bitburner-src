@@ -6,7 +6,7 @@
 
 Static password reminder text set for this server.
 
-This is a static hint, which does not change when you try to authenticate with different passwords. If you are looking for interactive feedback after attempting authentication, you need to use [heartbleed()](./bitburner.darknet.heartbleed.md)<!-- -->.
+This is a static hint, which does not change when trying to authenticate with different passwords. For interactive feedback after attempting authentication, use [heartbleed()](./bitburner.darknet.heartbleed.md)<!-- -->.
 
 **Signature:**
 
