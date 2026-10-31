@@ -23,7 +23,7 @@ RAM cost: 0 GB
 
 This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
 
-Returns the list of all available hash upgrades that can be used in the spendHashes function. You can also use the [HacknetServerHashUpgrade property in NSEnums](./bitburner.nsenums.md)
+Returns the list of all available hash upgrades that can be used in the spendHashes function. You can also use the HacknetServerHashUpgrade property in [NSEnums](./bitburner.nsenums.md)<!-- -->.
 
 ## Example
 

@@ -2,7 +2,7 @@
  * Map of all Hash Upgrades
  * Key = Hash name, Value = HashUpgrade object
  */
-import { HacknetServerHashUpgrade } from "@nsdefs";
+import type { HacknetServerHashUpgrade } from "@nsdefs";
 import { HashUpgrade } from "./HashUpgrade";
 import { HashUpgradesMetadata } from "./data/HashUpgradesMetadata";
 
