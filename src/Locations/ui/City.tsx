@@ -17,6 +17,7 @@ import { Page, Router } from "../../ui/Router";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { SxProps, Theme } from "@mui/material/styles";
+import { Box } from "@mui/material";
 
 interface IProps {
   city: City;
