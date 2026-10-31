@@ -16,7 +16,7 @@ import {
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
 import { calculateSkill } from "../PersonObjects/formulas/skill";
-import { GangMemberExpGain } from "@nsdefs";
+import type { GangMemberExpGain, GangMemberUpgradeName } from "@nsdefs";
 import { convertV2GangEquipmentNames } from "../utils/APIBreaks/3.0.0";
 
 interface IMults {
@@ -62,8 +62,8 @@ export class GangMember {
   agi_asc_points = 0;
   cha_asc_points = 0;
 
-  upgrades: string[] = []; // Names of upgrades
-  augmentations: string[] = []; // Names of augmentations only
+  upgrades: GangMemberUpgradeName[] = []; // Names of upgrades
+  augmentations: GangMemberUpgradeName[] = []; // Names of augmentations only
 
   constructor(name = "") {
     this.name = name;

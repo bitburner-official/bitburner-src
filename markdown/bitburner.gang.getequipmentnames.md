@@ -9,11 +9,11 @@ List equipment names.
 **Signature:**
 
 ```typescript
-getEquipmentNames(): string[];
+getEquipmentNames(): GangMemberUpgradeName[];
 ```
 **Returns:**
 
-string\[\]
+[GangMemberUpgradeName](./bitburner.gangmemberupgradename.md)<!-- -->\[\]
 
 Names of all Equipments/Augmentations.
 
