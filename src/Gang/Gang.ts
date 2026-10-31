@@ -28,7 +28,7 @@ import { FactionName, GangTaskNameEnum } from "@enums";
 import { CONSTANTS } from "../Constants";
 import { calculateReputationGain } from "./formulas/formulas";
 import type { GangTaskName } from "@nsdefs";
-import { gangMemberTasksMetadata } from "./data/tasks";
+import { getRecordKeys } from "../Types/Record";
 
 export enum RecruitmentResult {
   Success = "Success",
@@ -422,15 +422,12 @@ export class Gang {
 
   /** Returns only valid tasks for this gang. Excludes 'Unassigned' */
   getAllTaskNames(): GangTaskName[] {
-    return gangMemberTasksMetadata
-      .filter((taskName) => {
-        const task = GangMemberTasks[taskName.name];
-        if (task == null) return false;
-        if (task.name === GangTaskNameEnum.Unassigned) return false;
-        // yes you need both checks
-        return this.isHackingGang === task.isHacking || !this.isHackingGang === task.isCombat;
-      })
-      .map((f) => f.name);
+    return getRecordKeys(GangMemberTasks).filter((taskName) => {
+      const task = GangMemberTasks[taskName];
+      if (task === null) return false;
+      // yes you need both checks
+      return this.isHackingGang === task.isHacking || !this.isHackingGang === task.isCombat;
+    });
   }
 
   getUpgradeCost(upg: GangMemberUpgrade | null): number {
