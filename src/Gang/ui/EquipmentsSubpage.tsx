@@ -20,7 +20,7 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { StatsRow } from "../../ui/React/StatsRow";
 import { useRerender } from "../../ui/React/hooks";
-import { GangMemberUpgradeName } from "@nsdefs";
+import type { GangMemberUpgradeName } from "@nsdefs";
 import { getRecordKeys } from "../../Types/Record";
 
 function PurchasedUpgrade({ upgName }: { upgName: GangMemberUpgradeName }): React.ReactElement {
@@ -74,7 +74,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
 
   function filterUpgrades(list: GangMemberUpgradeName[], type: UpgradeType): GangMemberUpgrade[] {
     return getRecordKeys(GangMemberUpgrades)
-      .filter((upgName: GangMemberUpgradeName) => {
+      .filter((upgName) => {
         const upg = GangMemberUpgrades[upgName];
         if (upg.type !== type) return false;
         if (list.includes(upgName)) return false;
