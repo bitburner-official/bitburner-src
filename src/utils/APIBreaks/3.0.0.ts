@@ -1,8 +1,9 @@
 import type { VersionBreakingChange } from "./APIBreak";
 import { CONSTANTS } from "../../Constants";
 import { GangMemberUpgradeNameEnum } from "../../Enums";
+import { GangMemberUpgradeName } from "@nsdefs";
 
-export function convertV2GangEquipmentNames(name: string): string {
+export function convertV2GangEquipmentNames(name: string): GangMemberUpgradeName {
   switch (name) {
     case "Glock 18C":
       return GangMemberUpgradeNameEnum.Malorian;
@@ -25,7 +26,7 @@ export function convertV2GangEquipmentNames(name: string): string {
     case "White Ferrari":
       return GangMemberUpgradeNameEnum.Quadra;
     default:
-      return name;
+      return name as GangMemberUpgradeName;
   }
 }
 

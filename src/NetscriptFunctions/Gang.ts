@@ -10,11 +10,11 @@ import { FactionName } from "@enums";
 import { AllGangs } from "../Gang/AllGangs";
 import { GangMemberTasks } from "../Gang/GangMemberTasks";
 import { GangMemberUpgrades } from "../Gang/GangMemberUpgrades";
-import { gangMemberUpgradesMetadata } from "../Gang/data/upgrades";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { CONSTANTS } from "../Constants";
 import { canCreateGang } from "../Gang/helpers";
+import { getRecordKeys } from "../Types/Record";
 
 export function NetscriptGang(): InternalAPI<IGang> {
   /** Functions as an API check and also returns the gang object */
