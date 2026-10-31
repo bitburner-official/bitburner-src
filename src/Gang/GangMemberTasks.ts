@@ -1,4 +1,4 @@
-import { GangTaskName } from "@nsdefs";
+import type { GangTaskName } from "@nsdefs";
 import { gangMemberTasksMetadata } from "./data/tasks";
 import { GangMemberTask } from "./GangMemberTask";
 
