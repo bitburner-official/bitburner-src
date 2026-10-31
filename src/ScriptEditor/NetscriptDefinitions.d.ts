@@ -5108,7 +5108,7 @@ export interface Gang {
   recruitMember(name: string): boolean;
 
   /**
-   * List member task names. You can also use {@link NSEnums.GangTaskName | GangTaskName}
+   * List member task names. You can also use the GangTaskName property in {@link NSEnums | NSEnums}.
    * @remarks
    * RAM cost: 0 GB
    *

@@ -16,7 +16,7 @@ import {
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
 import { calculateSkill } from "../PersonObjects/formulas/skill";
-import { GangMemberExpGain, GangTaskName } from "@nsdefs";
+import type { GangMemberExpGain, GangTaskName } from "@nsdefs";
 import { convertV2GangEquipmentNames } from "../utils/APIBreaks/3.0.0";
 import { GangTaskNameEnum } from "./Enums";
 

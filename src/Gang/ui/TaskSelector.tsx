@@ -12,7 +12,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { GangMember } from "../GangMember";
 import { GangTaskNameEnum } from "../Enums";
-import { GangTaskName } from "@nsdefs";
+import type { GangTaskName } from "@nsdefs";
 
 interface IProps {
   member: GangMember;
@@ -29,6 +29,7 @@ export function TaskSelector(props: IProps): React.ReactElement {
   }
 
   function onChange(event: SelectChangeEvent): void {
+    // This assertion is safe because all Select options have valid GangTaskName values.
     const task = event.target.value as GangTaskName;
     props.member.assignToTask(task);
     setCurrentTask(task);
@@ -43,7 +44,7 @@ export function TaskSelector(props: IProps): React.ReactElement {
         <MenuItem key={0} value={GangTaskNameEnum.Unassigned}>
           {GangTaskNameEnum.Unassigned}
         </MenuItem>
-        {tasks.map((task: string, i: number) => (
+        {tasks.map((task, i) => (
           <MenuItem key={i + 1} value={task}>
             {task}
           </MenuItem>

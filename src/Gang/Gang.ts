@@ -27,7 +27,7 @@ import { PowerMultiplier } from "./data/power";
 import { FactionName, GangTaskNameEnum } from "@enums";
 import { CONSTANTS } from "../Constants";
 import { calculateReputationGain } from "./formulas/formulas";
-import { GangTaskName } from "@nsdefs";
+import type { GangTaskName } from "@nsdefs";
 import { gangMemberTasksMetadata } from "./data/tasks";
 
 export enum RecruitmentResult {
