@@ -48,6 +48,12 @@ export const InterfacePage = (): React.ReactElement => {
         text="Show all intermediary time units, even when null."
         tooltip={<>Example: 1 hour 13 seconds becomes 1 hour 0 minutes 13 seconds.</>}
       />
+      <OptionSwitch
+        checked={Settings.ShowScrollbarInDocumentationPages}
+        onChange={(newValue) => (Settings.ShowScrollbarInDocumentationPages = newValue)}
+        text="Show scrollbar in documentation pages"
+        tooltip={<>If this is set, show scrollbar in documentation pages.</>}
+      />
       <Tooltip
         title={
           <Typography>
