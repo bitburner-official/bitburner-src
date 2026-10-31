@@ -212,7 +212,7 @@ Check how many gang members you can currently recruit.
 
 </td><td>
 
-List member task names. You can also use 
+List member task names. You can also use the GangTaskName property in [NSEnums](./bitburner.nsenums.md)<!-- -->.
 
 
 </td></tr>

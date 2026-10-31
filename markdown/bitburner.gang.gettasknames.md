@@ -4,7 +4,7 @@
 
 ## Gang.getTaskNames() method
 
-List member task names. You can also use 
+List member task names. You can also use the GangTaskName property in [NSEnums](./bitburner.nsenums.md)<!-- -->.
 
 **Signature:**
 
