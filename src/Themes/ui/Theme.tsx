@@ -28,6 +28,11 @@ declare module "@mui/material/styles" {
       primary: React.CSSProperties["color"];
       secondary: React.CSSProperties["color"];
       well: React.CSSProperties["color"];
+      welllight: React.CSSProperties["color"];
+      bnlvl0: React.CSSProperties["color"];
+      bnlvl1: React.CSSProperties["color"];
+      bnlvl2: React.CSSProperties["color"];
+      bnlvl3: React.CSSProperties["color"];
     };
   }
   interface ThemeOptions {
@@ -52,6 +57,11 @@ declare module "@mui/material/styles" {
       primary: React.CSSProperties["color"];
       secondary: React.CSSProperties["color"];
       well: React.CSSProperties["color"];
+      welllight: React.CSSProperties["color"];
+      bnlvl0: React.CSSProperties["color"];
+      bnlvl1: React.CSSProperties["color"];
+      bnlvl2: React.CSSProperties["color"];
+      bnlvl3: React.CSSProperties["color"];
     };
   }
 }
@@ -82,6 +92,11 @@ export function refreshTheme(): void {
       primary: Settings.theme.primary,
       secondary: Settings.theme.secondary,
       well: Settings.theme.well,
+      welllight: Settings.theme.welllight,
+      bnlvl0: Settings.theme.bnlvl0,
+      bnlvl1: Settings.theme.bnlvl1,
+      bnlvl2: Settings.theme.bnlvl2,
+      bnlvl3: Settings.theme.bnlvl3,
     },
     palette: {
       primary: {
