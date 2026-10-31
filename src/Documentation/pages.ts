@@ -831,6 +831,7 @@ import nsDoc_bitburner_hacknetserverconstants_upgradecoremult_md from "../../mar
 import nsDoc_bitburner_hacknetserverconstants_upgradelevelmult_md from "../../markdown/bitburner.hacknetserverconstants.upgradelevelmult.md?raw";
 import nsDoc_bitburner_hacknetserverconstants_upgraderammult_md from "../../markdown/bitburner.hacknetserverconstants.upgraderammult.md?raw";
 import nsDoc_bitburner_hacknetserverhashupgrade_md from "../../markdown/bitburner.hacknetserverhashupgrade.md?raw";
+import nsDoc_bitburner_hacknetserverhashupgradeenumtype_md from "../../markdown/bitburner.hacknetserverhashupgradeenumtype.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_cacheupgradecost_md from "../../markdown/bitburner.hacknetserversformulas.cacheupgradecost.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_constants_md from "../../markdown/bitburner.hacknetserversformulas.constants.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_coreupgradecost_md from "../../markdown/bitburner.hacknetserversformulas.coreupgradecost.md?raw";
@@ -2466,6 +2467,7 @@ AllPages["nsDoc/bitburner.hacknetserverconstants.upgradecoremult.md"] = nsDoc_bi
 AllPages["nsDoc/bitburner.hacknetserverconstants.upgradelevelmult.md"] = nsDoc_bitburner_hacknetserverconstants_upgradelevelmult_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.upgraderammult.md"] = nsDoc_bitburner_hacknetserverconstants_upgraderammult_md;
 AllPages["nsDoc/bitburner.hacknetserverhashupgrade.md"] = nsDoc_bitburner_hacknetserverhashupgrade_md;
+AllPages["nsDoc/bitburner.hacknetserverhashupgradeenumtype.md"] = nsDoc_bitburner_hacknetserverhashupgradeenumtype_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.cacheupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_cacheupgradecost_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.constants.md"] = nsDoc_bitburner_hacknetserversformulas_constants_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.coreupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_coreupgradecost_md;

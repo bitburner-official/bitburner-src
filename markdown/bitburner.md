@@ -2190,6 +2190,16 @@ Locations of gym
 </td></tr>
 <tr><td>
 
+[HacknetServerHashUpgradeEnumType](./bitburner.hacknetserverhashupgradeenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [JobField](./bitburner.jobfield.md)
 
 

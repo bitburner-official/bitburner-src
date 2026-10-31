@@ -3032,18 +3032,22 @@ export interface CompanyPositionInfo {
 }
 
 /** @public */
-type HacknetServerHashUpgrade =
-  | "Sell for Money"
-  | "Sell for Corporation Funds"
-  | "Reduce Minimum Security"
-  | "Increase Maximum Money"
-  | "Improve Studying"
-  | "Improve Gym Training"
-  | "Exchange for Corporation Research"
-  | "Exchange for Bladeburner Rank"
-  | "Exchange for Bladeburner SP"
-  | "Generate Coding Contract"
-  | "Company Favor";
+type HacknetServerHashUpgradeEnumType = {
+  SellForMoney: "Sell for Money";
+  SellForCorporationFunds: "Sell for Corporation Funds";
+  ReduceMinimumSecurity: "Reduce Minimum Security";
+  IncreaseMaximumMoney: "Increase Maximum Money";
+  ImproveStudying: "Improve Studying";
+  ImproveGymTraining: "Improve Gym Training";
+  ExchangeForCorporationResearch: "Exchange for Corporation Research";
+  ExchangeForBladeburnerRank: "Exchange for Bladeburner Rank";
+  ExchangeForBladeburnerSP: "Exchange for Bladeburner SP";
+  GenerateCodingContract: "Generate Coding Contract";
+  CompanyFavor: "Company Favor";
+};
+
+/** @public */
+type HacknetServerHashUpgrade = _ValueOf<HacknetServerHashUpgradeEnumType>;
 
 /**
  * Hacknet API
@@ -3341,7 +3345,8 @@ export interface Hacknet {
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
-   * Returns the list of all available hash upgrades that can be used in the spendHashes function.
+   * Returns the list of all available hash upgrades that can be used in the spendHashes function. You can also use
+   * the HacknetServerHashUpgrade property in {@link NSEnums | NSEnums}.
    * @example
    * ```js
    * const upgrades = ns.hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
@@ -10031,6 +10036,7 @@ type NSEnums = {
   ProgramName: ProgramNameEnumType;
   GangTaskName: GangTaskNameEnumType;
   GangMemberUpgradeName: GangMemberUpgradeNameEnumType;
+  HacknetServerHashUpgrade: HacknetServerHashUpgradeEnumType;
 };
 
 /**
