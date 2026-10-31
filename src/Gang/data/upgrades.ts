@@ -1,4 +1,5 @@
-import { GangMemberUpgradeNameEnum, GangMemberUpgradeName } from "../Enums";
+import type { GangMemberUpgradeName } from "@nsdefs";
+import { GangMemberUpgradeNameEnum } from "../Enums";
 
 export interface IMults {
   hack?: number;

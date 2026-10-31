@@ -231,7 +231,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     },
     getEquipmentNames: (ctx) => {
       getGang(ctx);
-      return gangMemberUpgradesMetadata.map((e) => e.name);
+      return getRecordKeys(GangMemberUpgrades);
     },
     getEquipmentCost: (ctx, _equipName) => {
       const equipName = getEnumHelper("GangMemberUpgradeNameEnum").nsGetMember(ctx, _equipName, "equipName");
