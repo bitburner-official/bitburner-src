@@ -80,7 +80,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
         if (list.includes(upgName)) return false;
         return true;
       })
-      .map((upgName: GangMemberUpgradeName) => GangMemberUpgrades[upgName]);
+      .map((upgName) => GangMemberUpgrades[upgName]);
   }
 
   const onChange = (event: SelectChangeEvent): void => {
@@ -201,10 +201,10 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
 
       <Typography sx={{ mx: 1 }}>Purchased Upgrades: </Typography>
       <Box display="grid" sx={{ gridTemplateColumns: "repeat(4, 1fr)", m: 1 }}>
-        {props.member.upgrades.map((upg: GangMemberUpgradeName) => (
+        {props.member.upgrades.map((upg) => (
           <PurchasedUpgrade key={upg} upgName={upg} />
         ))}
-        {props.member.augmentations.map((upg: GangMemberUpgradeName) => (
+        {props.member.augmentations.map((upg) => (
           <PurchasedUpgrade key={upg} upgName={upg} />
         ))}
       </Box>
