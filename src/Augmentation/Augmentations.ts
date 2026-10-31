@@ -1698,7 +1698,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 1 / 0.95,
       crime_money: 1 / 0.95,
       crime_success: 1 / 0.95,
-      dnet_money: 1 / 0.9,
+      dnet_money: 1 / 0.95,
       hacknet_node_money: 1 / 0.95,
       hacknet_node_purchase_cost: 1 / 1.05,
       hacknet_node_ram_cost: 1 / 1.05,
