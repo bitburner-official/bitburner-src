@@ -19,7 +19,7 @@ import { calculateSkill } from "../PersonObjects/formulas/skill";
 import type { GangMemberExpGain, GangMemberUpgradeName } from "@nsdefs";
 import {
   convertV2GangEquipmentNames,
-  RenamedV2GangEquipmentName,
+  type RenamedV2GangEquipmentName,
   RenamedV2GangEquipmentNames,
 } from "../utils/APIBreaks/3.0.0";
 

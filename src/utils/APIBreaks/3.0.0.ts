@@ -1,7 +1,7 @@
 import type { VersionBreakingChange } from "./APIBreak";
 import { CONSTANTS } from "../../Constants";
 import { GangMemberUpgradeNameEnum } from "../../Enums";
-import { GangMemberUpgradeName } from "@nsdefs";
+import type { GangMemberUpgradeName } from "@nsdefs";
 
 export const RenamedV2GangEquipmentNames = [
   "Glock 18C",
