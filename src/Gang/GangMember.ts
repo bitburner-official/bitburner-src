@@ -17,7 +17,11 @@ import {
 } from "./formulas/formulas";
 import { calculateSkill } from "../PersonObjects/formulas/skill";
 import type { GangMemberExpGain, GangMemberUpgradeName } from "@nsdefs";
-import { convertV2GangEquipmentNames } from "../utils/APIBreaks/3.0.0";
+import {
+  convertV2GangEquipmentNames,
+  RenamedV2GangEquipmentName,
+  RenamedV2GangEquipmentNames,
+} from "../utils/APIBreaks/3.0.0";
 
 interface IMults {
   hack: number;
@@ -368,7 +372,11 @@ export class GangMember {
   static jsonReviver(value: IReviverValue): GangMember {
     const member = Generic_fromJSON(GangMember, value.data, GangMember.includedKeys);
     for (let i = 0; i < member.upgrades.length; ++i) {
-      member.upgrades[i] = convertV2GangEquipmentNames(member.upgrades[i]);
+      const memberUpgrade = member.upgrades[i];
+      if (!(RenamedV2GangEquipmentNames as readonly string[]).includes(memberUpgrade)) {
+        continue;
+      }
+      member.upgrades[i] = convertV2GangEquipmentNames(memberUpgrade as RenamedV2GangEquipmentName);
     }
     return member;
   }
