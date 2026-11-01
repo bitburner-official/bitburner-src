@@ -4,6 +4,11 @@
 
 ## NetscriptPort.empty() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [NetscriptPort.isEmpty](./bitburner.netscriptport.isempty.md) instead.
+> 
+
 Check if the port is empty.
 
 **Signature:**

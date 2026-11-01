@@ -62,6 +62,28 @@ Check if the port is full.
 </td></tr>
 <tr><td>
 
+[isEmpty()](./bitburner.netscriptport.isempty.md)
+
+
+</td><td>
+
+Check if the port is empty.
+
+
+</td></tr>
+<tr><td>
+
+[isFull()](./bitburner.netscriptport.isfull.md)
+
+
+</td><td>
+
+Check if the port is full.
+
+
+</td></tr>
+<tr><td>
+
 [nextWrite()](./bitburner.netscriptport.nextwrite.md)
 
 

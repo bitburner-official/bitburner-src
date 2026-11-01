@@ -976,6 +976,8 @@ import nsDoc_bitburner_multipliers_work_money_md from "../../markdown/bitburner.
 import nsDoc_bitburner_netscriptport_clear_md from "../../markdown/bitburner.netscriptport.clear.md?raw";
 import nsDoc_bitburner_netscriptport_empty_md from "../../markdown/bitburner.netscriptport.empty.md?raw";
 import nsDoc_bitburner_netscriptport_full_md from "../../markdown/bitburner.netscriptport.full.md?raw";
+import nsDoc_bitburner_netscriptport_isempty_md from "../../markdown/bitburner.netscriptport.isempty.md?raw";
+import nsDoc_bitburner_netscriptport_isfull_md from "../../markdown/bitburner.netscriptport.isfull.md?raw";
 import nsDoc_bitburner_netscriptport_md from "../../markdown/bitburner.netscriptport.md?raw";
 import nsDoc_bitburner_netscriptport_nextwrite_md from "../../markdown/bitburner.netscriptport.nextwrite.md?raw";
 import nsDoc_bitburner_netscriptport_peek_md from "../../markdown/bitburner.netscriptport.peek.md?raw";
@@ -2623,6 +2625,8 @@ AllPages["nsDoc/bitburner.multipliers.work_money.md"] = nsDoc_bitburner_multipli
 AllPages["nsDoc/bitburner.netscriptport.clear.md"] = nsDoc_bitburner_netscriptport_clear_md;
 AllPages["nsDoc/bitburner.netscriptport.empty.md"] = nsDoc_bitburner_netscriptport_empty_md;
 AllPages["nsDoc/bitburner.netscriptport.full.md"] = nsDoc_bitburner_netscriptport_full_md;
+AllPages["nsDoc/bitburner.netscriptport.isempty.md"] = nsDoc_bitburner_netscriptport_isempty_md;
+AllPages["nsDoc/bitburner.netscriptport.isfull.md"] = nsDoc_bitburner_netscriptport_isfull_md;
 AllPages["nsDoc/bitburner.netscriptport.md"] = nsDoc_bitburner_netscriptport_md;
 AllPages["nsDoc/bitburner.netscriptport.nextwrite.md"] = nsDoc_bitburner_netscriptport_nextwrite_md;
 AllPages["nsDoc/bitburner.netscriptport.peek.md"] = nsDoc_bitburner_netscriptport_peek_md;
