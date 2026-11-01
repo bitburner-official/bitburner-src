@@ -1,5 +1,5 @@
 import type { Port as IPort } from "@nsdefs";
-import { InternalAPI } from "src/Netscript/APIWrapper";
+import type { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 
 export function NetscriptPort(): InternalAPI<IPort> {
