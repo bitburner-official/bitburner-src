@@ -9,12 +9,7 @@ export class GangMemberUpgrade {
   desc: string;
   mults: IMults;
 
-  constructor(
-    name = "" as GangMemberUpgradeName,
-    cost = 0,
-    type: UpgradeType = UpgradeType.Weapon,
-    mults: IMults = {},
-  ) {
+  constructor(name: GangMemberUpgradeName, cost: number, type: UpgradeType, mults: IMults) {
     this.name = name;
     this.cost = cost;
     this.type = type;
