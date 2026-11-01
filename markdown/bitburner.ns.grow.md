@@ -92,7 +92,9 @@ To determine how many threads are needed to return a server to max money, obtain
 
 Like [hack](./bitburner.ns.hack.md)<!-- -->, `grow` can be called on any hackable server, regardless of where the script is running. Hackable servers are any servers not owned by the player.
 
-The grow() command requires root access to the target server, but there is no required hacking level to run the command. It also raises the security level of the target server based on the number of threads. The security increase can be determined using [growthAnalyzeSecurity](./bitburner.ns.growthanalyzesecurity.md)<!-- -->.
+The grow() command requires root access to the target server, but there is no required hacking level to run the command. It also raises the security level of the target server based on the number of threads.
+
+The security level is increased by 0.004 per "used thread". "used thread" may not be the same as opts.threads. Let's say you call this function with opts.threads = 1000, but it only takes 500 threads to grow the targeted server to the max money. In this case, "used thread" is 500. You should use [growthAnalyzeSecurity](./bitburner.ns.growthanalyzesecurity.md) to calculate the security increase.
 
 ## Example
 
