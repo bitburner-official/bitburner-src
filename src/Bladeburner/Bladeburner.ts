@@ -820,35 +820,26 @@ export class Bladeburner implements OperationTeam {
         break;
       case BladeburnerOperationName.Sting:
         if (success) {
-          city.changePopulationByPercentage(-0.1, {
-            changeEstEqually: true,
-            nonZero: true,
-          });
+          const change = getRandomIntInclusive(-10, -5);
+          city.changePopulationByCount(change, { estChange: change, estOffset: 0 });
         }
         city.changeChaosByCount(0.1);
         break;
       case BladeburnerOperationName.Raid:
         if (success) {
-          city.changePopulationByPercentage(-1, {
-            changeEstEqually: true,
-            nonZero: true,
-          });
+          const change = getRandomIntInclusive(-100, -50);
+          city.changePopulationByCount(change, { estChange: change, estOffset: 0 });
           --city.comms;
         } else {
-          const change = getRandomIntInclusive(-10, -5) / 10;
-          city.changePopulationByPercentage(change, {
-            nonZero: true,
-            changeEstEqually: false,
-          });
+          const change = getRandomIntInclusive(-40, -10);
+          city.changePopulationByCount(change, { estChange: change, estOffset: 0 });
         }
         city.changeChaosByPercentage(getRandomIntInclusive(1, 5));
         break;
       case BladeburnerOperationName.StealthRetirement:
         if (success) {
-          city.changePopulationByPercentage(-0.5, {
-            changeEstEqually: true,
-            nonZero: true,
-          });
+          const change = getRandomIntInclusive(-20, -10);
+          city.changePopulationByCount(change, { estChange: change, estOffset: 0 });
         }
         city.changeChaosByPercentage(getRandomIntInclusive(-3, -1));
         break;
