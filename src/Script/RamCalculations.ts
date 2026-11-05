@@ -31,9 +31,13 @@ export interface RamUsageEntry {
   cost: number;
 }
 
+export type RamDependencyEdge = [dependent: ScriptFilePath, dependency: ScriptFilePath];
+
 export type RamCalculationSuccess = {
   cost: number;
   entries: RamUsageEntry[];
+  dependencyEdges: RamDependencyEdge[];
+  parsedModules: ScriptFilePath[];
   errorCode?: never;
   errorMessage?: never;
 };
@@ -101,10 +105,11 @@ function parseOnlyRamCalculate(
   let dependencyMap: Record<string, Set<string>> = {};
 
   // Scripts we've parsed.
-  const completedParses = new Set();
+  const completedParses = new Set<ScriptFilePath>();
 
   // Scripts we've discovered that need to be parsed.
   const parseQueue: ScriptFilePath[] = [];
+  const dependencyEdges: RamDependencyEdge[] = [];
   // Parses a chunk of code with a given module name, and updates parseQueue and dependencyMap.
   function parseCode(ast: AST, moduleName: ScriptFilePath, fileTypeFeatureOfModule: FileTypeFeature): void {
     const result = parseOnlyCalculateDeps(ast, moduleName, fileTypeFeatureOfModule, otherScripts);
@@ -112,6 +117,7 @@ function parseOnlyRamCalculate(
 
     // Add any additional modules to the parse queue;
     for (const additionalModule of result.additionalModules) {
+      dependencyEdges.push([moduleName, additionalModule]);
       if (!completedParses.has(additionalModule) && !parseQueue.includes(additionalModule)) {
         parseQueue.push(additionalModule);
       }
@@ -179,7 +185,12 @@ function parseOnlyRamCalculate(
       // This is a RAM override for the main module. We can end ram calculation immediately.
       const [first] = dependencyMap[ref];
       const override = Number(first);
-      return { cost: override, entries: [{ type: "misc", name: "override", cost: override }] };
+      return {
+        cost: override,
+        entries: [{ type: "misc", name: "override", cost: override }],
+        dependencyEdges,
+        parsedModules: [...completedParses],
+      };
     }
     // Check if this is one of the special keys, and add the appropriate ram cost if so.
     if (ref === "document" && !resolvedRefs.has("document")) {
@@ -256,7 +267,12 @@ function parseOnlyRamCalculate(
     ram = RamCostConstants.Max;
     detailedCosts.push({ type: "misc", name: "Max Ram Cap", cost: RamCostConstants.Max });
   }
-  return { cost: ram, entries: detailedCosts.filter((e) => e.cost > 0) };
+  return {
+    cost: ram,
+    entries: detailedCosts.filter((e) => e.cost > 0),
+    dependencyEdges,
+    parsedModules: [...completedParses],
+  };
 }
 
 export function checkInfiniteLoop(ast: AST, code: string): number[] {
