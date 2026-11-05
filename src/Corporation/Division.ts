@@ -141,7 +141,10 @@ export class Division {
     for (const city of getRecordKeys(this.offices)) {
       if (city === CityName.Sector12) continue;
       price += corpConstants.officeInitialCost;
-      if (this.warehouses[city]) price += corpConstants.warehouseInitialCost;
+    }
+    for (const city of getRecordKeys(this.warehouses)) {
+      if (city === CityName.Sector12) continue;
+      price += corpConstants.warehouseInitialCost;
     }
     price /= 2;
     return price;
