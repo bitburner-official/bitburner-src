@@ -3,6 +3,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 
 import { Modal } from "../../ui/React/Modal";
+import { GangTaskNameEnum } from "../Enums";
 
 interface IProps {
   open: boolean;
@@ -22,9 +23,9 @@ export const TerritoryInfoModal = ({ open, onClose }: IProps): React.ReactElemen
           gang also loses a small amount of power whenever you lose a clash.
           <br />
           <br />
-          NOTE: Gang members assigned to 'Territory Warfare' can be killed during clashes. This can happen regardless of
-          whether you win or lose the clash. A gang member being killed results in loss of both respect and power for
-          your gang.
+          NOTE: Gang members assigned to '{GangTaskNameEnum.TerritoryWarfare}' can be killed during clashes. This can
+          happen regardless of whether you win or lose the clash. A gang member being killed results in loss of both
+          respect and power for your gang.
         </Typography>
         <br />
         <Typography variant="h4">Territory</Typography>
@@ -33,8 +34,8 @@ export const TerritoryInfoModal = ({ open, onClose }: IProps): React.ReactElemen
           respect, and wanted level. It is very beneficial to have high territory control.
           <br />
           <br />
-          To increase your chances of winning territory, assign gang members to "Territory Warfare". This will build
-          your gang power. Then, enable "Engage in Territory Clashes" to start fighting over territory.
+          To increase your chances of winning territory, assign gang members to {GangTaskNameEnum.TerritoryWarfare}.
+          This will build your gang power. Then, enable "Engage in Territory Clashes" to start fighting over territory.
         </Typography>
         <br />
         <Typography variant="h4">Territory Clash Chance</Typography>

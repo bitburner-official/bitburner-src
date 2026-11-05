@@ -9,7 +9,7 @@ Set gang member to task.
 **Signature:**
 
 ```typescript
-setMemberTask(memberName: string, taskName: string): boolean;
+setMemberTask(memberName: string, taskName: GangTaskName): boolean;
 ```
 
 ## Parameters
@@ -53,7 +53,7 @@ taskName
 
 </td><td>
 
-string
+[GangTaskName](./bitburner.gangtaskname.md)
 
 
 </td><td>

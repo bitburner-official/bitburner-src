@@ -5254,7 +5254,7 @@ export interface Gang {
   recruitMember(name: string): boolean;
 
   /**
-   * List member task names.
+   * List member task names. You can also use the GangTaskName property in {@link NSEnums | NSEnums}.
    * @remarks
    * RAM cost: 0 GB
    *
@@ -5262,7 +5262,7 @@ export interface Gang {
    *
    * @returns All valid tasks that Gang members can be assigned to.
    */
-  getTaskNames(): string[];
+  getTaskNames(): GangTaskName[];
 
   /**
    * Set gang member to task.
@@ -5276,7 +5276,7 @@ export interface Gang {
    * @param taskName - Task to assign.
    * @returns True if the Gang Member was successfully assigned to the task, false otherwise.
    */
-  setMemberTask(memberName: string, taskName: string): boolean;
+  setMemberTask(memberName: string, taskName: GangTaskName): boolean;
 
   /**
    * Get stats of a task.
@@ -5285,10 +5285,10 @@ export interface Gang {
    *
    * Get the stats of a gang task stats. This is typically used to evaluate which action should be executed next.
    *
-   * @param name -  Name of the task.
+   * @param taskName - Name of the task.
    * @returns Detailed stats of a task.
    */
-  getTaskStats(name: string): GangTaskStats;
+  getTaskStats(taskName: GangTaskName): GangTaskStats;
 
   /**
    * List equipment names.

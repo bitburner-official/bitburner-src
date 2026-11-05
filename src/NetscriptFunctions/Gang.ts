@@ -1,4 +1,4 @@
-import type { Gang as IGang, EquipmentStats, GangOtherInfoObject } from "@nsdefs";
+import type { Gang as IGang, EquipmentStats, GangOtherInfoObject, GangTaskName } from "@nsdefs";
 import type { Gang } from "../Gang/Gang";
 import type { GangMember } from "../Gang/GangMember";
 import type { GangMemberTask } from "../Gang/GangMemberTask";
@@ -6,7 +6,7 @@ import { type InternalAPI, type NetscriptContext, setRemovedFunctions } from "..
 
 import { GangPromise, RecruitmentResult } from "../Gang/Gang";
 import { Player } from "@player";
-import { FactionName } from "@enums";
+import { FactionName, GangTaskNameEnum } from "@enums";
 import { AllGangs } from "../Gang/AllGangs";
 import { GangMemberTasks } from "../Gang/GangMemberTasks";
 import { GangMemberUpgrades } from "../Gang/GangMemberUpgrades";
@@ -28,10 +28,10 @@ export function NetscriptGang(): InternalAPI<IGang> {
     throw helpers.errorMessage(ctx, `Invalid gang member: '${name}'`);
   };
 
-  const getGangTask = function (ctx: NetscriptContext, name: string): GangMemberTask {
-    const task = GangMemberTasks[name];
+  const getGangMemberTask = function (ctx: NetscriptContext, taskName: GangTaskName): GangMemberTask {
+    const task = GangMemberTasks[taskName];
     if (!task) {
-      throw helpers.errorMessage(ctx, `Invalid task: '${name}'`);
+      throw helpers.errorMessage(ctx, `Invalid task: '${taskName}'`);
     }
 
     return task;
@@ -189,12 +189,12 @@ export function NetscriptGang(): InternalAPI<IGang> {
     getTaskNames: (ctx) => {
       const gang = getGang(ctx);
       const tasks = gang.getAllTaskNames();
-      tasks.unshift("Unassigned");
+      tasks.unshift(GangTaskNameEnum.Unassigned);
       return tasks;
     },
     setMemberTask: (ctx, _memberName, _taskName) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
-      const taskName = helpers.string(ctx, "taskName", _taskName);
+      const taskName = getEnumHelper("GangTaskNameEnum").nsGetMember(ctx, _taskName, "taskName");
       const gang = getGang(ctx);
       const member = getGangMember(ctx, memberName);
       if (!gang.getAllTaskNames().includes(taskName)) {
@@ -203,7 +203,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
           () =>
             `Failed to assign Gang Member '${memberName}' to Invalid task '${taskName}'. '${memberName}' is now Unassigned`,
         );
-        return member.assignToTask("Unassigned");
+        return member.assignToTask(GangTaskNameEnum.Unassigned);
       }
       const success = member.assignToTask(taskName);
       if (success) {
@@ -221,9 +221,9 @@ export function NetscriptGang(): InternalAPI<IGang> {
       return success;
     },
     getTaskStats: (ctx, _taskName) => {
-      const taskName = helpers.string(ctx, "taskName", _taskName);
+      const taskName = getEnumHelper("GangTaskNameEnum").nsGetMember(ctx, _taskName, "taskName");
       getGang(ctx);
-      const task = getGangTask(ctx, taskName);
+      const task = getGangMemberTask(ctx, taskName);
       const copy = Object.assign({}, task);
       copy.territory = Object.assign({}, task.territory);
       return copy;
