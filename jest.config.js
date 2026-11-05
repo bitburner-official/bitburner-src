@@ -17,7 +17,7 @@ module.exports = {
     "@enums": "<rootDir>/src/Enums",
     "@nsdefs": "<rootDir>/src/ScriptEditor/NetscriptDefinitions.d.ts",
     "^monaco-editor$": "<rootDir>/test/__mocks__/NullMock.js",
-    "^monaco-vim$": "<rootDir>/test/__mocks__/NullMock.js",
+    "^@catloversg/monaco-vim$": "<rootDir>/test/__mocks__/NullMock.js",
     "/utils/Protections$": "<rootDir>/test/__mocks__/NullMock.js",
     "@swc/wasm-web": "@swc/core",
   },

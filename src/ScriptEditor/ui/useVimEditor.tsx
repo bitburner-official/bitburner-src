@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import * as MonacoVim from "monaco-vim";
+import * as MonacoVim from "@catloversg/monaco-vim";
 import type { editor } from "monaco-editor";
 type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
