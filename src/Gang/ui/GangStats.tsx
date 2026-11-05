@@ -50,8 +50,7 @@ export function GangStats(): React.ReactElement {
           title={
             <Typography>
               Represents the amount of respect your gang has from other gangs and criminal organizations. Your respect
-              affects the amount of money your gang members will earn, and also determines how much reputation you are
-              earning with your gang's corresponding Faction.
+              affects the amount of money your gang members will earn.
             </Typography>
           }
         >
