@@ -28,6 +28,8 @@ import { isFactionWork } from "../Work/FactionWork";
 import { isCompanyWork } from "../Work/CompanyWork";
 import { Page, Router } from "./Router";
 import { formatExp, formatPercent } from "./formatNumber";
+import { Favor } from "./React/Favor";
+import { addRepToFavor } from "../Faction/formulas/favor";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 
@@ -39,6 +41,7 @@ interface IWorkInfo {
   title: string | React.ReactElement;
 
   description?: string | React.ReactElement;
+  favorTooltip?: string | React.ReactElement;
   gains?: React.ReactElement[];
   progress?: {
     elapsed?: number;
@@ -397,6 +400,12 @@ export function WorkInProgressRoot(): React.ReactElement {
           <ReputationRate reputation={Player.currentWork.getReputationRate() * CYCLES_PER_SEC} />)
         </>
       ),
+      favorTooltip: (
+        <>
+          You will have <Favor favor={addRepToFavor(faction.favor, faction.playerReputation)} /> faction favor after
+          installing an Augmentation
+        </>
+      ),
       gains: ExpRows(exp),
       progress: {
         elapsed: Player.currentWork.cyclesWorked * CONSTANTS.MilliPerCycle,
@@ -447,6 +456,12 @@ export function WorkInProgressRoot(): React.ReactElement {
           Current Company Reputation: <Reputation reputation={companyRep} />
         </>
       ),
+      favorTooltip: (
+        <>
+          You will have <Favor favor={addRepToFavor(comp.favor, companyRep)} /> company favor after installing an
+          Augmentation
+        </>
+      ),
       gains: [
         <StatsRow key="money" name="Money" color={Settings.theme.money}>
           <Typography>
@@ -472,11 +487,18 @@ export function WorkInProgressRoot(): React.ReactElement {
     return <></>;
   }
 
-  const tooltipInfo =
+  const stopTooltipInfo =
     typeof workInfo.stopTooltip === "string" ? (
       <Typography>{workInfo.stopTooltip}</Typography>
     ) : (
       workInfo.stopTooltip || <></>
+    );
+
+  const favorTooltipInfo =
+    typeof workInfo.favorTooltip === "string" ? (
+      <Typography>{workInfo.favorTooltip}</Typography>
+    ) : (
+      workInfo.favorTooltip || <></>
     );
 
   return (
@@ -486,7 +508,13 @@ export function WorkInProgressRoot(): React.ReactElement {
     >
       <Paper sx={{ p: 1, mb: 1 }}>
         <Typography variant="h6">{workInfo.title}</Typography>
-        <Typography>{workInfo.description}</Typography>
+        {workInfo.favorTooltip ? (
+          <Tooltip title={favorTooltipInfo}>
+            <Typography>{workInfo.description}</Typography>
+          </Tooltip>
+        ) : (
+          <Typography>{workInfo.description}</Typography>
+        )}
         {workInfo.gains && (
           <Table sx={{ mt: 1 }}>
             <TableBody>{workInfo.gains}</TableBody>
@@ -523,7 +551,7 @@ export function WorkInProgressRoot(): React.ReactElement {
 
         <Box display="grid" sx={{ gridTemplateColumns: `repeat(${Object.keys(workInfo.buttons).length}, 1fr)` }}>
           {workInfo.stopTooltip ? (
-            <Tooltip title={tooltipInfo}>
+            <Tooltip title={stopTooltipInfo}>
               <Button onClick={workInfo.buttons.cancel}>{workInfo.stopText}</Button>
             </Tooltip>
           ) : (
