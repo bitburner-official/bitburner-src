@@ -16,8 +16,12 @@ import {
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
 import { calculateSkill } from "../PersonObjects/formulas/skill";
-import { GangMemberExpGain } from "@nsdefs";
-import { convertV2GangEquipmentNames } from "../utils/APIBreaks/3.0.0";
+import type { GangMemberExpGain, GangMemberUpgradeName } from "@nsdefs";
+import {
+  convertV2GangEquipmentNames,
+  type RenamedV2GangEquipmentName,
+  RenamedV2GangEquipmentNames,
+} from "../utils/APIBreaks/3.0.0";
 
 interface IMults {
   hack: number;
@@ -62,8 +66,8 @@ export class GangMember {
   agi_asc_points = 0;
   cha_asc_points = 0;
 
-  upgrades: string[] = []; // Names of upgrades
-  augmentations: string[] = []; // Names of augmentations only
+  upgrades: GangMemberUpgradeName[] = []; // Names of upgrades
+  augmentations: GangMemberUpgradeName[] = []; // Names of augmentations only
 
   constructor(name = "") {
     this.name = name;
@@ -368,7 +372,11 @@ export class GangMember {
   static jsonReviver(value: IReviverValue): GangMember {
     const member = Generic_fromJSON(GangMember, value.data, GangMember.includedKeys);
     for (let i = 0; i < member.upgrades.length; ++i) {
-      member.upgrades[i] = convertV2GangEquipmentNames(member.upgrades[i]);
+      const memberUpgrade = member.upgrades[i];
+      if (!(RenamedV2GangEquipmentNames as readonly string[]).includes(memberUpgrade)) {
+        continue;
+      }
+      member.upgrades[i] = convertV2GangEquipmentNames(memberUpgrade as RenamedV2GangEquipmentName);
     }
     return member;
   }

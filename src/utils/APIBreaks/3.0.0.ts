@@ -1,8 +1,24 @@
 import type { VersionBreakingChange } from "./APIBreak";
 import { CONSTANTS } from "../../Constants";
 import { GangMemberUpgradeNameEnum } from "../../Enums";
+import type { GangMemberUpgradeName } from "@nsdefs";
 
-export function convertV2GangEquipmentNames(name: string): string {
+export const RenamedV2GangEquipmentNames = [
+  "Glock 18C",
+  "P90C",
+  "Steyr AUG",
+  "AK-47",
+  "M15A10 Assault Rifle",
+  "AWM Sniper Rifle",
+  "Ford Flex V20",
+  "ATX1070 Superbike",
+  "Mercedes-Benz S9001",
+  "White Ferrari",
+] as const;
+
+export type RenamedV2GangEquipmentName = (typeof RenamedV2GangEquipmentNames)[number];
+
+export function convertV2GangEquipmentNames(name: RenamedV2GangEquipmentName): GangMemberUpgradeName {
   switch (name) {
     case "Glock 18C":
       return GangMemberUpgradeNameEnum.Malorian;
@@ -24,9 +40,12 @@ export function convertV2GangEquipmentNames(name: string): string {
       return GangMemberUpgradeNameEnum.Rayfield;
     case "White Ferrari":
       return GangMemberUpgradeNameEnum.Quadra;
-    default:
-      return name;
+    default: {
+      // Verify switch statement is exhaustive
+      const __a: never = name;
+    }
   }
+  throw new Error(`Invalid RenamedV2GangEquipmentName: ${name}`);
 }
 
 export const breakingChanges300: VersionBreakingChange = {

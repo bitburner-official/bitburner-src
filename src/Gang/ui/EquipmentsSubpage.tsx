@@ -20,8 +20,10 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { StatsRow } from "../../ui/React/StatsRow";
 import { useRerender } from "../../ui/React/hooks";
+import type { GangMemberUpgradeName } from "@nsdefs";
+import { getRecordKeys } from "../../Types/Record";
 
-function PurchasedUpgrade({ upgName }: { upgName: string }): React.ReactElement {
+function PurchasedUpgrade({ upgName }: { upgName: GangMemberUpgradeName }): React.ReactElement {
   const upg = GangMemberUpgrades[upgName];
   return (
     <Paper sx={{ p: 1 }}>
@@ -70,15 +72,15 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
   const rerender = useRerender();
   const [currentCategory, setCurrentCategory] = useState("Weapons");
 
-  function filterUpgrades(list: string[], type: UpgradeType): GangMemberUpgrade[] {
-    return Object.keys(GangMemberUpgrades)
-      .filter((upgName: string) => {
+  function filterUpgrades(list: GangMemberUpgradeName[], type: UpgradeType): GangMemberUpgrade[] {
+    return getRecordKeys(GangMemberUpgrades)
+      .filter((upgName) => {
         const upg = GangMemberUpgrades[upgName];
         if (upg.type !== type) return false;
         if (list.includes(upgName)) return false;
         return true;
       })
-      .map((upgName: string) => GangMemberUpgrades[upgName]);
+      .map((upgName) => GangMemberUpgrades[upgName]);
   }
 
   const onChange = (event: SelectChangeEvent): void => {
@@ -199,10 +201,10 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
 
       <Typography sx={{ mx: 1 }}>Purchased Upgrades: </Typography>
       <Box display="grid" sx={{ gridTemplateColumns: "repeat(4, 1fr)", m: 1 }}>
-        {props.member.upgrades.map((upg: string) => (
+        {props.member.upgrades.map((upg) => (
           <PurchasedUpgrade key={upg} upgName={upg} />
         ))}
-        {props.member.augmentations.map((upg: string) => (
+        {props.member.augmentations.map((upg) => (
           <PurchasedUpgrade key={upg} upgName={upg} />
         ))}
       </Box>

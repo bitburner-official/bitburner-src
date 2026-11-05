@@ -9,7 +9,7 @@ Get type of an equipment.
 **Signature:**
 
 ```typescript
-getEquipmentType(equipName: string): string;
+getEquipmentType(equipName: GangMemberUpgradeName): string;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ equipName
 
 </td><td>
 
-string
+[GangMemberUpgradeName](./bitburner.gangmemberupgradename.md)
 
 
 </td><td>
