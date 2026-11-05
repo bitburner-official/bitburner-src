@@ -15,7 +15,7 @@ import {
 } from "../../../ui/formatNumber";
 import { Settings } from "../../../Settings/Settings";
 import { StatsRow } from "../../../ui/React/StatsRow";
-import { useStyles } from "../../../ui/React/CharacterOverview";
+import { cellNoneSx } from "../../../ui/React/CharacterOverview";
 import { Money } from "../../../ui/React/Money";
 import { MoneyRate } from "../../../ui/React/MoneyRate";
 import { ReputationRate } from "../../../ui/React/ReputationRate";
@@ -34,8 +34,6 @@ interface IProps {
 }
 
 export function StatsElement(props: IProps): React.ReactElement {
-  const { classes } = useStyles();
-
   return (
     <Table sx={{ display: "table", mb: 1, width: "100%" }}>
       <TableBody>
@@ -85,7 +83,7 @@ export function StatsElement(props: IProps): React.ReactElement {
           />
         )}
         <TableRow>
-          <TableCell classes={{ root: classes.cellNone }}>
+          <TableCell sx={cellNoneSx}>
             <br />
           </TableCell>
         </TableRow>
@@ -110,8 +108,6 @@ export function StatsElement(props: IProps): React.ReactElement {
 }
 
 export function EarningsElement(props: IProps): React.ReactElement {
-  const { classes } = useStyles();
-
   let data: [string, string | JSX.Element][] = [];
   if (isSleeveCrimeWork(props.sleeve.currentWork)) {
     const gains = props.sleeve.currentWork.getExp(props.sleeve);
@@ -175,10 +171,10 @@ export function EarningsElement(props: IProps): React.ReactElement {
         <TableBody>
           {data.map(([a, b]) => (
             <TableRow key={getKeyFromReactElements(a, b)}>
-              <TableCell classes={{ root: classes.cellNone }}>
+              <TableCell sx={cellNoneSx}>
                 <Typography>{a}</Typography>
               </TableCell>
-              <TableCell align="right" classes={{ root: classes.cellNone }}>
+              <TableCell align="right" sx={cellNoneSx}>
                 <Typography>{b}</Typography>
               </TableCell>
             </TableRow>

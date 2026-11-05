@@ -1,42 +1,28 @@
 import React, { FC } from "react";
 import { Card, Suit } from "./Card";
 
-import { makeStyles } from "tss-react/mui";
 import Paper from "@mui/material/Paper";
 import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
+import { Box } from "@mui/material";
 
 interface Props {
   card: Card;
   hidden?: boolean;
 }
 
-const useStyles = makeStyles()(() => ({
-  card: {
-    padding: "10px",
-    border: "solid 1px #808080",
-    backgroundColor: "white",
-    display: "inline-block",
-    borderRadius: "10px",
-    fontSize: "18.5px",
-    textAlign: "center",
-    margin: "3px",
-    fontWeight: "bold",
-  },
-  red: {
-    color: "red",
-  },
-
-  black: {
-    color: "black",
-  },
-  value: {
-    fontSize: "20px",
-    fontFamily: "sans-serif",
-  },
-}));
+const cardSx = {
+  padding: "10px",
+  border: "solid 1px #808080",
+  backgroundColor: "white",
+  display: "inline-block",
+  borderRadius: "10px",
+  fontSize: "18.5px",
+  textAlign: "center",
+  margin: "3px",
+  fontWeight: "bold",
+};
 
 export const ReactCard: FC<Props> = ({ card, hidden }) => {
-  const { classes } = useStyles();
   let suit: React.ReactNode;
   switch (card.suit) {
     case Suit.Clubs:
@@ -55,9 +41,16 @@ export const ReactCard: FC<Props> = ({ card, hidden }) => {
       throwIfReachable(card.suit);
   }
   return (
-    <Paper className={`${classes.card} ${card.isRedSuit() ? classes.red : classes.black}`}>
+    <Paper
+      sx={{
+        color: card.isRedSuit() ? "red" : "black",
+        ...cardSx,
+      }}
+    >
       <>
-        <span className={classes.value}>{hidden ? " - " : card.formatValue()}</span>
+        <Box component="span" sx={{ fontSize: "20px", fontFamily: "sans-serif" }}>
+          {hidden ? " - " : card.formatValue()}
+        </Box>
         <span>{hidden ? " - " : suit}</span>
       </>
     </Paper>

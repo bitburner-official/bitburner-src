@@ -3,7 +3,7 @@ import React from "react";
 import { Typography, TableCell, TableRow } from "@mui/material";
 
 import { formatExp, formatSkill } from "../formatNumber";
-import { useStyles } from "./CharacterOverview";
+import { cellNoneSx } from "./CharacterOverview";
 
 interface ITableRowData {
   content?: string;
@@ -19,8 +19,6 @@ interface IProps {
 }
 
 export const StatsRow = ({ name, color, children, data }: IProps): React.ReactElement => {
-  const { classes } = useStyles();
-
   let content = "";
   if (data) {
     if (data.content !== undefined) {
@@ -34,10 +32,10 @@ export const StatsRow = ({ name, color, children, data }: IProps): React.ReactEl
 
   return (
     <TableRow>
-      <TableCell classes={{ root: classes.cellNone }}>
+      <TableCell sx={cellNoneSx}>
         <Typography style={{ color: color }}>{name}</Typography>
       </TableCell>
-      <TableCell align="right" classes={{ root: classes.cellNone }}>
+      <TableCell align="right" sx={cellNoneSx}>
         {content && <Typography style={{ color: color }}>{content}</Typography>}
         {children}
       </TableCell>

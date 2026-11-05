@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "tss-react/mui";
 import { Modal } from "../ui/React/Modal";
 import { Box, Button, Typography } from "@mui/material/";
 import { errorModalsAreSuppressed, type ErrorRecord, ErrorState, toggleSuppressErrorModals } from "./ErrorState";
@@ -13,7 +12,6 @@ import { SnackbarEvents } from "../ui/React/Snackbar";
 import { Settings } from "../Settings/Settings";
 
 export function ErrorModal(): React.ReactElement {
-  const { classes } = useStyles();
   const rerender = useRerender();
   const [error, setError] = useState<ErrorRecord | null>(ErrorState.ActiveError);
 
@@ -89,7 +87,7 @@ export function ErrorModal(): React.ReactElement {
               />
             )}
           </Typography>
-          <Box className={classes.inlineFlexBox}>
+          <Box sx={{ display: "inline-flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
             <Button onClick={() => onClose()}>Close</Button>
             <div>
               <Button disabled={error.pid === undefined} onClick={viewLogs}>
@@ -103,12 +101,3 @@ export function ErrorModal(): React.ReactElement {
     </Modal>
   );
 }
-
-const useStyles = makeStyles()(() => ({
-  inlineFlexBox: {
-    display: "inline-flex",
-    flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-between",
-  },
-}));

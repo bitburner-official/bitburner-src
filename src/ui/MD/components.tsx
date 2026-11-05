@@ -1,19 +1,6 @@
 import React from "react";
-import { Theme } from "@mui/material/styles";
-import { ListItemText, Table, TableCell, TableCellProps, TableRow, Typography } from "@mui/material";
+import { Box, ListItemText, Table, TableCell, TableCellProps, TableRow, Typography } from "@mui/material";
 import { LiProps, TableDataCellProps, TableHeaderCellProps } from "react-markdown/lib/ast-to-react";
-import { makeStyles } from "tss-react/mui";
-const useStyles = makeStyles()((theme: Theme) => ({
-  th: { whiteSpace: "pre", fontWeight: "bold" },
-  td: { button: { textAlign: "left" } },
-  blockquote: {
-    borderLeftColor: theme.palette.background.paper,
-    borderLeftStyle: "solid",
-    borderLeftWidth: "4px",
-    paddingLeft: "16px",
-    paddingRight: "16px",
-  },
-}));
 
 export const h1 = (props: React.PropsWithChildren<object>): React.ReactElement => (
   // We are just going to cheat and lower every h# by 1.
@@ -93,7 +80,6 @@ const fixAlign = (align: React.CSSProperties["textAlign"]): TableCellProps["alig
 };
 
 export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.ReactElement => {
-  const { classes } = useStyles();
   const align = fixAlign(props.style?.textAlign);
   const content = props.children?.map((child, i) => {
     if (child === "<br />") return <br key={i} />;
@@ -101,7 +87,7 @@ export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.Re
   });
   return (
     <TableCell align={align}>
-      <Typography component="div" align={align} classes={{ root: classes.td }}>
+      <Typography component="div" align={align} sx={{ button: { textAlign: "left" } }}>
         {content}
       </Typography>
     </TableCell>
@@ -109,12 +95,11 @@ export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.Re
 };
 
 export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.ReactElement => {
-  const { classes } = useStyles();
   const align = fixAlign(props.style?.textAlign);
 
   return (
     <TableCell align={align}>
-      <Typography component="div" align={align} classes={{ root: classes.th }}>
+      <Typography component="div" align={align} sx={{ whiteSpace: "pre", fontWeight: "bold" }}>
         {props.children}
       </Typography>
     </TableCell>
@@ -130,6 +115,18 @@ export const tr = (props: React.PropsWithChildren<object>): React.ReactElement =
 };
 
 export const Blockquote = (props: React.PropsWithChildren<object>): React.ReactElement => {
-  const { classes } = useStyles();
-  return <blockquote className={classes.blockquote}>{props.children}</blockquote>;
+  return (
+    <Box
+      component="blockquote"
+      sx={{
+        borderLeftColor: "background.paper",
+        borderLeftStyle: "solid",
+        borderLeftWidth: "4px",
+        paddingLeft: "16px",
+        paddingRight: "16px",
+      }}
+    >
+      {props.children}
+    </Box>
+  );
 };

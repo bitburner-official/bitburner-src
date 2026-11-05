@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Typography } from "@mui/material";
-import { Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
+import { Box, Typography } from "@mui/material";
 import _ from "lodash";
 
 import { Output, Link, RawOutput } from "../OutputTypes";
@@ -16,25 +14,12 @@ import { useRerender } from "../../ui/React/hooks";
 import { TerminalActionTimer } from "./TerminalActionTimer";
 import { ConnectLink } from "./ConnectLink";
 
-const useStyles = makeStyles()((theme: Theme) => ({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    height: "calc(100vh - 16px)",
-  },
-  entries: {
-    padding: 0,
-    overflow: "scroll",
-    flex: "0 1 auto",
-    margin: "auto 0 0",
-  },
-  preformatted: {
-    whiteSpace: "pre-wrap",
-    overflowWrap: "anywhere",
-    margin: theme.spacing(0),
-    width: "100%",
-  },
-}));
+const preformattedTypographySx = {
+  whiteSpace: "pre-wrap",
+  overflowWrap: "anywhere",
+  m: 0,
+  width: "100%",
+};
 
 export function TerminalRoot(): React.ReactElement {
   const scrollHook = useRef<HTMLUListElement>(null);
@@ -80,36 +65,41 @@ export function TerminalRoot(): React.ReactElement {
     };
   }, []);
 
-  const { classes } = useStyles();
   return (
-    <div className={classes.container}>
-      <ul key={key} id="terminal" className={classes.entries} ref={scrollHook}>
+    <Box component="div" sx={{ display: "flex", flexDirection: "column", height: "calc(100vh - 16px)" }}>
+      <Box
+        component="ul"
+        key={key}
+        id="terminal"
+        sx={{ padding: 0, overflow: "scroll", flex: "0 1 auto", margin: "auto 0 0" }}
+        ref={scrollHook}
+      >
         {Terminal.outputHistory.map((item, i) => (
-          <li key={i}>
+          <Box component="li" key={i}>
             {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
             {item instanceof RawOutput && (
-              <Typography component="div" classes={{ root: classes.preformatted }} paragraph={false}>
+              <Typography component="div" sx={preformattedTypographySx} paragraph={false}>
                 {item.raw}
               </Typography>
             )}
             {item instanceof Link && (
-              <Typography component="div" classes={{ root: classes.preformatted }}>
+              <Typography component="div" sx={preformattedTypographySx}>
                 {item.dashes}
                 <ConnectLink path={item.path} text={item.text} />
               </Typography>
             )}
-          </li>
+          </Box>
         ))}
 
         {Terminal.action !== null && (
-          <li>
+          <Box component="li">
             <TerminalActionTimer />{" "}
-          </li>
+          </Box>
         )}
-      </ul>
+      </Box>
       <TerminalInput />
       <BitFlumeModal />
       <CodingContractModal />
-    </div>
+    </Box>
   );
 }
