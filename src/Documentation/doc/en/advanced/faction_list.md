@@ -67,7 +67,7 @@ If you install a backdoor on a company's server, the required reputation of that
 
 ### Endgame Factions
 
-| Faction Name              | Requirements                                                                                                   |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Bladeburners              | \* Be in BitNode 6 or 7 or have Source-File 6 or 7<br />\* Join Bladeburner Division<br />\* Have 25 Rank      |
-| Church of the Machine God | \* Be in BitNode 13 or have Source-File 13<br />\* Have not installed any augmentations in the current BitNode |
+| Faction Name              | Requirements                                                                                                             |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Bladeburners              | \* Be in BitNode 6 or 7 or have Source-File 6 or 7<br />\* Join Bladeburner Division<br />\* Have 25 Rank                |
+| Church of the Machine God | \* Be in BitNode 13 or have Source-File 13<br />\* Have not queued or installed any augmentations in the current BitNode |
