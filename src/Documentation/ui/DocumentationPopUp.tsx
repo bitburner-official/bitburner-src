@@ -4,6 +4,7 @@ import { convertNavigatorHref, Navigator, openDocExternally } from "../../ui/Rea
 import { MD } from "../../ui/MD/MD";
 import { asFilePath, type FilePath } from "../../Paths/FilePath";
 import { DocumentationPopUpEvents } from "../root";
+import { Settings } from "../../Settings/Settings";
 
 export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
   const [path, setPath] = useState<FilePath | undefined>(undefined);
@@ -55,7 +56,14 @@ export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
         setPath(undefined);
       }}
       wrapperRef={modalWrapperRef}
-      wrapperStyles={{ minWidth: "90%", minHeight: "90%", scrollbarWidth: "thin" }}
+      wrapperStyles={{
+        minWidth: "90%",
+        minHeight: "90%",
+        ...(Settings.ShowScrollbarInDocumentationPages && {
+          scrollbarWidth: "auto",
+          scrollbarColor: `${Settings.theme.button} transparent`,
+        }),
+      }}
       removeFocus={false}
     >
       <Navigator.Provider value={navigator}>
