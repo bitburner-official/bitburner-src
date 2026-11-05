@@ -14,7 +14,9 @@ export interface Singularity
 
 ## Remarks
 
-This API requires Source-File 4 to use outside of BitNode 4. Additionally, outside of BitNode 4 the RAM cost of all these functions is multiplied by 16/4/1 based on Source-File 4 levels.
+This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
+
+Additionally, the RAM cost of functions in this namespace change based on your current BN and Source-Files.
 
 ## Methods
 

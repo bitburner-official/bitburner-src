@@ -4,13 +4,17 @@
 
 ## GoCheat interface
 
-Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
+Illicit and dangerous IPvGO tools. Not for the faint of heart.
 
 **Signature:**
 
 ```typescript
 export interface GoCheat 
 ```
+
+## Remarks
+
+This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
 
 ## Methods
 
