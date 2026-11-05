@@ -23,8 +23,7 @@ export function CalculateEffect(nodes: number, faction: GoOpponent): number {
 }
 
 /**
- * Get maximum favor that you can gain from IPvGO win streaks
- * for factions you are a member of.
+ * Get maximum reputation converted to favor that you can gain from IPvGO win streaks for factions you are a member of.
  *
  * This is added as converted rep to avoid making the equivalent value of the favor in rep very different as you approach 150 favor
  */
