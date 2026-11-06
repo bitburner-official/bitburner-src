@@ -10,11 +10,11 @@ export function NetscriptPort(): InternalAPI<IPort> {
     },
     isEmpty: (ctx, _portNumber) => {
       const portHandle = helpers.portHandle(ctx, _portNumber);
-      return portHandle.empty();
+      return portHandle.isEmpty();
     },
     isFull: (ctx, _portNumber) => {
       const portHandle = helpers.portHandle(ctx, _portNumber);
-      return portHandle.full();
+      return portHandle.isFull();
     },
     peek: (ctx, _portNumber) => {
       const portHandle = helpers.portHandle(ctx, _portNumber);
