@@ -4,6 +4,11 @@
 
 ## NetscriptPort.full() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [NetscriptPort.isFull](./bitburner.netscriptport.isfull.md) instead.
+> 
+
 Check if the port is full.
 
 **Signature:**

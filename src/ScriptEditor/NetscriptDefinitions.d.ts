@@ -1315,6 +1315,10 @@ export interface NetscriptPort {
 
   /**
    * Check if the port is full.
+   *
+   * @deprecated
+   * Use {@link NetscriptPort.isFull | NetscriptPort.isFull} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -1323,13 +1327,33 @@ export interface NetscriptPort {
   full(): boolean;
 
   /**
+   * Check if the port is full.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns true if the port is full, otherwise false
+   */
+  isFull(): boolean;
+
+  /**
    * Check if the port is empty.
+   * @deprecated
+   * Use {@link NetscriptPort.isEmpty | NetscriptPort.isEmpty} instead.
    * @remarks
    * RAM cost: 0 GB
    *
    * @returns true if the port is empty, otherwise false
    */
   empty(): boolean;
+
+  /**
+   * Check if the port is empty.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns true if the port is empty, otherwise false
+   */
+  isEmpty(): boolean;
 
   /**
    * Empties all data from the port.
