@@ -104,10 +104,14 @@ const useStyles = makeStyles()((theme: Theme) => ({
     color: theme.colors.primary,
     textOverflow: "ellipsis",
     whiteSpace: "pre-wrap",
-    lineClamp: "6",
     lineHeight: 1.1,
-    overflowX: "auto",
-    maxHeight: "200px",
+    // The unprefixed line-clamp property currently requires players to use experimental browser flags.
+    lineClamp: "6",
+    // Use the prefixed properties for compatibility.
+    display: "-webkit-box",
+    WebkitLineClamp: 6,
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
   },
   xsmall: {
     maxWidth: "110px",
