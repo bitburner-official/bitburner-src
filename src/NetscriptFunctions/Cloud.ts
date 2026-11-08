@@ -1,5 +1,5 @@
 import { Cloud } from "@nsdefs";
-import { InternalAPI } from "src/Netscript/APIWrapper";
+import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Player } from "@player";
 import {

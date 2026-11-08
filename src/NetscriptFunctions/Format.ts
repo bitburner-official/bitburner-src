@@ -1,5 +1,5 @@
 import { Format } from "@nsdefs";
-import { InternalAPI } from "src/Netscript/APIWrapper";
+import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { formatNumber, formatPercent, formatRam, formatMoney } from "../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";

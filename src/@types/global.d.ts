@@ -16,6 +16,8 @@ declare module "*.svg" {
   export default value;
 }
 
+declare module "*.css" {}
+
 // Achievements communicated back to Electron shell for Steam.
 declare interface Document {
   achievements: string[];
