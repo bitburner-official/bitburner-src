@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, shell, BrowserWindow } = require("electron");
+const { app, dialog, shell, BrowserWindow } = require("electron");
 const utils = require("./utils");
 const achievements = require("./achievements");
 const menu = require("./menu");
@@ -61,6 +61,28 @@ async function createWindow(killall) {
   });
 
   window.webContents.backgroundThrottling = false;
+
+  let isWindowClosing = false;
+  window.on("close", () => {
+    isWindowClosing = true;
+  });
+  window.webContents.on("will-prevent-unload", (event) => {
+    if (isWindowClosing) {
+      event.preventDefault();
+      return;
+    }
+    const choice = dialog.showMessageBoxSync(window, {
+      type: "question",
+      buttons: ["Leave", "Cancel"],
+      title: "Confirm to leave",
+      message: "Do you want to leave this site?\n\nChanges you made may not be saved.",
+      defaultId: 0,
+      cancelId: 1,
+    });
+    if (choice === 0) {
+      event.preventDefault();
+    }
+  });
 
   achievements.enableSyncingAchievements();
   utils.attachUnresponsiveAppHandler(window);
