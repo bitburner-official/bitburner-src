@@ -4,6 +4,7 @@ import { Link, Output, RawOutput } from "../OutputTypes";
 import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
 import { PortHandle, PortNumber } from "../../NetscriptPort";
 import { parseCommand } from "../Parser";
+import { TTheme } from "../../Themes/ui/Theme";
 
 export type Args = string | number | boolean;
 
@@ -39,10 +40,18 @@ export function stringify(s: unknown, stripAnsiEscape = false): string {
 }
 
 export function stringifyReactElement(element: React.ReactNode): string {
-  const markup = renderToStaticMarkup(<>{element}</>);
+  // Rendered outside the app's React tree, so provide the game theme that components like <Money> read
+  const markup = renderToStaticMarkup(
+    <TTheme>
+      <>{element}</>
+    </TTheme>,
+  )
+    // separate sibling elements (e.g. ls file names and columns) with one space
+    .replaceAll(/(<\/[^>]+>)(?=<(?!\/|br\b))/g, "$1 ")
+    .replaceAll("<br/>", "\n");
   const div = document.createElement("div");
-  div.innerHTML = markup.replaceAll(">", "> ").replaceAll("<br/>", "\n");
-  return (div.innerText ?? div.textContent ?? "").trim();
+  div.innerHTML = markup;
+  return (div.innerText ?? div.textContent ?? "").trimEnd();
 }
 
 export function getCommandAfterLastPipe(commandString: string): string {

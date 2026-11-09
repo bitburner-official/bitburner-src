@@ -288,6 +288,33 @@ describe("Terminal Pipes", () => {
       expect(getOutput(Terminal.outputHistory, -1).text).toBe(`${scriptName}: ["a",1]`);
     });
 
+    it.each(["./byPath.js", "byPath.js"])(
+      "should run '%s' as the first stage of a redirect instead of treating it as a file",
+      async (scriptPath) => {
+        const scriptName = "byPath.js" as ScriptFilePath;
+        const fileName = "byPathOut.txt" as TextFilePath;
+        const server = GetServerOrThrow(Player.currentServer);
+        server.writeToScriptFile(scriptName, `export function main(ns) { ns.tprint(JSON.stringify(ns.args)); }`);
+
+        await Terminal.executeCommands(`${scriptPath} a 1 > ${fileName}`);
+        await sleep(100);
+
+        expect(server.textFiles.get(fileName)?.text).toBe(`${scriptName}: ["a",1]`);
+      },
+    );
+
+    it("should run a script by path as the first stage of a pipe", async () => {
+      const scriptName = "byPath.js" as ScriptFilePath;
+      const fileName = "byPathGrep.txt" as TextFilePath;
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToScriptFile(scriptName, `export function main(ns) { ns.tprint("found it"); ns.tprint("skip"); }`);
+
+      await Terminal.executeCommands(`./${scriptName} | grep found > ${fileName}`);
+      await sleep(100);
+
+      expect(server.textFiles.get(fileName)?.text).toBe(`${scriptName}: found it`);
+    });
+
     it("should pass the same args to a piped script as to an unpiped one", async () => {
       const scriptName = "pipedArgs.js" as ScriptFilePath;
       const argsFile = "pipedArgs.txt" as TextFilePath;

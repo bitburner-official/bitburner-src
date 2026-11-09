@@ -339,6 +339,7 @@ export class Terminal {
   }
 
   prestige(): void {
+    this.pidOfLastScriptRun = -1;
     this.cancelAction();
     this.clear();
   }
