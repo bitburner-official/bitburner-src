@@ -230,6 +230,7 @@ type ParsedLine = {
   lines: LineStrings;
   filename: string;
   isFileSep: boolean;
+  isEmitted: boolean;
 };
 
 class Results {
@@ -273,7 +274,8 @@ class Results {
     const rawResult = [];
     const prettyResult = [];
     for (const lineInfo of this.results) {
-      if (lineInfo.isPrint === this.options.isInvertMatch) continue;
+      if (lineInfo.isEmitted || lineInfo.isPrint === this.options.isInvertMatch) continue;
+      lineInfo.isEmitted = true;
       rawResult.push(lineInfo.lines.rawLine);
       prettyResult.push(lineInfo.lines.prettyLine);
     }
@@ -332,7 +334,7 @@ function parseLine(pattern: string | RegExp, options: Options, filename: string,
   const lines: LineStrings = { rawLine: rawName + rawLineNo + line, prettyLine: colName + colLineNo + editedLine };
 
   const isMatched = line !== editedLine;
-  return { lines, filename, isMatched, isPrint: false, isFileSep: false };
+  return { lines, filename, isMatched, isPrint: false, isFileSep: false, isEmitted: false };
 }
 
 function writeToTerminal(
@@ -346,7 +348,7 @@ function writeToTerminal(
   const printResult = prettyResult.slice(0, Math.min(prettyResult.length, Settings.MaxTerminalCapacity)); // limit printing to terminal
   const verboseInfo = results.getVerboseInfo(files, pattern, options);
   const truncateInfo = prettyResult.length !== printResult.length ? ERR.truncated() : "";
-  if (results.areEdited) stdIO.write(printResult.join("\n") + truncateInfo);
+  if (results.areEdited && printResult.length) stdIO.write(printResult.join("\n") + truncateInfo);
   if (options.isVerbose) stdIO.write(verboseInfo);
 }
 
@@ -398,21 +400,39 @@ export function grep(args: (string | number | boolean)[], server: BaseServer, st
   if (params.outfile && !outFilePath) return; // associated errors are printed in checkOutFile
 
   if (!validateFilenames(otherArgs.slice(1), server, stdIO)) return;
+  if (outFilePath) server.writeToContentFile(outFilePath, ""); // create or empty it once
+
   const fileContent: DataToSearch[] = options.isSearchAll
     ? getServerFiles(server)
-    : getDataToGrep(otherArgs.slice(1), server, stdinContent);
-
+    : getDataToGrep(otherArgs.slice(1), server, ""); // stdin is handled below
   try {
-    applyFilters(options, params, otherArgs, fileContent, server, stdIO);
+    applyFilters(options, params, otherArgs, fileContent, outFilePath, server, stdIO);
   } catch (error) {
     console.error(error);
-    Terminal.fatal(`grep processing error: ${error}`, stdIO);
+    return Terminal.fatal(`grep processing error: ${error}`, stdIO);
   }
 
-  void callOnRead(stdIO, (data: unknown, stdInOut: StdIO) => {
-    const content = { filename: "stdin", content: stringify(data) };
-    applyFilters(options, params, otherArgs, [content], server, stdInOut);
-  });
+  // Stdin can arrive in chunks while a script runs, so line numbers, the -m count and context lines carry over
+  const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
+  let lineOffset = 0;
+  let matchCount = 0;
+  let carry: ParsedLine[] = [];
+  const filterStdin = (text: string) => {
+    if (nLimit && matchCount >= nLimit) return stdIO.close();
+    const newLines = text.split("\n").map((line, i) => parseLine(pattern, options, "stdin", line, lineOffset + i));
+    lineOffset += newLines.length;
+    const carriedMatches = carry.filter((line) => line.isMatched).length;
+    const results = new Results([...carry, ...newLines], options, params)
+      .capMatches(nLimit - matchCount + carriedMatches)
+      .addContext(nContext);
+    matchCount += newLines.filter((line) => line.isMatched).length;
+    carry = nContext ? results.results.slice(-nContext) : [];
+    writeResults(results, [{ filename: "stdin", content: text }], pattern, outFilePath, server, stdIO);
+    if (nLimit && matchCount >= nLimit) stdIO.close();
+  };
+
+  if (stdinContent) filterStdin(stdinContent.replace(/\n$/, ""));
+  void callOnRead(stdIO, (data: unknown) => filterStdin(stringify(data)));
 }
 
 function applyFilters(
@@ -420,19 +440,35 @@ function applyFilters(
   params: Parameters,
   otherArgs: string[],
   fileContent: DataToSearch[],
+  outFilePath: ContentFilePath | null,
   server: BaseServer,
   stdIO: StdIO,
 ) {
   const nContext = Math.max(Number(params.preContext), Number(params.context), Number(params.postContext));
-  const nLimit = Number(params.maxMatches);
-  const outFilePath = checkOutFile(params.outfile, options, server, stdIO);
   const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
-  const contentToMatch = getContentToMatch(pattern, options, fileContent);
-  const results = new Results(contentToMatch, options, params);
-  const [rawResult, prettyResult] = results.capMatches(nLimit).addContext(nContext).splitAndFilter();
+  const results = new Results(getContentToMatch(pattern, options, fileContent), options, params);
+  writeResults(
+    results.capMatches(Number(params.maxMatches)).addContext(nContext),
+    fileContent,
+    pattern,
+    outFilePath,
+    server,
+    stdIO,
+  );
+}
 
-  if (!options.isQuiet) writeToTerminal(prettyResult, options, results, fileContent, pattern, stdIO);
-  if (params.outfile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
+function writeResults(
+  results: Results,
+  files: DataToSearch[],
+  pattern: string | RegExp,
+  outFilePath: ContentFilePath | null,
+  server: BaseServer,
+  stdIO: StdIO,
+) {
+  const [rawResult, prettyResult] = results.splitAndFilter();
+  if (!results.options.isQuiet) writeToTerminal(prettyResult, results.options, results, files, pattern, stdIO);
+  const file = outFilePath ? server.getContentFile(outFilePath) : null;
+  if (file && rawResult.length) file.content += (file.content ? "\n" : "") + rawResult.join("\n");
 }
 
 function getContentToMatch(pattern: RegExp | string, options: Options, fileContent: DataToSearch[]): ParsedLine[] {

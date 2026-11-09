@@ -43,7 +43,7 @@ export async function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
   const command = trimQuotes(`${rawCommand}`);
 
   // Pipe to file
-  if (hasTextExtension(command) || (hasScriptExtension(command) && pipeSymbol !== PipeSymbols.Pipe)) {
+  if (hasTextExtension(command) || (hasScriptExtension(command) && pipeSymbol && pipeSymbol !== PipeSymbols.Pipe)) {
     return handlePipeToFile(command, pipeSymbol, stdIO);
   }
 

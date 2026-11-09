@@ -83,4 +83,74 @@ describe("grep command", () => {
       `This is line 2 of file 1This is another example text file.\nThis is line 2 of file 2`,
     );
   });
+
+  describe("on stdin that arrives line by line from a running script", () => {
+    const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+    const logger = "logger.js" as ScriptFilePath;
+    const outFile = "out.txt" as TextFilePath;
+    const loggerContent = `export async function main(ns) {
+      for (const line of ["err one", "ok two", "err three", "ok four"]) {
+        ns.tprint(line);
+        await ns.sleep(20);
+      }
+      await ns.sleep(Number(ns.args[0] ?? 0));
+    }`;
+
+    beforeEach(() => {
+      GetServerOrThrow(Player.currentServer).writeToScriptFile(logger, loggerContent);
+    });
+
+    async function runAndReadOutFile(command: string): Promise<string | undefined> {
+      await Terminal.executeCommands(command);
+      await sleep(300);
+      return GetServerOrThrow(Player.currentServer).textFiles.get(outFile)?.text;
+    }
+
+    it("should keep counting line numbers across chunks with -n", async () => {
+      expect(await runAndReadOutFile(`run ${logger} | grep -n err > ${outFile}`)).toBe(
+        "1:logger.js: err one\n3:logger.js: err three",
+      );
+    });
+
+    it("should write every chunk's matches to the -O file without an 'already exists' error", async () => {
+      expect(await runAndReadOutFile(`run ${logger} | grep err -O ${outFile}`)).toBe(
+        "logger.js: err one\nlogger.js: err three",
+      );
+      const terminalText = Terminal.outputHistory.map((line) => stringify(line, true)).join("\n");
+      expect(terminalText).not.toContain("already exist");
+    });
+
+    it("should print -A context from the next chunk", async () => {
+      expect(await runAndReadOutFile(`run ${logger} | grep -A 1 one > ${outFile}`)).toBe(
+        "logger.js: err one\nlogger.js: ok two",
+      );
+    });
+
+    it("should print -B context from the previous chunk", async () => {
+      expect(await runAndReadOutFile(`run ${logger} | grep -B 1 three > ${outFile}`)).toBe(
+        "logger.js: ok two\nlogger.js: err three",
+      );
+    });
+
+    it("should stop after -m matches and close its output while the script is still running", async () => {
+      const reader = "reader.js" as ScriptFilePath;
+      GetServerOrThrow(Player.currentServer).writeToScriptFile(
+        reader,
+        `export async function main(ns) {
+          const stdin = ns.getStdin();
+          const received = [];
+          while (true) {
+            if (stdin.empty()) await stdin.nextWrite();
+            const data = stdin.read();
+            if (data === null) break;
+            received.push(data);
+          }
+          ns.write("${outFile}", received.join("|"), "w");
+        }`,
+      );
+
+      // The logger keeps running for 5 seconds after its last line, so the reader only finishes if grep closes
+      expect(await runAndReadOutFile(`run ${logger} 5000 | grep -m 1 err | run ${reader}`)).toBe("logger.js: err one");
+    });
+  });
 });
