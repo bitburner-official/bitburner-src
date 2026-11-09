@@ -2,8 +2,7 @@ import React, { useState } from "react";
 
 import { Money } from "../../../ui/React/Money";
 import { Modal } from "../../../ui/React/Modal";
-import { Router } from "../../../ui/GameRoot";
-import { Page } from "../../../ui/Router";
+import { Page, Router } from "../../../ui/Router";
 import { formatShares } from "../../../ui/formatNumber";
 import { Player } from "@player";
 import Typography from "@mui/material/Typography";

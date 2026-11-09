@@ -450,6 +450,7 @@ import nsDoc_bitburner_darknet_promotestock_md from "../../markdown/bitburner.da
 import nsDoc_bitburner_darknet_setstasislink_md from "../../markdown/bitburner.darknet.setstasislink.md?raw";
 import nsDoc_bitburner_darknet_unleashstormseed_md from "../../markdown/bitburner.darknet.unleashstormseed.md?raw";
 import nsDoc_bitburner_darknetformulas_getauthenticatetime_md from "../../markdown/bitburner.darknetformulas.getauthenticatetime.md?raw";
+import nsDoc_bitburner_darknetformulas_getexpectedmigrationcharge_md from "../../markdown/bitburner.darknetformulas.getexpectedmigrationcharge.md?raw";
 import nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md from "../../markdown/bitburner.darknetformulas.getexpectedramblockremoved.md?raw";
 import nsDoc_bitburner_darknetformulas_getheartbleedtime_md from "../../markdown/bitburner.darknetformulas.getheartbleedtime.md?raw";
 import nsDoc_bitburner_darknetformulas_md from "../../markdown/bitburner.darknetformulas.md?raw";
@@ -589,6 +590,7 @@ import nsDoc_bitburner_gangformulas_ascensionmultiplier_md from "../../markdown/
 import nsDoc_bitburner_gangformulas_ascensionpointsgain_md from "../../markdown/bitburner.gangformulas.ascensionpointsgain.md?raw";
 import nsDoc_bitburner_gangformulas_md from "../../markdown/bitburner.gangformulas.md?raw";
 import nsDoc_bitburner_gangformulas_moneygain_md from "../../markdown/bitburner.gangformulas.moneygain.md?raw";
+import nsDoc_bitburner_gangformulas_reputationgain_md from "../../markdown/bitburner.gangformulas.reputationgain.md?raw";
 import nsDoc_bitburner_gangformulas_respectgain_md from "../../markdown/bitburner.gangformulas.respectgain.md?raw";
 import nsDoc_bitburner_gangformulas_wantedlevelgain_md from "../../markdown/bitburner.gangformulas.wantedlevelgain.md?raw";
 import nsDoc_bitburner_gangformulas_wantedpenalty_md from "../../markdown/bitburner.gangformulas.wantedpenalty.md?raw";
@@ -669,6 +671,8 @@ import nsDoc_bitburner_gangmemberinstall_dex_md from "../../markdown/bitburner.g
 import nsDoc_bitburner_gangmemberinstall_hack_md from "../../markdown/bitburner.gangmemberinstall.hack.md?raw";
 import nsDoc_bitburner_gangmemberinstall_md from "../../markdown/bitburner.gangmemberinstall.md?raw";
 import nsDoc_bitburner_gangmemberinstall_str_md from "../../markdown/bitburner.gangmemberinstall.str.md?raw";
+import nsDoc_bitburner_gangmemberupgradename_md from "../../markdown/bitburner.gangmemberupgradename.md?raw";
+import nsDoc_bitburner_gangmemberupgradenameenumtype_md from "../../markdown/bitburner.gangmemberupgradenameenumtype.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_md from "../../markdown/bitburner.gangotherinfoobject.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_power_md from "../../markdown/bitburner.gangotherinfoobject.power.md?raw";
 import nsDoc_bitburner_gangotherinfoobject_territory_md from "../../markdown/bitburner.gangotherinfoobject.territory.md?raw";
@@ -828,6 +832,7 @@ import nsDoc_bitburner_hacknetserverconstants_upgradecoremult_md from "../../mar
 import nsDoc_bitburner_hacknetserverconstants_upgradelevelmult_md from "../../markdown/bitburner.hacknetserverconstants.upgradelevelmult.md?raw";
 import nsDoc_bitburner_hacknetserverconstants_upgraderammult_md from "../../markdown/bitburner.hacknetserverconstants.upgraderammult.md?raw";
 import nsDoc_bitburner_hacknetserverhashupgrade_md from "../../markdown/bitburner.hacknetserverhashupgrade.md?raw";
+import nsDoc_bitburner_hacknetserverhashupgradeenumtype_md from "../../markdown/bitburner.hacknetserverhashupgradeenumtype.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_cacheupgradecost_md from "../../markdown/bitburner.hacknetserversformulas.cacheupgradecost.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_constants_md from "../../markdown/bitburner.hacknetserversformulas.constants.md?raw";
 import nsDoc_bitburner_hacknetserversformulas_coreupgradecost_md from "../../markdown/bitburner.hacknetserversformulas.coreupgradecost.md?raw";
@@ -1086,6 +1091,7 @@ import nsDoc_bitburner_ns_nextportwrite_md from "../../markdown/bitburner.ns.nex
 import nsDoc_bitburner_ns_nuke_md from "../../markdown/bitburner.ns.nuke.md?raw";
 import nsDoc_bitburner_ns_peek_md from "../../markdown/bitburner.ns.peek.md?raw";
 import nsDoc_bitburner_ns_pid_md from "../../markdown/bitburner.ns.pid.md?raw";
+import nsDoc_bitburner_ns_port_md from "../../markdown/bitburner.ns.port.md?raw";
 import nsDoc_bitburner_ns_print_md from "../../markdown/bitburner.ns.print.md?raw";
 import nsDoc_bitburner_ns_printf_md from "../../markdown/bitburner.ns.printf.md?raw";
 import nsDoc_bitburner_ns_printraw_md from "../../markdown/bitburner.ns.printraw.md?raw";
@@ -1179,6 +1185,16 @@ import nsDoc_bitburner_player_totalplaytime_md from "../../markdown/bitburner.pl
 import nsDoc_bitburner_playerbasetask_cyclesworked_md from "../../markdown/bitburner.playerbasetask.cyclesworked.md?raw";
 import nsDoc_bitburner_playerbasetask_md from "../../markdown/bitburner.playerbasetask.md?raw";
 import nsDoc_bitburner_playerrequirement_md from "../../markdown/bitburner.playerrequirement.md?raw";
+import nsDoc_bitburner_port_clear_md from "../../markdown/bitburner.port.clear.md?raw";
+import nsDoc_bitburner_port_gethandle_md from "../../markdown/bitburner.port.gethandle.md?raw";
+import nsDoc_bitburner_port_isempty_md from "../../markdown/bitburner.port.isempty.md?raw";
+import nsDoc_bitburner_port_isfull_md from "../../markdown/bitburner.port.isfull.md?raw";
+import nsDoc_bitburner_port_md from "../../markdown/bitburner.port.md?raw";
+import nsDoc_bitburner_port_nextwrite_md from "../../markdown/bitburner.port.nextwrite.md?raw";
+import nsDoc_bitburner_port_peek_md from "../../markdown/bitburner.port.peek.md?raw";
+import nsDoc_bitburner_port_read_md from "../../markdown/bitburner.port.read.md?raw";
+import nsDoc_bitburner_port_trywrite_md from "../../markdown/bitburner.port.trywrite.md?raw";
+import nsDoc_bitburner_port_write_md from "../../markdown/bitburner.port.write.md?raw";
 import nsDoc_bitburner_positionenumtype_md from "../../markdown/bitburner.positionenumtype.md?raw";
 import nsDoc_bitburner_positiontype_md from "../../markdown/bitburner.positiontype.md?raw";
 import nsDoc_bitburner_processinfo_args_md from "../../markdown/bitburner.processinfo.args.md?raw";
@@ -2083,6 +2099,7 @@ AllPages["nsDoc/bitburner.darknet.promotestock.md"] = nsDoc_bitburner_darknet_pr
 AllPages["nsDoc/bitburner.darknet.setstasislink.md"] = nsDoc_bitburner_darknet_setstasislink_md;
 AllPages["nsDoc/bitburner.darknet.unleashstormseed.md"] = nsDoc_bitburner_darknet_unleashstormseed_md;
 AllPages["nsDoc/bitburner.darknetformulas.getauthenticatetime.md"] = nsDoc_bitburner_darknetformulas_getauthenticatetime_md;
+AllPages["nsDoc/bitburner.darknetformulas.getexpectedmigrationcharge.md"] = nsDoc_bitburner_darknetformulas_getexpectedmigrationcharge_md;
 AllPages["nsDoc/bitburner.darknetformulas.getexpectedramblockremoved.md"] = nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md;
 AllPages["nsDoc/bitburner.darknetformulas.getheartbleedtime.md"] = nsDoc_bitburner_darknetformulas_getheartbleedtime_md;
 AllPages["nsDoc/bitburner.darknetformulas.md"] = nsDoc_bitburner_darknetformulas_md;
@@ -2222,6 +2239,7 @@ AllPages["nsDoc/bitburner.gangformulas.ascensionmultiplier.md"] = nsDoc_bitburne
 AllPages["nsDoc/bitburner.gangformulas.ascensionpointsgain.md"] = nsDoc_bitburner_gangformulas_ascensionpointsgain_md;
 AllPages["nsDoc/bitburner.gangformulas.md"] = nsDoc_bitburner_gangformulas_md;
 AllPages["nsDoc/bitburner.gangformulas.moneygain.md"] = nsDoc_bitburner_gangformulas_moneygain_md;
+AllPages["nsDoc/bitburner.gangformulas.reputationgain.md"] = nsDoc_bitburner_gangformulas_reputationgain_md;
 AllPages["nsDoc/bitburner.gangformulas.respectgain.md"] = nsDoc_bitburner_gangformulas_respectgain_md;
 AllPages["nsDoc/bitburner.gangformulas.wantedlevelgain.md"] = nsDoc_bitburner_gangformulas_wantedlevelgain_md;
 AllPages["nsDoc/bitburner.gangformulas.wantedpenalty.md"] = nsDoc_bitburner_gangformulas_wantedpenalty_md;
@@ -2302,6 +2320,8 @@ AllPages["nsDoc/bitburner.gangmemberinstall.dex.md"] = nsDoc_bitburner_gangmembe
 AllPages["nsDoc/bitburner.gangmemberinstall.hack.md"] = nsDoc_bitburner_gangmemberinstall_hack_md;
 AllPages["nsDoc/bitburner.gangmemberinstall.md"] = nsDoc_bitburner_gangmemberinstall_md;
 AllPages["nsDoc/bitburner.gangmemberinstall.str.md"] = nsDoc_bitburner_gangmemberinstall_str_md;
+AllPages["nsDoc/bitburner.gangmemberupgradename.md"] = nsDoc_bitburner_gangmemberupgradename_md;
+AllPages["nsDoc/bitburner.gangmemberupgradenameenumtype.md"] = nsDoc_bitburner_gangmemberupgradenameenumtype_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.md"] = nsDoc_bitburner_gangotherinfoobject_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.power.md"] = nsDoc_bitburner_gangotherinfoobject_power_md;
 AllPages["nsDoc/bitburner.gangotherinfoobject.territory.md"] = nsDoc_bitburner_gangotherinfoobject_territory_md;
@@ -2461,6 +2481,7 @@ AllPages["nsDoc/bitburner.hacknetserverconstants.upgradecoremult.md"] = nsDoc_bi
 AllPages["nsDoc/bitburner.hacknetserverconstants.upgradelevelmult.md"] = nsDoc_bitburner_hacknetserverconstants_upgradelevelmult_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.upgraderammult.md"] = nsDoc_bitburner_hacknetserverconstants_upgraderammult_md;
 AllPages["nsDoc/bitburner.hacknetserverhashupgrade.md"] = nsDoc_bitburner_hacknetserverhashupgrade_md;
+AllPages["nsDoc/bitburner.hacknetserverhashupgradeenumtype.md"] = nsDoc_bitburner_hacknetserverhashupgradeenumtype_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.cacheupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_cacheupgradecost_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.constants.md"] = nsDoc_bitburner_hacknetserversformulas_constants_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.coreupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_coreupgradecost_md;
@@ -2719,6 +2740,7 @@ AllPages["nsDoc/bitburner.ns.nextportwrite.md"] = nsDoc_bitburner_ns_nextportwri
 AllPages["nsDoc/bitburner.ns.nuke.md"] = nsDoc_bitburner_ns_nuke_md;
 AllPages["nsDoc/bitburner.ns.peek.md"] = nsDoc_bitburner_ns_peek_md;
 AllPages["nsDoc/bitburner.ns.pid.md"] = nsDoc_bitburner_ns_pid_md;
+AllPages["nsDoc/bitburner.ns.port.md"] = nsDoc_bitburner_ns_port_md;
 AllPages["nsDoc/bitburner.ns.print.md"] = nsDoc_bitburner_ns_print_md;
 AllPages["nsDoc/bitburner.ns.printf.md"] = nsDoc_bitburner_ns_printf_md;
 AllPages["nsDoc/bitburner.ns.printraw.md"] = nsDoc_bitburner_ns_printraw_md;
@@ -2812,6 +2834,16 @@ AllPages["nsDoc/bitburner.player.totalplaytime.md"] = nsDoc_bitburner_player_tot
 AllPages["nsDoc/bitburner.playerbasetask.cyclesworked.md"] = nsDoc_bitburner_playerbasetask_cyclesworked_md;
 AllPages["nsDoc/bitburner.playerbasetask.md"] = nsDoc_bitburner_playerbasetask_md;
 AllPages["nsDoc/bitburner.playerrequirement.md"] = nsDoc_bitburner_playerrequirement_md;
+AllPages["nsDoc/bitburner.port.clear.md"] = nsDoc_bitburner_port_clear_md;
+AllPages["nsDoc/bitburner.port.gethandle.md"] = nsDoc_bitburner_port_gethandle_md;
+AllPages["nsDoc/bitburner.port.isempty.md"] = nsDoc_bitburner_port_isempty_md;
+AllPages["nsDoc/bitburner.port.isfull.md"] = nsDoc_bitburner_port_isfull_md;
+AllPages["nsDoc/bitburner.port.md"] = nsDoc_bitburner_port_md;
+AllPages["nsDoc/bitburner.port.nextwrite.md"] = nsDoc_bitburner_port_nextwrite_md;
+AllPages["nsDoc/bitburner.port.peek.md"] = nsDoc_bitburner_port_peek_md;
+AllPages["nsDoc/bitburner.port.read.md"] = nsDoc_bitburner_port_read_md;
+AllPages["nsDoc/bitburner.port.trywrite.md"] = nsDoc_bitburner_port_trywrite_md;
+AllPages["nsDoc/bitburner.port.write.md"] = nsDoc_bitburner_port_write_md;
 AllPages["nsDoc/bitburner.positionenumtype.md"] = nsDoc_bitburner_positionenumtype_md;
 AllPages["nsDoc/bitburner.positiontype.md"] = nsDoc_bitburner_positiontype_md;
 AllPages["nsDoc/bitburner.processinfo.args.md"] = nsDoc_bitburner_processinfo_args_md;

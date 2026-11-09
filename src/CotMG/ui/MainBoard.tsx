@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Table } from "../../ui/React/Table";
 import { Grid } from "./Grid";
-import { zeros } from "../Helper";
+import { normalizeFragmentRotation, zeros } from "../Helper";
 import { ActiveFragmentSummary } from "./ActiveFragmentSummary";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -72,12 +72,12 @@ export function MainBoard(props: IProps): React.ReactElement {
   React.useEffect(() => {
     function doRotate(this: Document, event: KeyboardEvent): void {
       if (event.key === "q") {
-        const r = (rotation - 1 + 4) % 4;
+        const r = normalizeFragmentRotation(rotation - 1);
         setRotation(r);
         moveGhost(pos[0], pos[1], r);
       }
       if (event.key === "e") {
-        const r = (rotation + 1) % 4;
+        const r = normalizeFragmentRotation(rotation + 1);
         setRotation(r);
         moveGhost(pos[0], pos[1], r);
       }

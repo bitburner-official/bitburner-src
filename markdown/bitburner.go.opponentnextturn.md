@@ -4,7 +4,7 @@
 
 ## Go.opponentNextTurn() method
 
-Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable. x:0 y:0 represents the bottom-left corner of the board in the UI.
+Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable. {<!-- -->"x":0,"y":0<!-- -->} represents the bottom-left corner of the board in the UI.
 
 **Signature:**
 

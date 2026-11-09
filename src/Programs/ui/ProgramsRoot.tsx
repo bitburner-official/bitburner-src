@@ -5,8 +5,7 @@ import { Check, Lock, Create } from "@mui/icons-material";
 
 import { Player } from "@player";
 import { CompletedProgramName } from "@enums";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { Settings } from "../../Settings/Settings";
 
 import { Programs } from "../Programs";

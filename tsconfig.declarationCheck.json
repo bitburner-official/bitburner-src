@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": false
+  },
+  "files": [
+    "src/ScriptEditor/NetscriptDefinitions.d.ts",
+    "src/@types/global.d.ts",
+    "src/@types/module-augmentations.d.ts"
+  ],
+  "include": []
+}

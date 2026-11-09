@@ -114,7 +114,7 @@ const hacknet = {
   spendHashes: RamCostConstants.Hacknet,
   maxNumNodes: RamCostConstants.Hacknet,
   hashCapacity: RamCostConstants.Hacknet,
-  getHashUpgrades: RamCostConstants.Hacknet,
+  getHashUpgrades: 0,
   getHashUpgradeLevel: RamCostConstants.Hacknet,
   getStudyMult: RamCostConstants.Hacknet,
   getTrainingMult: RamCostConstants.Hacknet,
@@ -233,6 +233,19 @@ const cloud = {
   purchaseServer: 2.25,
   deleteServer: 2.25,
 } as const;
+
+// Port API
+const port = {
+  getHandle: 0,
+  isEmpty: 0,
+  isFull: 0,
+  peek: 0,
+  read: 0,
+  write: 0,
+  tryWrite: 0,
+  nextWrite: 0,
+  clear: 0,
+};
 
 // Darknet API
 const dnet = {
@@ -551,6 +564,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   singularity,
   format,
   cloud,
+  port,
   gang,
   go,
   dnet,
@@ -726,6 +740,7 @@ export const RamCosts: RamCostTree<NSFull> = {
     gang: {
       wantedPenalty: 0,
       respectGain: 0,
+      reputationGain: 0,
       wantedLevelGain: 0,
       moneyGain: 0,
       ascensionPointsGain: 0,
@@ -746,6 +761,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       getAuthenticateTime: 0,
       getHeartbleedTime: 0,
       getExpectedRamBlockRemoved: 0,
+      getExpectedMigrationCharge: 0,
     },
   },
 } as const;

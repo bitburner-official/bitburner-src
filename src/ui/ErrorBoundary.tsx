@@ -3,7 +3,7 @@ import React, { type ErrorInfo } from "react";
 import { type CrashReport, getCrashReport } from "../utils/ErrorHelper";
 import { RecoveryRoot } from "./React/RecoveryRoot";
 import type { Page } from "./Router";
-import { Router } from "./GameRoot";
+import { Router } from "./Router";
 
 type ErrorBoundaryProps = {
   softReset: () => void;

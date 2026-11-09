@@ -15,8 +15,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { makeTheme } from "./themes";
 
 import { Modal } from "../../ui/React/Modal";
-import { Page } from "../../ui/Router";
-import { Router } from "../../ui/GameRoot";
+import { Page, Router } from "../../ui/Router";
 import { useBoolean } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 import { OptionsModal, OptionsModalProps } from "./OptionsModal";

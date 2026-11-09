@@ -21,12 +21,12 @@ import { DeleteGameButton } from "../../ui/React/DeleteGameButton";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { SoftResetButton } from "../../ui/React/SoftResetButton";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { OptionsTabName } from "./GameOptionsRoot";
 import { Player } from "@player";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
+import { CONSTANTS } from "../../Constants";
 
 interface IProps {
   tab: OptionsTabName;
@@ -300,7 +300,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
             Repeat Tutorial
           </Button>
-          <Button startIcon={<Chat />} href="https://discord.gg/TFc3hKD" target="_blank" sx={{ gridArea: "discord" }}>
+          <Button startIcon={<Chat />} href={CONSTANTS.DiscordURL} target="_blank" sx={{ gridArea: "discord" }}>
             Discord
           </Button>
           <Button

@@ -4,6 +4,11 @@
 
 ## NS.readPort() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [Port.read](./bitburner.port.read.md) instead
+> 
+
 Read data from a port.
 
 **Signature:**

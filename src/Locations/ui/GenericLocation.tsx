@@ -25,8 +25,7 @@ import { isBackdoorInstalled } from "../../Server/ServerHelpers";
 import { GetServer } from "../../Server/AllServers";
 
 import { CorruptibleText } from "../../ui/React/CorruptibleText";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { serverMetadata } from "../../Server/data/servers";
 import { Tooltip } from "@mui/material";
 import { getEnumHelper } from "../../utils/EnumHelper";

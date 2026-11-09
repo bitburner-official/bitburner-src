@@ -10,8 +10,7 @@ import Tab from "@mui/material/Tab";
 
 import { useCycleRerender } from "../../ui/React/hooks";
 import Button from "@mui/material/Button";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { Factions } from "../../Faction/Factions";
 
 /** React Component for all the gang stuff. */

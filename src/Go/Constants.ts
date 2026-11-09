@@ -32,7 +32,7 @@ export const opponentDetails = {
     description: "Aggro AI",
     flavorText:
       "The Black Hand faction is a black-hat hacking group who uses their subnets to launch targeted DDOS attacks. They are famous for their unrelenting aggression, surrounding and strangling any foothold their opponents try to establish.",
-    bonusDescription: "hacking money",
+    bonusDescription: "hack power",
     bonusPower: 0.9,
   },
   [GoOpponent.Tetrads]: {

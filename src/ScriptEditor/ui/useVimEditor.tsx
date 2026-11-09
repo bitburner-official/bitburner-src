@@ -3,8 +3,7 @@ import * as MonacoVim from "monaco-vim";
 import type { editor } from "monaco-editor";
 type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { StatusBar } from "./StatusBar";
 import { useRerender } from "../../ui/React/hooks";
 
@@ -13,17 +12,28 @@ interface IProps {
   editor: IStandaloneCodeEditor | null;
   onOpenNextTab: (step: number) => void;
   onOpenPreviousTab: (step: number) => void;
+  onCloseCurrentTab: () => void;
   onSave: () => Promise<void>;
 }
 
-export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, onSave }: IProps) {
+export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, onCloseCurrentTab, onSave }: IProps) {
   const [vimEditor, setVimEditor] = useState<ReturnType<typeof MonacoVim.initVimMode> | null>(null);
 
   const statusBarRef = useRef<React.ReactElement | null>(null);
   const rerender = useRerender();
 
-  const actionsRef = useRef({ save: onSave, openNextTab: onOpenNextTab, openPreviousTab: onOpenPreviousTab });
-  actionsRef.current = { save: onSave, openNextTab: onOpenNextTab, openPreviousTab: onOpenPreviousTab };
+  const actionsRef = useRef({
+    save: onSave,
+    openNextTab: onOpenNextTab,
+    openPreviousTab: onOpenPreviousTab,
+    closeCurrentTab: onCloseCurrentTab,
+  });
+  actionsRef.current = {
+    save: onSave,
+    openNextTab: onOpenNextTab,
+    openPreviousTab: onOpenPreviousTab,
+    closeCurrentTab: onCloseCurrentTab,
+  };
 
   useEffect(() => {
     // setup monaco-vim
@@ -53,6 +63,11 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
         // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
         MonacoVim.VimMode.Vim.defineEx("wqriteandquit", "wq", saveNQuit);
         MonacoVim.VimMode.Vim.defineEx("xriteandquit", "x", saveNQuit);
+
+        // ":bd" / ":bdelete" closes the current tab without leaving the editor.
+        MonacoVim.VimMode.Vim.defineEx("bdelete", "bd", function () {
+          actionsRef.current.closeCurrentTab();
+        });
 
         // Setup "go to next tab" and "go to previous tab". This is a little more involved
         // since these aren't Ex commands (they run in normal mode, not after typing `:`)

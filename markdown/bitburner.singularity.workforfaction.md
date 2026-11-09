@@ -101,7 +101,7 @@ This function will return true if you successfully start working for the specifi
 const factionName = "CyberSec";
 const workType = "hacking";
 
-let success = ns.singularity.workForFaction(factionName, workType);
+const success = ns.singularity.workForFaction(factionName, workType);
 if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`);
 ```
 

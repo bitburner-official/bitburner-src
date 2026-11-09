@@ -11,7 +11,7 @@ import { generateNextPid } from "./Netscript/Pid";
 import { CONSTANTS } from "./Constants";
 import { NetscriptFunctions } from "./NetscriptFunctions";
 import { compile } from "./NetscriptJSEvaluator";
-import { Port, PortNumber } from "./NetscriptPort";
+import { NetscriptPorts } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
 import { scriptCalculateOfflineProduction } from "./Script/ScriptHelpers";
 import { GetAllServers } from "./Server/AllServers";
@@ -36,8 +36,6 @@ import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { DarknetServer } from "./Server/DarknetServer";
 import { getTerminalStdIO } from "./Terminal/StdIO/RedirectIO";
 import { resetStdinHandleCounter } from "./Terminal/StdIO/utils";
-
-export const NetscriptPorts = new Map<PortNumber, Port>();
 
 export function prestigeWorkerScripts(): void {
   for (const ws of workerScripts.values()) {

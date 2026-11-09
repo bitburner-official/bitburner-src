@@ -4,6 +4,10 @@
 
 ## ActiveFragment.numCharge property
 
+The current charge value in play for this fragment. This is the cumulative effective threads used to charge across all cycles, divided by the (current) highestCharge.
+
+This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged.
+
 **Signature:**
 
 ```typescript

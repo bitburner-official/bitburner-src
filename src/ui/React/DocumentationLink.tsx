@@ -1,8 +1,7 @@
 import React from "react";
 import { Link, type LinkProps } from "@mui/material";
 import { Settings } from "../../Settings/Settings";
-import { Router } from "../GameRoot";
-import { Page } from "../Router";
+import { Page, Router } from "../Router";
 import { openDocExternally } from "./Documentation";
 import { openDocumentationPopUp } from "../../Documentation/root";
 

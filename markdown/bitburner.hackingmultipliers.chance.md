@@ -4,7 +4,7 @@
 
 ## HackingMultipliers.chance property
 
-Player's hacking chance multiplier.
+Player's hack() success chance multiplier.
 
 **Signature:**
 

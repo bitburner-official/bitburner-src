@@ -74,5 +74,5 @@ Amount of RAM (in GB) required to run the specified script, and 0 if the script 
 
 RAM cost: 0.1 GB
 
-Returns the amount of RAM required to run the specified script on the target server. Returns 0 if the script does not exist.
+Returns the amount of RAM required to run the specified script on the target server. Returns 0 if the script does not exist, has syntax errors or import errors.
 

@@ -13,8 +13,7 @@ import {
 } from "../../ui/React/Documentation";
 import { asFilePath } from "../../Paths/FilePath";
 import { Settings } from "../../Settings/Settings";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { DocumentationAutocomplete } from "./DocumentationAutocomplete";
 
 export function DocumentationRoot({ docPage }: { docPage?: string }): React.ReactElement {
@@ -95,7 +94,7 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
           }}
         />
       </Box>
-      <Box paddingTop="50px">
+      <Box sx={{ paddingTop: "50px", maxWidth: "lg" }}>
         <Navigator.Provider value={navigator}>
           <MD pageFilePath={deepLink ? asFilePath(deepLink) : history.page} />
         </Navigator.Provider>

@@ -448,7 +448,7 @@ number
 
 </td><td>
 
-Multiplier to hacking speed
+Multiplier to the speed of hack(), grow() and weaken()
 
 
 </td></tr>

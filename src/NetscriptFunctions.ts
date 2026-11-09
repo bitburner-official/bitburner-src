@@ -33,6 +33,8 @@ import {
   BladeburnerActionType,
   SpecialBladeburnerActionTypeForSleeve,
   GangTaskNameEnum,
+  GangMemberUpgradeNameEnum,
+  HashUpgradeEnum,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer } from "./Server/AllServers";
@@ -101,8 +103,7 @@ import { getRamCost, RamCostConstants } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { ServerConstants } from "./Server/data/Constants";
 import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
-import { Router } from "./ui/GameRoot";
-import { Page } from "./ui/Router";
+import { Page, Router } from "./ui/Router";
 import { getDarknetPropertiesForDeprecationSupport, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { validBitNodes } from "./BitNode/Constants";
@@ -117,7 +118,8 @@ import { exampleDarknetServerData, ResponseCodeEnum } from "./DarkNet/Enums";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
-import { setDeprecatedProperties } from "./utils/DeprecationHelper";
+import { deprecationWarning, setDeprecatedProperties } from "./utils/DeprecationHelper";
+import { NetscriptPort } from "./NetscriptFunctions/Port";
 
 export const enums: NSEnums = {
   CityName,
@@ -140,6 +142,8 @@ export const enums: NSEnums = {
   DarknetResponseCode: ResponseCodeEnum,
   ProgramName: CompletedProgramName,
   GangTaskName: GangTaskNameEnum,
+  GangMemberUpgradeName: GangMemberUpgradeNameEnum,
+  HacknetServerHashUpgrade: HashUpgradeEnum,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
@@ -164,6 +168,8 @@ export const ns: InternalAPI<NSFull> = {
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
   cloud: NetscriptCloud(),
+  port: NetscriptPort(),
+
   sprintf: (ctx, _format, ...args) => {
     const format = helpers.string(ctx, "format", _format);
     return sprintf(format, ...args);
@@ -1032,8 +1038,9 @@ export const ns: InternalAPI<NSFull> = {
     return helpers.getRunningScript(ctx, ident) !== null;
   },
   writePort: (ctx, _portNumber, data) => {
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.write(data);
+    deprecationWarning("ns.writePort", "Use ns.port.write instead.");
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- This API intentionally returns any.
+    return ns.port.write(ctx, _portNumber, data);
   },
   write: (ctx, _filename, _data, _mode) => {
     const filepath = helpers.filePath(ctx, "filename", _filename);
@@ -1064,16 +1071,17 @@ export const ns: InternalAPI<NSFull> = {
     server.writeToTextFile(filepath, mode === "w" ? data : existingText + data);
   },
   tryWritePort: (ctx, _portNumber, data) => {
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.tryWrite(data);
+    deprecationWarning("ns.tryWritePort", "Use ns.port.tryWrite instead.");
+    return ns.port.tryWrite(ctx, _portNumber, data);
   },
   nextPortWrite: (ctx, _portNumber) => {
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.nextWrite();
+    deprecationWarning("ns.nextPortWrite", "Use ns.port.nextWrite instead.");
+    return ns.port.nextWrite(ctx, _portNumber);
   },
   readPort: (ctx, _portNumber) => {
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.read();
+    deprecationWarning("ns.readPort", "Use ns.port.read instead.");
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- This API intentionally returns any.
+    return ns.port.read(ctx, _portNumber);
   },
   read: (ctx, _filename) => {
     const path = helpers.filePath(ctx, "filename", _filename);
@@ -1109,16 +1117,17 @@ export const ns: InternalAPI<NSFull> = {
     return contentFile.metadata.plain();
   },
   peek: (ctx, _portNumber) => {
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.peek();
+    deprecationWarning("ns.peek", "Use ns.port.peek instead.");
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- This API intentionally returns any.
+    return ns.port.peek(ctx, _portNumber);
   },
   isFullPort: (ctx, _portNumber) => {
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.full();
+    deprecationWarning("ns.isFullPort", "Use ns.port.isFull instead.");
+    return ns.port.isFull(ctx, _portNumber);
   },
   isEmptyPort: (ctx, _portNumber) => {
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.empty();
+    deprecationWarning("ns.isEmptyPort", "Use ns.port.isEmpty instead.");
+    return ns.port.isEmpty(ctx, _portNumber);
   },
   clear: (ctx, _file) => {
     const path = helpers.filePath(ctx, "file", _file);
@@ -1132,12 +1141,12 @@ export const ns: InternalAPI<NSFull> = {
     file.content = "";
   },
   clearPort: (ctx, _portNumber) => {
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle.clear();
+    deprecationWarning("ns.clearPort", "Use ns.port.clear instead.");
+    return ns.port.clear(ctx, _portNumber);
   },
   getPortHandle: (ctx, _portNumber) => {
-    const portHandle = helpers.portHandle(ctx, _portNumber);
-    return portHandle;
+    deprecationWarning("ns.getPortHandle", "Use ns.port.getHandle instead.");
+    return ns.port.getHandle(ctx, _portNumber);
   },
   rm: (ctx, _fn, _host?) => {
     const filepath = helpers.filePath(ctx, "fn", _fn);
@@ -1303,7 +1312,7 @@ export const ns: InternalAPI<NSFull> = {
       );
       options.type = _options.type;
       const validTypes = ["boolean", "text", "select"];
-      if (!["boolean", "text", "select"].includes(options.type)) {
+      if (!validTypes.includes(options.type)) {
         throw helpers.errorMessage(
           ctx,
           `Invalid value for options.type: ${options.type}. Must be one of ${validTypes.join(", ")}.`,

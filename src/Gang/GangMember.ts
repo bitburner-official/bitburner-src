@@ -15,6 +15,7 @@ import {
   calculateAscensionMult,
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
+import { calculateSkill } from "../PersonObjects/formulas/skill";
 import { GangMemberExpGain } from "@nsdefs";
 import { convertV2GangEquipmentNames } from "../utils/APIBreaks/3.0.0";
 
@@ -68,21 +69,17 @@ export class GangMember {
     this.name = name;
   }
 
-  calculateSkill(exp: number, mult = 1): number {
-    return Math.max(Math.floor(mult * (32 * Math.log(exp + 534.5) - 200)), 1);
-  }
-
   calculateAscensionMult(points: number): number {
     return calculateAscensionMult(points);
   }
 
   updateSkillLevels(): void {
-    this.hack = this.calculateSkill(this.hack_exp, this.hack_mult * this.calculateAscensionMult(this.hack_asc_points));
-    this.str = this.calculateSkill(this.str_exp, this.str_mult * this.calculateAscensionMult(this.str_asc_points));
-    this.def = this.calculateSkill(this.def_exp, this.def_mult * this.calculateAscensionMult(this.def_asc_points));
-    this.dex = this.calculateSkill(this.dex_exp, this.dex_mult * this.calculateAscensionMult(this.dex_asc_points));
-    this.agi = this.calculateSkill(this.agi_exp, this.agi_mult * this.calculateAscensionMult(this.agi_asc_points));
-    this.cha = this.calculateSkill(this.cha_exp, this.cha_mult * this.calculateAscensionMult(this.cha_asc_points));
+    this.hack = calculateSkill(this.hack_exp, this.hack_mult * this.calculateAscensionMult(this.hack_asc_points));
+    this.str = calculateSkill(this.str_exp, this.str_mult * this.calculateAscensionMult(this.str_asc_points));
+    this.def = calculateSkill(this.def_exp, this.def_mult * this.calculateAscensionMult(this.def_asc_points));
+    this.dex = calculateSkill(this.dex_exp, this.dex_mult * this.calculateAscensionMult(this.dex_asc_points));
+    this.agi = calculateSkill(this.agi_exp, this.agi_mult * this.calculateAscensionMult(this.agi_asc_points));
+    this.cha = calculateSkill(this.cha_exp, this.cha_mult * this.calculateAscensionMult(this.cha_asc_points));
   }
 
   calculatePower(): number {

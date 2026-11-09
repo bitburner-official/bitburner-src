@@ -17,7 +17,7 @@ import { formatToMaxDigits } from "./uiUtilities";
 
 import type { DarknetServer } from "../../Server/DarknetServer";
 import { DarknetConstants } from "../Constants";
-import { Router } from "../../ui/GameRoot";
+import { Router } from "../../ui/Router";
 import { Settings } from "../../Settings/Settings";
 
 export type ServerSummaryProps = {

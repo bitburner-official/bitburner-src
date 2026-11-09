@@ -4,13 +4,13 @@
 
 ## Darknet.authenticate() method
 
-Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected to the server that the script is running on. The speed of authentication scales with the number of threads used.
+Sends a network request to try to authenticate on a darknet server. The target server must be directly connected to the server that the script is running on. The speed of authentication scales with the number of threads used.
 
-If successful, grants the current script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() \*from\* the server is always allowed.)
+If successful, grants the current script a session, allowing it to [exec()](./bitburner.ns.exec.md) scripts on that server, or [scp()](./bitburner.ns.scp.md) files to it. (scp() \*from\* the server is always allowed.)
 
 Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer if the player's charisma is below the server's charisma level.
 
-Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use connectToSession with the correct password to also get a session with the target server.
+Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use [connectToSession()](./bitburner.darknet.connecttosession.md) with the correct password to also get a session with the target server.
 
 **Signature:**
 
@@ -90,7 +90,7 @@ _(Optional)_ Optional. The number of additional milliseconds to add to the run t
 
 Promise&lt;[DarknetResult](./bitburner.darknetresult.md) &amp; { data?: any }&gt;
 
-A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object. The resolved object may contain an optional property. The type of this property is intentionaly undocumented. You are supposed to experiment and discover the content of this property.
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object. The resolved object may contain an optional property. The type of this property is intentionally undocumented. You are supposed to experiment and discover the content of this property. This property only exists when authenticating with some very special servers. For interactive feedback after attempting authentication, in most cases, use [heartbleed()](./bitburner.darknet.heartbleed.md)<!-- -->.
 
 ## Remarks
 

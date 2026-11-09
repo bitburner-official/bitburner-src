@@ -1,27 +1,29 @@
 import type { VersionBreakingChange } from "./APIBreak";
+import { CONSTANTS } from "../../Constants";
+import { GangMemberUpgradeNameEnum } from "../../Enums";
 
 export function convertV2GangEquipmentNames(name: string): string {
   switch (name) {
     case "Glock 18C":
-      return "Malorian-3516";
+      return GangMemberUpgradeNameEnum.Malorian;
     case "P90C":
-      return "Hansen-HA7";
+      return GangMemberUpgradeNameEnum.Hansen;
     case "Steyr AUG":
-      return "Arasaka-HJSH18";
+      return GangMemberUpgradeNameEnum.Arasaka;
     case "AK-47":
-      return "Militech-M251s";
+      return GangMemberUpgradeNameEnum.Militech;
     case "M15A10 Assault Rifle":
-      return "Nokota-D5";
+      return GangMemberUpgradeNameEnum.Nokota;
     case "AWM Sniper Rifle":
-      return "Techtronika-SPT32";
+      return GangMemberUpgradeNameEnum.Techtronika;
     case "Ford Flex V20":
-      return "Herrera Outlaw GTS";
+      return GangMemberUpgradeNameEnum.Herrera;
     case "ATX1070 Superbike":
-      return "Yaiba ASM-R250 Muramasa";
+      return GangMemberUpgradeNameEnum.Yaiba;
     case "Mercedes-Benz S9001":
-      return "Rayfield Caliburn";
+      return GangMemberUpgradeNameEnum.Rayfield;
     case "White Ferrari":
-      return "Quadra Sport R-7";
+      return GangMemberUpgradeNameEnum.Quadra;
     default:
       return name;
   }
@@ -35,7 +37,7 @@ export const breakingChanges300: VersionBreakingChange = {
       info:
         "You cannot use the deprecated VSCode extension to connect to the Steam app via API server now. You have to " +
         "use Remote API to connect your external editors to Bitburner.\nFor more information, please check the Remote " +
-        "API page in the Documentation tab. If you have a question, please ask us on #external-editors on Discord (https://discord.gg/TFc3hKD).",
+        `API page in the Documentation tab. If you have a question, please ask us on #external-editors on Discord (${CONSTANTS.DiscordURL}).`,
       showWarning: true,
       doNotSkip: true,
     },
@@ -567,7 +569,7 @@ export const breakingChanges300: VersionBreakingChange = {
       ],
       info:
         "Accessing the hacknet namespace incurred a one-time cost of 4 GB of RAM, and each hacknet API did not incur \n" +
-        "RAM cost. Now the hacknet namespace does not incur RAM cost, but each hacknet API incurs a 0.5GB RAM cost.",
+        "RAM cost. Now the hacknet namespace does not incur RAM cost, but each hacknet API except getHashUpgrades() incurs a 0.5GB RAM cost.",
       showWarning: false,
     },
     {

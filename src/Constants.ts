@@ -109,6 +109,8 @@ export const CONSTANTS = {
   // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
 
+  DiscordURL: "https://discord.gg/TFc3hKD",
+
   // Also update Documentation/doc/en/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
 ## v3.0.2: Dev version last updated 17 May 2026

@@ -16,8 +16,8 @@ import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 
-import type { IRouter, PageContext, PageWithContext } from "./Router";
-import { isSimplePage, Page } from "./Router";
+import type { PageContext, PageWithContext } from "./Router";
+import { isSimplePage, Page, pendingRouterActions, Router, setRouter } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";
 import { AugmentationsRoot } from "../Augmentation/ui/AugmentationsRoot";
@@ -96,57 +96,6 @@ const useStyles = makeStyles()((theme: Theme) => ({
 }));
 
 const MAX_PAGES_IN_HISTORY = 10;
-
-type RouterAction = (
-  | {
-      type: "toPage";
-      page: Page;
-      context?: PageContext<ComplexPage>;
-    }
-  | {
-      type: "back";
-    }
-) & { stackTrace: string | undefined };
-
-/**
- * When the main UI is not loaded, all router actions ("toPage" and "back") are stored in this array. After that, we
- * will run them and show a warning popup. This queue is empty in a normal situation. If it has items, there are bugs
- * that try to route the main UI when it's not loaded.
- */
-const pendingRouterActions: RouterAction[] = [];
-
-export let Router: IRouter = {
-  page: () => {
-    return Page.LoadingScreen;
-  },
-  /**
-   * This function is only called in ImportSave.tsx. That component is only used when the main UI shows Page.ImportSave,
-   * so it's impossible for this function to run before the main UI is loaded. If it happens, it's a fatal error. In
-   * that case, throwing an error is the only option.
-   */
-  allowRouting: () => {
-    throw new Error("Router.allowRouting() was called before initialization.");
-  },
-  hidingMessages: () => true,
-  toPage: (page: Page, context?: PageContext<ComplexPage>) => {
-    const stackTrace = new Error().stack;
-    console.error("Router.toPage() was called before initialization.", page, context, stackTrace);
-    pendingRouterActions.push({
-      type: "toPage",
-      page,
-      context,
-      stackTrace,
-    });
-  },
-  back: () => {
-    const stackTrace = new Error().stack;
-    console.error("Default Router.back() was called before initialization.", stackTrace);
-    pendingRouterActions.push({
-      type: "back",
-      stackTrace,
-    });
-  },
-};
 
 function determineStartPage(): PageWithContext {
   if (RecoveryMode) {
@@ -241,7 +190,7 @@ export function GameRoot(): React.ReactElement {
     Page.BladeburnerCinematic,
   ]);
 
-  Router = {
+  setRouter({
     page: () => pageWithContext.page,
     allowRouting: (value: boolean) => setAllowRoutingCalls(value),
     hidingMessages: () => hiddenPages.has(pageWithContext.page),
@@ -286,7 +235,7 @@ export function GameRoot(): React.ReactElement {
       }
       setPages((pages) => pages.slice(1));
     },
-  };
+  });
 
   useEffect(() => {
     if (pageWithContext.page !== Page.Terminal) window.scrollTo(0, 0);

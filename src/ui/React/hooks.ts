@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { GameCycleEvents } from "../../engine";
+import { GameCycleEvents } from "../../GameCycleEvents";
 
 /** Hook that returns a function for the component. Optionally set an interval to rerender the component.
  * @param autoRerenderTime: Optional. If provided and nonzero, used as the ms interval to automatically call the rerender function.

@@ -34,7 +34,9 @@ lower rewards. Contracts generated this way grant 50% lower rewards than those g
 
 To run a Coding Contract in the [Terminal](terminal.md), simply use the `run` command:
 
-    $ run some-contract.cct
+```text
+$ run some-contract.cct
+```
 
 Doing this will bring up a popup.
 The popup will display the contract's problem, the number of attempts remaining, and an area to provide an answer.

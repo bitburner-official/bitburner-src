@@ -4,9 +4,15 @@
 
 ## NS.getSharePower() method
 
-Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking work, share power still increases the reputation gain rate, but the effect is non-linear.
+Share power has a multiplicative effect on the reputation gain rate of faction work.
 
-Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+The multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
+
+Share power increases for each thread of share running on your server network, but the total amount is logarithmic. A server's cores bonus effectively increases its thread count.
+
+The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
+
+Share only boosts faction work. It does not affect your passive reputation gain rate (the rate at which your faction rep increases just by being a member).
 
 **Signature:**
 

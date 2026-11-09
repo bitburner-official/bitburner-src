@@ -13,8 +13,7 @@ import { Location } from "../Location";
 import { Settings } from "../../Settings/Settings";
 
 import { Player } from "@player";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Theme } from "@mui/material/styles";

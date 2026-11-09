@@ -1,8 +1,7 @@
 import type { InfiltrationStage } from "./InfiltrationStage";
 import { AugmentationName, FactionName, ToastVariant } from "@enums";
 import { Player } from "@player";
-import { Page } from "../ui/Router";
-import { Router } from "../ui/GameRoot";
+import { Page, Router } from "../ui/Router";
 import { Location } from "../Locations/Location";
 import { EventEmitter } from "../utils/EventEmitter";
 import { PlayerEvents, PlayerEventType } from "../PersonObjects/Player/PlayerEvents";

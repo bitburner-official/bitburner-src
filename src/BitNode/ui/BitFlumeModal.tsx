@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "../../ui/React/Modal";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { EventEmitter } from "../../utils/EventEmitter";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";

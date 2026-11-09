@@ -58,5 +58,5 @@ Augmentation stats.
 
 RAM cost: 5 GB \* 16/4/1
 
-This function returns augmentation stats.
+This function returns augmentation stats for one level or copy of the augment.
 

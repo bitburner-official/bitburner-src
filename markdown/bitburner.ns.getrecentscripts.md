@@ -27,8 +27,8 @@ The most recently killed script is the first element in the array. Note that the
 
 
 ```js
-let recentScripts = ns.getRecentScripts();
-let mostRecent = recentScripts.shift();
+const recentScripts = ns.getRecentScripts();
+const mostRecent = recentScripts.shift();
 if (mostRecent)
   ns.tprint(mostRecent.logs.join('\n'));
 ```

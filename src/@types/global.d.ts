@@ -25,26 +25,7 @@ declare interface WebSocket {
   intentionallyClosed?: boolean;
 }
 
-declare global {
-  /**
-   * "loader" is not exposed in the public API.
-   */
-  module "monaco-editor" {
-    namespace languages {
-      interface ILanguageExtensionPoint {
-        loader: () => Promise<{
-          language: {
-            tokenizer: {
-              root: any[];
-            };
-          };
-        }>;
-      }
-    }
-  }
-}
-
-module "monaco-vim" {
+declare module "monaco-vim" {
   export const initVimMode: (...args: unknown[]) => { dispose: () => void };
   export const VimMode: {
     Vim: {

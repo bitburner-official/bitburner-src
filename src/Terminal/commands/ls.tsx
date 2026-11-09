@@ -9,8 +9,7 @@ import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
 
 import { makeStyles } from "tss-react/mui";
 import { BaseServer } from "../../Server/BaseServer";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { Terminal } from "../../Terminal";
 import libarg from "arg";
 import { showLiterature } from "../../Literature/LiteratureHelpers";

@@ -10,8 +10,7 @@ import Button from "@mui/material/Button";
 import { Location } from "../Location";
 
 import { Money } from "../../ui/React/Money";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { Player } from "@player";
 import { Box } from "@mui/material";
 

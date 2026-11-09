@@ -14,8 +14,7 @@ import { CONSTANTS } from "../../../Constants";
 import { hasAugmentationPrereqs } from "../../../Faction/FactionHelpers";
 import { PurchaseAugmentationsOrderSetting } from "../../../Settings/SettingEnums";
 import { Settings } from "../../../Settings/Settings";
-import { Router } from "../../../ui/GameRoot";
-import { Page } from "../../../ui/Router";
+import { Page, Router } from "../../../ui/Router";
 import { ConfirmationModal } from "../../../ui/React/ConfirmationModal";
 import { Money } from "../../../ui/React/Money";
 import { formatNumberNoSuffix } from "../../../ui/formatNumber";
@@ -271,7 +270,7 @@ export const GraftingRoot = (): React.ReactElement => {
           <br />
           Individuals who tested augmentation grafting have reported symptoms of an unknown virus, which persists even
           after a body reset. They've dubbed it "Entropy". This virus seems to grow more potent with each grafted
-          augmentation ...
+          augmentation...
         </Typography>
       </Box>
     </Container>

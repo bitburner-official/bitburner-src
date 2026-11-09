@@ -14,7 +14,9 @@ export interface Singularity
 
 ## Remarks
 
-This API requires Source-File 4 to use outside of BitNode 4. Additionally, outside of BitNode 4 the RAM cost of all these functions is multiplied by 16/4/1 based on Source-File 4 levels.
+This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
+
+Additionally, the RAM cost of functions in this namespace change based on your current BN and Source-Files.
 
 ## Methods
 
@@ -335,7 +337,7 @@ Get the current work the player is doing.
 
 </td><td>
 
-Check the price of an exploit on the dark web
+Check the price of an exploit on the Dark Web.
 
 
 </td></tr>
@@ -346,7 +348,7 @@ Check the price of an exploit on the dark web
 
 </td><td>
 
-Get a list of programs offered on the dark web.
+Get a list of programs offered on the Dark Web.
 
 
 </td></tr>
@@ -621,7 +623,7 @@ Purchase an augmentation
 
 </td><td>
 
-Purchase a program from the dark web.
+Purchase a program from the Dark Web.
 
 
 </td></tr>

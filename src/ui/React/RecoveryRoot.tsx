@@ -3,8 +3,7 @@ import React, { useEffect } from "react";
 import { Typography, Link, Button, ButtonGroup, Tooltip, Box, Paper, TextField } from "@mui/material";
 import { Settings } from "../../Settings/Settings";
 import { IndexedDBVersionError, load } from "../../db";
-import { Router } from "../GameRoot";
-import { Page } from "../Router";
+import { Page, Router } from "../Router";
 import { type CrashReport, newIssueUrl, getCrashReport, isSaveDataFromNewerVersions } from "../../utils/ErrorHelper";
 import { DeleteGameButton } from "./DeleteGameButton";
 import { SoftResetButton } from "./SoftResetButton";
@@ -149,7 +148,7 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
           </Link>
         </Typography>
         <Typography>
-          <Link href="https://discord.gg/TFc3hKD" target="_blank">
+          <Link href={CONSTANTS.DiscordURL} target="_blank">
             Post in the #bug-report channel on Discord.
           </Link>
         </Typography>

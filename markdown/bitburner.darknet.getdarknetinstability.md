@@ -4,7 +4,9 @@
 
 ## Darknet.getDarknetInstability() method
 
-Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
+Gets the current instability penalties caused by excessive backdoor installations on the darknet.
+
+Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error.
 
 **Signature:**
 
@@ -15,9 +17,11 @@ getDarknetInstability(): DarknetInstability;
 
 [DarknetInstability](./bitburner.darknetinstability.md)
 
-An object containing the current instability values.
+An object containing the current instability penalty values.
 
 ## Remarks
 
 Ram cost: 0 GB
+
+Backdoors on stationary servers are excluded from penalty calculations.
 

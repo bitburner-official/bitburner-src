@@ -3,7 +3,7 @@ import { makeStyles } from "tss-react/mui";
 import { Modal } from "../ui/React/Modal";
 import { Box, Button, Typography } from "@mui/material/";
 import { errorModalsAreSuppressed, type ErrorRecord, ErrorState, toggleSuppressErrorModals } from "./ErrorState";
-import { Router } from "../ui/GameRoot";
+import { Router } from "../ui/Router";
 import { SimplePage, ToastVariant } from "@enums";
 import { useRerender } from "../ui/React/hooks";
 import { OptionSwitch } from "../ui/React/OptionSwitch";

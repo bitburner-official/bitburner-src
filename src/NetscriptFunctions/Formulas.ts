@@ -30,6 +30,7 @@ import { CityName, CompletedProgramName, LocationName } from "@enums";
 import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
 import {
   calculateRespectGain,
+  calculateReputationGain,
   calculateWantedLevelGain,
   calculateMoneyGain,
   calculateWantedPenalty,
@@ -56,6 +57,7 @@ import { calculateEffectiveSharedThreads, calculateShareBonus } from "../Network
 import { calculateAuthenticationTime } from "../DarkNet/effects/effects";
 import { assertDarknetServerDetails } from "../Netscript/TypeAssertion";
 import { getRamBlockRemoved } from "../DarkNet/effects/ramblock";
+import { getServerMigrationChargeValue } from "../DarkNet/effects/effects";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -342,6 +344,16 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         return calculateRespectGain(gang, member, task);
       },
+      reputationGain: (ctx, _gang, _member, _task, _favor, _factionRepMult) => {
+        const gang = helpers.gang(ctx, _gang);
+        const member = helpers.gangMember(ctx, _member);
+        const task = helpers.gangTask(ctx, _task);
+        const favor = helpers.number(ctx, "favor", _favor);
+        const factionRepMult = helpers.number(ctx, "factionRepMult", _factionRepMult);
+        checkFormulasAccess(ctx);
+        const respectGain = calculateRespectGain(gang, member, task);
+        return calculateReputationGain(respectGain, favor, factionRepMult);
+      },
       wantedLevelGain: (ctx, _gang, _member, _task) => {
         const gang = helpers.gang(ctx, _gang);
         const member = helpers.gangMember(ctx, _member);
@@ -462,6 +474,12 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const threads = helpers.number(ctx, "threads", _threads ?? 1);
         const person = helpers.person(ctx, _person ?? Player);
         return getRamBlockRemoved(_darknetServerDetails, threads, person);
+      },
+      getExpectedMigrationCharge: (ctx, _darknetServerDetails, _person, _threads): number => {
+        assertDarknetServerDetails(ctx, _darknetServerDetails);
+        const threads = helpers.number(ctx, "threads", _threads ?? 1);
+        const person = helpers.person(ctx, _person);
+        return getServerMigrationChargeValue(_darknetServerDetails, person, threads);
       },
     },
   };

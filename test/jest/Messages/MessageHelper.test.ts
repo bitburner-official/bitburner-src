@@ -1,7 +1,7 @@
 import { checkForMessagesToSend } from "../../../src/Message/MessageHelpers";
 import * as dialogBoxCreate from "../../../src/ui/React/DialogBox";
 import { Player } from "@player";
-import { Router } from "../../../src/ui/GameRoot";
+import { Router } from "../../../src/ui/Router";
 import { AugmentationName, MessageFilename } from "@enums";
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
 import { initGameEnvironment, setupBasicTestingEnvironment } from "../Utilities";

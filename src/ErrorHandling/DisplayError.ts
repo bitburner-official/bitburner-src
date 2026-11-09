@@ -1,4 +1,4 @@
-import { Router } from "../ui/GameRoot";
+import { Router } from "../ui/Router";
 import { SimplePage } from "@enums";
 import { errorModalsAreSuppressed, ErrorRecord, ErrorState } from "./ErrorState";
 import type { WorkerScript } from "../Netscript/WorkerScript";

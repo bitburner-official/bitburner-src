@@ -4,6 +4,11 @@
 
 ## NS.getPortHandle() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [Port.getHandle](./bitburner.port.gethandle.md) instead
+> 
+
 Get all data on a port.
 
 **Signature:**

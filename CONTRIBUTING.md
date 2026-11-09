@@ -177,11 +177,16 @@ Install
 
 Inside the root of the repository run:
 
-- `npm install` to install all the dependencies; and
+- `npm ci` to install all the dependencies.
 - `npm run start:dev` to launch the game in dev mode.
 
 After that you can open any browser and navigate to `localhost:8000` and play the game.
 Saving a file will reload the game automatically.
+
+**Warning: You should never run `npm update`.**
+
+- If you want to update `npm` itself, run `npm install -g npm@latest`.
+- If you want to update some dependencies, you need to update their versions in `package.json`, then run `npm i`. Updating dependencies may introduce unintentional breaking changes, so you should check with the maintainers first.
 
 ### How to build the electron app
 
@@ -191,7 +196,7 @@ These steps only work in a Bash-like environment, like MinGW for Windows.
 
 ```sh
 # Install the main game dependencies & build the app in debug mode.
-$ npm install
+$ npm ci
 $ npm run build:dev
 
 # Use electron-packager to build the app to the .build/ folder.
@@ -217,9 +222,9 @@ the following rules:
   the changes to the UI.
 - If your changes affect the Netscript APIs, provide some
   scripts that can be used to test the Netscript changes.
-- Ensure you have run `npm run lint` to make sure your changes conform to the
-  rules enforced across the code base. The command will fail if any of the
-  linters find a violation.
+- Ensure you have run `npm run lint` and `npm run typecheck` to make sure your changes conform to the
+  rules enforced across the codebase. The command will fail if the
+  linter finds a violation.
 - Ensure you have run `npm run format` to make sure your changes conform to the
   style guide.
 - Also, ensure you have run `npm run test` to make sure your changes pass
@@ -231,6 +236,8 @@ the following rules:
   `MISC: Reticulated the splines`, where the first word must be capitalised
   and relate to the kind of change being implemented. Possible examples
   are UI, BUGFIX, SERVERS, API... You get the idea.
+- Avoid rebasing and force-pushing after your pull request has been reviewed. A rebase can make it much harder to track
+  what has changed. In some cases, maintainers even have to review the entire pull request from scratch.
 
 ## As a Documenter
 
@@ -280,11 +287,11 @@ Avoid:
 
 ### Unrelated changes in `package-lock.json`
 
-After running `npm install`, if you do not change anything in `package.json` and `package-lock.json` is still changed, you need to update `npm` to the latest version. After that, discard the changes in `package-lock.json`, delete the `node_modules` folder, and run `npm install` again.
+If you do not change anything in `package.json` but `package-lock.json` is still changed (e.g., running `npm i` with an outdated `npm` or running `npm update`), you should update `npm` to the latest version, discard the changes in `package-lock.json`, and run `npm ci` again.
 
 ### Lots of `peer: true` lines added in `package-lock.json`
 
-npm version 11.6.2 has a bug that causes this. You need to update npm and rerun `npm install`.
+npm version 11.6.2 has a bug that causes this. You need to update npm and rerun `npm ci`.
 
 See https://github.com/npm/cli/pull/8671 and https://github.com/npm/cli/issues/8690 for details.
 
@@ -297,7 +304,7 @@ Some Jest tests fail to run in Node versions older than v24. On those versions, 
 - Fork the repo ([How to setup your fork properly](#how-to-setup-your-fork-properly)).
 - Make your changes.
 - Test your changes manually before submitting anything ([Running locally](#running-locally)).
-- Run `npm run format`, `npm run lint`, and `npm run test`. If you make any changes to
+- Run `npm run format`, `npm run lint`, `npm run typecheck`, and `npm run test`. If you made any changes to
   `NetscriptDefinitions.d.ts` or in-game documentation pages, run `npm run doc`.
 - Commit your changes ([Development Workflow](#development-workflow-best-practices)).
 - Go to GitHub and create a PR [Submitting a Pull Request](#submitting-a-pull-request).

@@ -376,7 +376,9 @@ Darknet formulas
 
 </td><td>
 
-Instability of the darknet caused by excessive backdoor-ing of servers.
+Instability penalties caused by excessive backdoor installations on the darknet.
+
+Backdoors on stationary servers are not factored for penalty calculations.
 
 
 </td></tr>
@@ -666,7 +668,7 @@ Tools to analyze the IPvGO subnet.
 
 </td><td>
 
-Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
+Illicit and dangerous IPvGO tools. Not for the faint of heart.
 
 
 </td></tr>
@@ -820,7 +822,7 @@ Hacknet Server formulas
 
 </td><td>
 
-Options to change the behavior of [heartbleed](./bitburner.darknet.heartbleed.md) API.
+Options to change the behavior of [heartbleed()](./bitburner.darknet.heartbleed.md) API.
 
 
 </td></tr>
@@ -1133,6 +1135,17 @@ Player must have killed at least this many people.
 </td><td>
 
 Base interface of all player tasks.
+
+
+</td></tr>
+<tr><td>
+
+[Port](./bitburner.port.md)
+
+
+</td><td>
+
+Port API
 
 
 </td></tr>
@@ -1986,7 +1999,7 @@ Errors:
 
 - NotFound: The API requires a specific resource (e.g., an exe file), but it does not exist on the server.
 
-- RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by network instability.
+- RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by [Darknet Instability](./bitburner.darknet.getdarknetinstability.md) penalties.
 
 - ServiceUnavailable: The server is offline.
 
@@ -2087,6 +2100,26 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 </td></tr>
 <tr><td>
 
+[GangMemberUpgradeName](./bitburner.gangmemberupgradename.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GangMemberUpgradeNameEnumType](./bitburner.gangmemberupgradenameenumtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [GangTaskName](./bitburner.gangtaskname.md)
 
 
@@ -2159,6 +2192,16 @@ Locations of gym
 <tr><td>
 
 [HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[HacknetServerHashUpgradeEnumType](./bitburner.hacknetserverhashupgradeenumtype.md)
 
 
 </td><td>

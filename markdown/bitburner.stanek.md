@@ -65,7 +65,9 @@ Check if fragment can be placed at specified location.
 
 </td><td>
 
-Charge a fragment, increasing its power.
+Charge a fragment, increasing its effect strength.
+
+See [ActiveFragment](./bitburner.activefragment.md) for additional information.
 
 
 </td></tr>

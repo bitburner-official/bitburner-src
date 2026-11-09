@@ -364,7 +364,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
         ctx,
         () => `Beginning stasis ${shouldLink ? "" : "removal "}procedure on ${server.hostname}... (Est: 30s)`,
       );
-      // setStasisLink's delay is hardcoded at 30s. We should skip this delay in Jest tests.
       return helpers.netscriptDelay(ctx, getSetStasisLinkDuration()).then(() => setStasisLink(ctx, server, shouldLink));
     },
     getStasisLinkLimit: (ctx: NetscriptContext): number => {
@@ -461,7 +460,6 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
           }));
         }
         const server = serverCheck.server;
-        const currentDepth = server.depth;
         const result = chargeServerMigration(server, ctx.workerScript.scriptRef.threads);
 
         logger(ctx)(
@@ -469,7 +467,7 @@ export function NetscriptDarknet(): InternalAPI<DarknetAPI> {
             result.newCharge * 100,
           )}%. (Gained ${formatNumber(result.xpGained)} cha xp)`,
         );
-        if (result.newCharge >= 1 && currentDepth < server.depth) {
+        if (result.newCharge >= 1) {
           logger(ctx)(`${server.hostname} has been migrated!`);
         }
         return {

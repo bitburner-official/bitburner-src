@@ -83,6 +83,6 @@ This function will return an object that contains the requirements for a specifi
 const companyName = "ECorp";
 const position = "Chief Executive Officer";
 
-let requirements = ns.singularity.getCompanyPositionInfo(companyName, position);
+const requirements = ns.singularity.getCompanyPositionInfo(companyName, position);
 ```
 

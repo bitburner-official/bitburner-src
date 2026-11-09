@@ -1,7 +1,6 @@
 import React from "react";
 import { FactionName } from "@enums";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Page, Router } from "../../ui/Router";
 import { CinematicText } from "../../ui/React/CinematicText";
 
 export function BladeburnerCinematic(): React.ReactElement {

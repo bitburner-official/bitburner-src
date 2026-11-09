@@ -11,7 +11,7 @@ Prompt the player with an input modal.
 ```typescript
 prompt(
     txt: string,
-    options?: { type?: "boolean" | "text" | "select"; choices?: string[] },
+    options?: { type?: "boolean" | "text" | "select"; choices?: (string | number)[] },
   ): Promise<boolean | string>;
 ```
 
@@ -45,7 +45,7 @@ string
 
 </td><td>
 
-Text to appear in the prompt dialog box.
+Text to appear in the prompt's body.
 
 
 </td></tr>
@@ -56,7 +56,7 @@ options
 
 </td><td>
 
-{ type?: "boolean" \| "text" \| "select"; choices?: string\[\] }
+{ type?: "boolean" \| "text" \| "select"; choices?: (string \| number)\[\] }
 
 
 </td><td>
@@ -71,23 +71,29 @@ _(Optional)_ Options to modify the prompt the player is shown.
 
 Promise&lt;boolean \| string&gt;
 
-True if the player clicks “Yes”; false if the player clicks “No”; or the value entered by the player.
+Return value depends on the player action and `options.type`<!-- -->. If `options.type` is "boolean" or `undefined`<!-- -->, the return value is `true` if the player clicks Yes, and `false` if they click "No" or cancel the prompt. If the `options.type` is "text" or "select", the return value is the one selected or entered by the player, or `""` if they cancel the prompt.
 
 ## Remarks
 
 RAM cost: 0 GB
 
-Prompts the player with a dialog box and returns a promise. If the player cancels this dialog box (press X button or click outside the dialog box), the promise is resolved with a default value (empty string or "false"). If this API is called again while the old dialog box still exists, the old dialog box will be replaced with a new one, and the old promise will be resolved with the default value.
+Prompts the player with a dialog box and returns a promise.
 
-Here is an explanation of the various options.
+The prompt and the return value depend on the `options.type` and on the player's action.
 
-- `options.type` is not provided to the function. If `options.type` is left out and only a string is passed to the function, then the default behavior is to create a boolean dialog box.
+If the `options.type` is `"boolean"`<!-- -->, not provided, or `undefined`<!-- -->: - Prompt options: Yes/No - Return value: `true` if the player selects Yes, or `false` if they click No or cancel the box.
 
-- `options.type` has value `undefined` or `"boolean"`<!-- -->. A boolean dialog box is created. The player is shown "Yes" and "No" prompts, which return true and false respectively. The script's execution is halted until the player presses either the "Yes" or "No" button.
+If the `options.type` is `"select"`<!-- -->: - Prompt options: Dropdown list of options - Return value: The value selected by the player, or `""` if they cancel the box.
 
-- `options.type` has value `"text"`<!-- -->. The player is given a text field to enter free-form text. The script's execution is halted until the player enters some text and/or presses the "Confirm" button.
+If the `options.type` is `"text"`<!-- -->: - Prompt options: Free-form text field - Return value: The value entered by the player, or `""` if they cancel the box.
 
-- `options.type` has value `"select"`<!-- -->. The player is shown a drop-down field. Choosing type `"select"` will require an array to be passed via the `options.choices` property. The array can be an array of strings, an array of numbers (not BigInt numbers), or a mixture of both numbers and strings. Any other types of array elements will result in an error or an undefined/unexpected behavior. The `options.choices` property will be ignored if `options.type` has a value other than `"select"`<!-- -->. The script's execution is halted until the player chooses one of the provided options and presses the "Confirm" button.
+The `options.choices` property is an optional array, only needed for the "select" prompt and ignored otherwise. Its elements can be strings or numbers (excluding BigInt).
+
+Note that when the player selects an option from the choices array, the selected value will always be converted to a string. For example, if the choices array is `[1, "2"]` and the player chooses `1` (the number value), the promise resolves to `"1"` (the string value).
+
+The player can cancel the prompt in two ways: by clicking the X button in the top-right, or clicking outside the dialog box.
+
+If the prompt API is called again while the old dialog box still exists, the old dialog box will be replaced with a new one, and the old promise will be resolved with the default value.
 
 ## Example
 

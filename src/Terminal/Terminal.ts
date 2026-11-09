@@ -193,9 +193,9 @@ export class Terminal {
 
   timedAction(durationSec: number, name: string, onDone: () => void, stdIO: StdIO): TerminalAction {
     const start = performance.now();
-    const progress = () =>
+    const progress = (p = (performance.now() - start) / (durationSec * 1000)) =>
       createProgressBarText({
-        progress: (performance.now() - start) / (durationSec * 1000),
+        progress: p,
         totalTicks: 50,
       });
 
@@ -211,7 +211,7 @@ export class Terminal {
           };
         });
       } finally {
-        this.printAndBypassPipes(progress());
+        this.printAndBypassPipes(cancelled ? progress() : progress(1));
         if (cancelled) {
           this.print(`Cancelled ${name}`, stdIO);
         }

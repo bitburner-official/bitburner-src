@@ -1,10 +1,11 @@
 import { Player } from "@player";
+import type { Multipliers } from "@nsdefs";
 
 import { GoOpponent } from "@enums";
 import { Go } from "../Go";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { opponentDetails } from "../Constants";
-import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonObjects/Multipliers";
+import { defaultMultipliers, mergeMultipliers } from "../../PersonObjects/Multipliers";
 import { formatPercent } from "../../ui/formatNumber";
 import { getOpponentStats } from "../boardAnalysis/scoring";
 import { getRecordEntries, getRecordValues } from "../../Types/Record";
@@ -22,8 +23,7 @@ export function CalculateEffect(nodes: number, faction: GoOpponent): number {
 }
 
 /**
- * Get maximum favor that you can gain from IPvGO win streaks
- * for factions you are a member of.
+ * Get maximum reputation converted to favor that you can gain from IPvGO win streaks for factions you are a member of.
  *
  * This is added as converted rep to avoid making the equivalent value of the favor in rep very different as you approach 150 favor
  */
@@ -58,7 +58,7 @@ export function getBonusText(opponent: GoOpponent) {
  */
 export function updateGoMults(): void {
   const mults = calculateMults();
-  Player.mults = mergeMultipliers(Player.mults, mults);
+  mergeMultipliers(Player.mults, mults);
   Player.updateSkillLevels();
 }
 

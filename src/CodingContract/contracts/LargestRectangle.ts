@@ -31,12 +31,13 @@ Example 2:
 Data:
 [
   [0,0,0,1],
-  [0,0,0,0],
   [0,0,1,0],
-  [0,0,0,1]
+  [0,1,1,0],
+  [0,1,0,1]
 ]
 
-Answer: [[0,0],[3,1]]
+Answer: [[0,0],[3,0]].
+Note [[0,0],[1,1]] is also a valid answer - there may be more than one solution.
 `;
     },
     difficulty: 6,

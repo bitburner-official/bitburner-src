@@ -9,7 +9,7 @@ export const compression: Pick<
   | CodingContractName.CompressionIIILZCompression
 > = {
   [CodingContractName.CompressionIRLECompression]: {
-    difficulty: 2,
+    difficulty: 1,
     desc: (plaintext: string): string => {
       return [
         "Run-length encoding (RLE) is a data compression technique which encodes data as a series of runs of",

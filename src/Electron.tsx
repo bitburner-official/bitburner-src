@@ -1,6 +1,5 @@
 import { Player } from "@player";
-import { Router } from "./ui/GameRoot";
-import { Page } from "./ui/Router";
+import { Page, Router } from "./ui/Router";
 import { Terminal } from "./Terminal";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { ToastVariant } from "@enums";

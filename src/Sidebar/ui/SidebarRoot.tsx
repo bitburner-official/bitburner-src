@@ -8,6 +8,7 @@ import Tooltip from "@mui/material/Tooltip";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
@@ -41,9 +42,8 @@ import BorderInnerSharpIcon from "@mui/icons-material/BorderInnerSharp"; // IPvG
 import ShareIcon from "@mui/icons-material/Share"; // DarkWeb
 import BiotechIcon from "@mui/icons-material/Biotech"; // Grafting
 
-import { Router } from "../../ui/GameRoot";
 import { ComplexPage, SimplePage } from "../../ui/Enums";
-import { Page, isSimplePage } from "../../ui/Router";
+import { Page, isSimplePage, Router } from "../../ui/Router";
 import { SidebarAccordion } from "./SidebarAccordion";
 import { Player } from "@player";
 import { CONSTANTS } from "../../Constants";
@@ -326,17 +326,19 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     <Drawer open={open} anchor="left" variant="permanent">
       {useMemo(
         () => (
-          <ListItem classes={li_classes} button onClick={toggleDrawer}>
-            <ListItemIcon>
-              <ChevronOpenClose color={"primary"} />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Tooltip title={commitHash()}>
-                  <Typography>Bitburner v{CONSTANTS.VersionString}</Typography>
-                </Tooltip>
-              }
-            />
+          <ListItem classes={li_classes} disablePadding>
+            <ListItemButton onClick={toggleDrawer}>
+              <ListItemIcon>
+                <ChevronOpenClose color={"primary"} />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Tooltip title={commitHash()}>
+                    <Typography>Bitburner v{CONSTANTS.VersionString}</Typography>
+                  </Tooltip>
+                }
+              />
+            </ListItemButton>
           </ListItem>
         ),
         [ChevronOpenClose, li_classes],

@@ -15,8 +15,7 @@ import { KillScriptsModal } from "./KillScriptsModal";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 
 import { Settings } from "../../Settings/Settings";
-import { Router } from "../GameRoot";
-import { Page } from "../Router";
+import { Page, Router } from "../Router";
 import { StatsProgressBar } from "./StatsProgressBar";
 
 import { isClassWork } from "../../Work/ClassWork";

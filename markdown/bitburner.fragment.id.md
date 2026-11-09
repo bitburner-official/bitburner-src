@@ -4,6 +4,8 @@
 
 ## Fragment.id property
 
+A unique integer ID assigned to the combination of a fragment's shape, effect, and power.
+
 **Signature:**
 
 ```typescript

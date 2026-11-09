@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Grid, Link, Typography } from "@mui/material";
 
 import { GoOpponent, GoColor } from "@enums";
@@ -8,68 +8,76 @@ import { GoTutorialChallenge } from "./GoTutorialChallenge";
 import { getMaxRep } from "../effects/effect";
 import { DocumentationLink } from "../../ui/React/DocumentationLink";
 
-const captureChallenge = (
-  <GoTutorialChallenge
-    state={boardStateFromSimpleBoard([".....", "OX...", "OXX..", "OOX.O", "OOX.."], GoOpponent.none, GoColor.white)}
-    description={
-      "CHALLENGE: This white network on the bottom is vulnerable! Click on the board to place a router. Capture some white pieces by cutting off their access to any empty nodes."
-    }
-    correctMoves={[{ x: 0, y: 0 }]}
-    correctText={
-      "Correct! With no open ports, the white routers are destroyed. Now you surround and control the empty nodes in the bottom-right."
-    }
-    incorrectText={"Unfortunately the white routers still touch at least one empty node. Hit 'Reset' to try again."}
-  />
-);
+function getTutorialChallenges() {
+  const captureChallenge = (
+    <GoTutorialChallenge
+      state={boardStateFromSimpleBoard([".....", "OX...", "OXX..", "OOX.O", "OOX.."], GoOpponent.none, GoColor.white)}
+      description={
+        "CHALLENGE: This white network on the bottom is vulnerable! Click on the board to place a router. Capture some white pieces by cutting off their access to any empty nodes."
+      }
+      correctMoves={[{ x: 0, y: 0 }]}
+      correctText={
+        "Correct! With no open ports, the white routers are destroyed. Now you surround and control the empty nodes in the bottom-right."
+      }
+      incorrectText={"Unfortunately the white routers still touch at least one empty node. Hit 'Reset' to try again."}
+    />
+  );
 
-const saveTheNetworkChallenge = (
-  <GoTutorialChallenge
-    state={boardStateFromSimpleBoard(["OO.##", "XO..#", "XX..#", "XO...", "XO..."], GoOpponent.none, GoColor.white)}
-    description={
-      "CHALLENGE: Your routers are in trouble! They only have one open port. Save the black network by connecting them to more empty nodes."
-    }
-    correctMoves={[{ x: 2, y: 2 }]}
-    correctText={
-      "Correct! Now the network touches three empty nodes instead of one, making it much harder to cut them off."
-    }
-    incorrectText={
-      "Unfortunately your network can still be cut off from all empty ports in just one move by white. Hit 'Reset' to try again."
-    }
-  />
-);
+  const saveTheNetworkChallenge = (
+    <GoTutorialChallenge
+      state={boardStateFromSimpleBoard(["OO.##", "XO..#", "XX..#", "XO...", "XO..."], GoOpponent.none, GoColor.white)}
+      description={
+        "CHALLENGE: Your routers are in trouble! They only have one open port. Save the black network by connecting them to more empty nodes."
+      }
+      correctMoves={[{ x: 2, y: 2 }]}
+      correctText={
+        "Correct! Now the network touches three empty nodes instead of one, making it much harder to cut them off."
+      }
+      incorrectText={
+        "Unfortunately your network can still be cut off from all empty ports in just one move by white. Hit 'Reset' to try again."
+      }
+    />
+  );
 
-const onlyGoodMoveChallenge = (
-  <GoTutorialChallenge
-    state={boardStateFromSimpleBoard(["XXO.O", "XO.O.", ".OOOO", "XXXXX", "X.X.X"], GoOpponent.none, GoColor.white)}
-    description={"CHALLENGE: Save the black network on the left! Connect the network to more than one empty node."}
-    correctMoves={[{ x: 2, y: 0 }]}
-    correctText={
-      "Correct! Now the network touches two empty nodes instead of one, making it much harder to cut them off."
-    }
-    incorrectText={
-      "Incorrect. Your left network can still be cut off from empty ports in just one move. Also, you blocked one of your only open ports from your right network!"
-    }
-  />
-);
+  const onlyGoodMoveChallenge = (
+    <GoTutorialChallenge
+      state={boardStateFromSimpleBoard(["XXO.O", "XO.O.", ".OOOO", "XXXXX", "X.X.X"], GoOpponent.none, GoColor.white)}
+      description={"CHALLENGE: Save the black network on the left! Connect the network to more than one empty node."}
+      correctMoves={[{ x: 2, y: 0 }]}
+      correctText={
+        "Correct! Now the network touches two empty nodes instead of one, making it much harder to cut them off."
+      }
+      incorrectText={
+        "Incorrect. Your left network can still be cut off from empty ports in just one move. Also, you blocked one of your only open ports from your right network!"
+      }
+    />
+  );
 
-const makeTwoEyesChallenge = (
-  <GoTutorialChallenge
-    state={boardStateFromSimpleBoard(["XXOO.", ".XXOO", ".XXO.", ".XXOO", "XXOO."], GoOpponent.none, GoColor.white)}
-    description={
-      "CHALLENGE: The black routers are only connected to one empty-node group. Place a router such that they are connected to TWO empty node groups instead."
-    }
-    correctMoves={[{ x: 2, y: 0 }]}
-    correctText={
-      "Correct! Now that your network surrounds empty nodes in multiple different areas, it is impossible for the network to be captured by white because of the suicide rule (unless you fill in your own empty nodes!)."
-    }
-    incorrectText={
-      "Incorrect. The black network still only touches one group of open nodes. (Hint: Try dividing up the bottom open-node group.) Hit 'Reset' to try again."
-    }
-  />
-);
+  const makeTwoEyesChallenge = (
+    <GoTutorialChallenge
+      state={boardStateFromSimpleBoard(["XXOO.", ".XXOO", ".XXO.", ".XXOO", "XXOO."], GoOpponent.none, GoColor.white)}
+      description={
+        "CHALLENGE: The black routers are only connected to one empty-node group. Place a router such that they are connected to TWO empty node groups instead."
+      }
+      correctMoves={[{ x: 2, y: 0 }]}
+      correctText={
+        "Correct! Now that your network surrounds empty nodes in multiple different areas, it is impossible for the network to be captured by white because of the suicide rule (unless you fill in your own empty nodes!)."
+      }
+      incorrectText={
+        "Incorrect. The black network still only touches one group of open nodes. (Hint: Try dividing up the bottom open-node group.) Hit 'Reset' to try again."
+      }
+    />
+  );
+
+  return { captureChallenge, saveTheNetworkChallenge, onlyGoodMoveChallenge, makeTwoEyesChallenge };
+}
 
 export const GoInstructionsPage = (): React.ReactElement => {
   const { classes } = boardStyles({});
+  const { captureChallenge, saveTheNetworkChallenge, onlyGoodMoveChallenge, makeTwoEyesChallenge } = useMemo(
+    getTutorialChallenges,
+    [],
+  );
   return (
     <div className={classes.instructionScroller}>
       <>

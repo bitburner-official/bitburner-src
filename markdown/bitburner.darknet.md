@@ -32,13 +32,13 @@ Description
 
 </td><td>
 
-Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected to the server that the script is running on. The speed of authentication scales with the number of threads used.
+Sends a network request to try to authenticate on a darknet server. The target server must be directly connected to the server that the script is running on. The speed of authentication scales with the number of threads used.
 
-If successful, grants the current script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() \*from\* the server is always allowed.)
+If successful, grants the current script a session, allowing it to [exec()](./bitburner.ns.exec.md) scripts on that server, or [scp()](./bitburner.ns.scp.md) files to it. (scp() \*from\* the server is always allowed.)
 
 Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer if the player's charisma is below the server's charisma level.
 
-Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use connectToSession with the correct password to also get a session with the target server.
+Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use [connectToSession()](./bitburner.darknet.connecttosession.md) with the correct password to also get a session with the target server.
 
 
 </td></tr>
@@ -49,11 +49,11 @@ Note that the session granted is only for the current script instance (by PID) -
 
 </td><td>
 
-Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`<!-- -->, connectToSession can be used to get a session on servers at any distance.
+Attempts to connect to a target darknet server that you have previously authenticated on. Unlike [authenticate()](./bitburner.darknet.authenticate.md)<!-- -->, connectToSession can be used to get a session on servers at any distance.
 
-If successful, grants the script a session, allowing it to scp() files to that target. It also allows starting scripts with exec() on that target, if the target is directly connected to the server that the script is running on, or has a backdoor or stasis link.
+If successful, grants the script a session, allowing it to [scp()](./bitburner.ns.scp.md) files to that target. It also allows starting scripts with [exec()](./bitburner.ns.exec.md) on that target, if the target is directly connected to the server that the script is running on, or has a backdoor or stasis link.
 
-If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
+If unsuccessful, more detail may be able to be gathered by using [heartbleed()](./bitburner.darknet.heartbleed.md) to look at the resulting logs on the server.
 
 Note that the session granted is only for the current script instance (by PID) - other running scripts will need to use connectToSession with the correct password to also get a session with the target server.
 
@@ -79,7 +79,9 @@ This technique is sometimes used to sacrifice a new device that appears on the n
 
 </td><td>
 
-Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using dnet.memoryReallocation() .
+Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using [memoryReallocation()](./bitburner.darknet.memoryreallocation.md)<!-- -->.
+
+Unlike [memoryReallocation()](./bitburner.darknet.memoryreallocation.md)<!-- -->, getBlockedRam() can be evaluated regardless of distance or session held.
 
 
 </td></tr>
@@ -90,7 +92,9 @@ Gets the amount of RAM blocked by the server owner's processes. This ram can be 
 
 </td><td>
 
-Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
+Gets the current instability penalties caused by excessive backdoor installations on the darknet.
+
+Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error.
 
 
 </td></tr>
@@ -101,9 +105,9 @@ Gets the current instability of the darknet caused by excessive backdoor-ing of 
 
 </td><td>
 
-Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and each visual row in the UI below that increases the depth of the server.
+Gets the current depth of the specified server into the darknet. Servers immediately below the "darkweb" server are depth 0, and each visual row in the UI below that increases the depth of the server.
 
-Returns -1 if the server is offline, not found, or not a darkweb server.
+Returns -1 on the server "darkweb" or if the server is offline, not found, or not a darknet server.
 
 
 </td></tr>
@@ -127,7 +131,7 @@ If the darknet server has recently gone offline, the returned object will be a d
 
 </td><td>
 
-Gets the required charisma level to target the server with dnet.heartbleed().
+Gets the required charisma level to target the server with [heartbleed()](./bitburner.darknet.heartbleed.md)<!-- -->.
 
 Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep in the darknet, be impossible.
 
@@ -166,7 +170,7 @@ Uses an exploit to extract log data from a server by sending a malformed heartbe
 
 Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
 
-The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information. Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
+The speed of capture scales with the number of threads used. See [getHeartbleedTime()](./bitburner.darknetformulas.getheartbleedtime.md) for more information. Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
 
 
 </td></tr>
@@ -177,9 +181,9 @@ The speed of capture scales with the number of threads used. See formulas.dnet.g
 
 </td><td>
 
-Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server. The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
+Attempts to move a target server to other parts of the darknet, by overloading the connections between it and the current server. Continued attempts accrue charge on the target server, which causes the server to move when charge reaches 100%. The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
 
-Effect scales with threads and charisma level.
+The amount of charge gained scales with threads and charisma level.
 
 
 </td></tr>
@@ -302,7 +306,7 @@ Note that there is no guarantee about the order of servers in the returned list.
 
 Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but a savvy investor can take advantage of the chaos. The effect scales with charisma and the number of threads used, but degrades over time if left alone.
 
-This function requires TIX API access. You can use [purchaseTixApi](./bitburner.stock.purchasetixapi.md) to purchase it.
+This function requires TIX API access. You can use [purchaseTixApi()](./bitburner.stock.purchasetixapi.md) to purchase it.
 
 
 </td></tr>
@@ -313,11 +317,13 @@ This function requires TIX API access. You can use [purchaseTixApi](./bitburner.
 
 </td><td>
 
-Applies or removes a stasis link to the script's current server. This will allow you to connectToSession() or exec() to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
+Applies or removes a stasis link to the script's current server.
+
+This will allow you to [exec()](./bitburner.ns.exec.md) to the server remotely, even if it is not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
 
 Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
 
-There is a maximum of stasis links that can be applied globally, which can be seen using getStasisLinkLimit(). This limit can be increased by finding special augmentations in the deep darknet.
+There is a maximum number of stasis links that can be applied globally, which can be seen using [getStasisLinkLimit()](./bitburner.darknet.getstasislinklimit.md)<!-- -->. This limit can be increased by finding special augmentations in the deep darknet.
 
 
 </td></tr>

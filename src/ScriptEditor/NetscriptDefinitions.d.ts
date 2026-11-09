@@ -164,7 +164,7 @@ interface Multipliers {
   charisma_exp: number;
   /** Multiplier to chance of successfully performing a hack */
   hacking_chance: number;
-  /** Multiplier to hacking speed */
+  /** Multiplier to the speed of hack(), grow() and weaken() */
   hacking_speed: number;
   /** Multiplier to amount of money the player gains from hacking */
   hacking_money: number;
@@ -518,13 +518,13 @@ interface ProcessInfo {
  * @public
  */
 interface HackingMultipliers {
-  /** Player's hacking chance multiplier. */
+  /** Player's hack() success chance multiplier. */
   chance: number;
-  /** Player's hacking speed multiplier. */
+  /** Player's hack(), grow() and weaken() speed multiplier. */
   speed: number;
   /** Player's hacking money stolen multiplier. */
   money: number;
-  /** Player's hacking growth multiplier */
+  /** Player's grow() power multiplier */
   growth: number;
 }
 
@@ -887,6 +887,49 @@ export type GangTaskNameEnumType = {
 /** @public */
 type GangTaskName = _ValueOf<GangTaskNameEnumType>;
 
+/** @public */
+export type GangMemberUpgradeNameEnumType = {
+  Bat: "Baseball Bat";
+  Katana: "Katana";
+  Malorian: "Malorian-3516";
+  Hansen: "Hansen-HA7";
+  Arasaka: "Arasaka-HJSH18";
+  Militech: "Militech-M251s";
+  Nokota: "Nokota-D5";
+  Techtronika: "Techtronika-SPT32";
+
+  Vest: "Bulletproof Vest";
+  FullArmor: "Full Body Armor";
+  LiquidArmor: "Liquid Body Armor";
+  GrapheneArmor: "Graphene Plating Armor";
+
+  Herrera: "Herrera Outlaw GTS";
+  Yaiba: "Yaiba ASM-R250 Muramasa";
+  Rayfield: "Rayfield Caliburn";
+  Quadra: "Quadra Sport R-7";
+
+  NukeRootkit: "NUKE Rootkit";
+  SoulstealerRootkit: "Soulstealer Rootkit";
+  DemonRootkit: "Demon Rootkit";
+  HmapNode: "Hmap Node";
+  JackRipper: "Jack the Ripper";
+
+  BionicArms: "Bionic Arms";
+  BionicLegs: "Bionic Legs";
+  BionicSpine: "Bionic Spine";
+  BrachiBlades: "BrachiBlades";
+  Nanofiber: "Nanofiber Weave";
+  SyntheticHeart: "Synthetic Heart";
+  SynfibrilMuscle: "Synfibril Muscle";
+  BitWire: "BitWire";
+  Neuralstimulator: "Neuralstimulator";
+  DataJack: "DataJack";
+  GrapheneBoneLacings: "Graphene Bone Lacings";
+};
+
+/** @public */
+type GangMemberUpgradeName = _ValueOf<GangMemberUpgradeNameEnumType>;
+
 /**
  * Gang general info.
  * @public
@@ -1141,7 +1184,9 @@ interface GangMemberAscension {
 interface SleeveBladeburnerTask extends BaseTask {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
-  actionName: string;
+  actionName:
+    | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionNameEnumType["InciteViolence"]>
+    | BladeburnerContractName;
   cyclesWorked: number;
   cyclesNeeded: number;
   tasksCompleted: number;
@@ -1296,6 +1341,9 @@ export interface NetscriptPort {
 
 /**
  * Stock market API
+ * @remarks
+ * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Stock {
@@ -1950,8 +1998,10 @@ export interface BitNodeBooleanOptions {
 /**
  * Singularity API
  * @remarks
- * This API requires Source-File 4 to use outside of BitNode 4. Additionally, outside of BitNode 4 the RAM cost of all these functions is multiplied by 16/4/1 based on
- * Source-File 4 levels.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
+ *
+ * Additionally, the RAM cost of functions in this namespace change based on your current BN and Source-Files.
  * @public
  */
 export interface Singularity {
@@ -2068,15 +2118,15 @@ export interface Singularity {
   purchaseTor(): boolean;
 
   /**
-   * Purchase a program from the dark web.
+   * Purchase a program from the Dark Web.
    * @remarks
    * RAM cost: 2 GB * 16/4/1
    *
    *
    * This function allows you to automatically purchase programs. You MUST have a
    * TOR router in order to use this function. The cost of purchasing programs
-   * using this function is the same as if you were purchasing them through the Dark
-   * Web using the Terminal buy command.
+   * using this function is the same as if you were purchasing them through the Dark Web
+   * using the Terminal buy command.
    *
    * @example
    * ```js
@@ -2114,7 +2164,7 @@ export interface Singularity {
    * - This function returns true when the UI is showing the infiltration UI or the BitVerse.
    *
    * - This function does not take Bladeburner actions into account. You can use {@link Bladeburner.getCurrentAction | getCurrentAction}
-   *  to check if you are performing a Bladeburner action.
+   * to check if you are performing a Bladeburner action.
    *
    * @returns True if the player is currently performing an action, false otherwise.
    */
@@ -2218,7 +2268,7 @@ export interface Singularity {
    * const companyName = "ECorp";
    * const position = "Chief Executive Officer";
    *
-   * let requirements = ns.singularity.getCompanyPositionInfo(companyName, position);
+   * const requirements = ns.singularity.getCompanyPositionInfo(companyName, position);
    * ```
    * @param companyName - Name of company to get the requirements for. Must be an exact match.
    * @param positionName - Name of position to get the requirements for. Must be an exact match.
@@ -2445,7 +2495,7 @@ export interface Singularity {
    * const factionName = "CyberSec";
    * const workType = "hacking";
    *
-   * let success = ns.singularity.workForFaction(factionName, workType);
+   * const success = ns.singularity.workForFaction(factionName, workType);
    * if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`);
    * ```
    * @param faction - Name of faction to work for.
@@ -2626,8 +2676,8 @@ export interface Singularity {
    * This function returns an array containing the names (as strings) of all Augmentations you have.
    *
    * @param purchased - Specifies whether the returned array should include Augmentations you have purchased but not
-   *   yet installed. By default, this argument is false which means that the return value will NOT have the purchased
-   *   Augmentations.
+   * yet installed. By default, this argument is false which means that the return value will NOT have the purchased
+   * Augmentations.
    * @returns Array containing the names (as strings) of all Augmentations you have.
    */
   getOwnedAugmentations(purchased?: boolean): string[];
@@ -2751,7 +2801,7 @@ export interface Singularity {
    * RAM cost: 5 GB * 16/4/1
    *
    *
-   * This function returns augmentation stats.
+   * This function returns augmentation stats for one level or copy of the augment.
    *
    * @param name - Name of Augmentation. CASE-SENSITIVE.
    * @returns Augmentation stats.
@@ -2874,14 +2924,14 @@ export interface Singularity {
   setFocus(focus: boolean): boolean;
 
   /**
-   * Get a list of programs offered on the dark web.
+   * Get a list of programs offered on the Dark Web.
    * @remarks
    * RAM cost: 0.5 GB * 16/4/1
    *
    *
    * This function allows the player to get a list of programs available for purchase
-   * on the dark web. Players MUST have purchased Tor to get the list of programs
-   * available. If Tor has not been purchased yet, this function will return an
+   * on the Dark Web. Players MUST have purchased TOR to get the list of programs
+   * available. If TOR has not been purchased yet, this function will return an
    * empty list.
    *
    * @example
@@ -2889,22 +2939,22 @@ export interface Singularity {
    * const programs = ns.singularity.getDarkwebPrograms();
    * ns.tprint(`Available programs are: ${programs}`);
    * ```
-   * @returns - a list of programs available for purchase on the dark web, or [] if Tor has not
-   * been purchased
+   * @returns - a list of programs available for purchase on the Dark Web, or [] if TOR has not
+   * been purchased.
    */
   getDarkwebPrograms(): ProgramName[];
 
   /**
-   * Check the price of an exploit on the dark web
+   * Check the price of an exploit on the Dark Web.
    * @remarks
    * RAM cost: 0.5 GB * 16/4/1
    *
    *
-   * This function allows you to check the price of a darkweb exploit/program.
+   * This function allows you to check the price of a Dark Web exploit/program.
    * You MUST have a TOR router in order to use this function. The price returned
    * by this function is the same price you would see with buy -l from the terminal.
    * Returns the cost of the program if it has not been purchased yet, 0 if it
-   * has already been purchased, or -1 if Tor has not been purchased (and thus
+   * has already been purchased, or -1 if TOR has not been purchased (and thus
    * the program/exploit is not available for purchase).
    *
    * If the program does not exist, an error is thrown.
@@ -2917,9 +2967,9 @@ export interface Singularity {
    * if (cost > 0) ns.tprint(`${programName} costs $${ns.format.number(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
-   * @returns Price of the specified darkweb program
-   * (if not yet purchased), 0 if it has already been purchased, or -1 if Tor has not been
-   * purchased. Throws an error if the specified program/exploit does not exist
+   * @returns Price of the specified Dark Web program
+   * (if not yet purchased), 0 if it has already been purchased, or -1 if TOR has not been
+   * purchased. Throws an error if the specified program/exploit does not exist.
    */
   getDarkwebProgramCost(programName: ProgramName): number;
 
@@ -2939,9 +2989,7 @@ export interface Singularity {
    * @remarks
    * RAM cost: 32 GB * 16/4/1
    *
-   * You must have the special augment installed and the required hacking level
-   *   OR
-   * Completed the final black op.
+   * You must have the special augment installed and the required hacking level OR completed the final black op.
    *
    * If you do not want to move on to the next BN and instead stay on the BitVerse screen, you can set nextBN
    * to undefined. Note that with the hacking route, using {@link Singularity.installBackdoor | installBackdoor} is a
@@ -2987,23 +3035,28 @@ export interface CompanyPositionInfo {
 }
 
 /** @public */
-type HacknetServerHashUpgrade =
-  | "Sell for Money"
-  | "Sell for Corporation Funds"
-  | "Reduce Minimum Security"
-  | "Increase Maximum Money"
-  | "Improve Studying"
-  | "Improve Gym Training"
-  | "Exchange for Corporation Research"
-  | "Exchange for Bladeburner Rank"
-  | "Exchange for Bladeburner SP"
-  | "Generate Coding Contract"
-  | "Company Favor";
+type HacknetServerHashUpgradeEnumType = {
+  SellForMoney: "Sell for Money";
+  SellForCorporationFunds: "Sell for Corporation Funds";
+  ReduceMinimumSecurity: "Reduce Minimum Security";
+  IncreaseMaximumMoney: "Increase Maximum Money";
+  ImproveStudying: "Improve Studying";
+  ImproveGymTraining: "Improve Gym Training";
+  ExchangeForCorporationResearch: "Exchange for Corporation Research";
+  ExchangeForBladeburnerRank: "Exchange for Bladeburner Rank";
+  ExchangeForBladeburnerSP: "Exchange for Bladeburner SP";
+  GenerateCodingContract: "Generate Coding Contract";
+  CompanyFavor: "Company Favor";
+};
+
+/** @public */
+type HacknetServerHashUpgrade = _ValueOf<HacknetServerHashUpgradeEnumType>;
 
 /**
  * Hacknet API
  * @remarks
- * Not all these functions are immediately available.
+ * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Hacknet {
@@ -3292,11 +3345,12 @@ export interface Hacknet {
   /**
    * Get the list of hash upgrades
    * @remarks
-   * RAM cost: 0.5 GB
+   * RAM cost: 0 GB
    *
    * This function is only applicable for Hacknet Servers (the upgraded version of a Hacknet Node).
    *
-   * Returns the list of all available hash upgrades that can be used in the spendHashes function.
+   * Returns the list of all available hash upgrades that can be used in the spendHashes function. You can also use
+   * the HacknetServerHashUpgrade property in {@link NSEnums | NSEnums}.
    * @example
    * ```js
    * const upgrades = ns.hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
@@ -3490,8 +3544,8 @@ export type BladeburnerActionTypeForSleeve =
 /**
  * Bladeburner API
  * @remarks
- * You have to be employed in the Bladeburner division and be in BitNode 6/7 or have Source-File 6/7 in order to use
- * this API.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Bladeburner {
@@ -4110,7 +4164,7 @@ export interface CodingContract {
    * @param answer - Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
    * @param filename - Filename of the contract.
    * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not
-   *   provided.
+   * provided.
    * @returns A reward description string on success, or an empty string on failure.
    */
   attempt(answer: any, filename: string, host?: string): string;
@@ -4216,6 +4270,136 @@ export interface CodingContract {
    * RAM cost: 0 GB
    */
   getContractTypes(): CodingContractName[];
+}
+
+/**
+ * Port API
+ * @public
+ */
+export interface Port {
+  /**
+   * Get all data on a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Get a handle to a Netscript Port.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port number. Must be a positive integer.
+   */
+  getHandle(portNumber: number): NetscriptPort;
+
+  /**
+   * Check if a port is full.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Returns true if the port's data queue is full, and false otherwise.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port number. Must be a positive integer.
+   */
+  isFull(portNumber: number): boolean;
+
+  /**
+   * Check if a port is empty.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Returns true if the port's data queue is empty, and false otherwise.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port number. Must be a positive integer.
+   */
+  isEmpty(portNumber: number): boolean;
+
+  /**
+   * Get a copy of the data from a port without popping it.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This function is used to peek at the data from a port. It returns the
+   * first element in the specified port without removing that element. If
+   * the port is empty, the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port to peek. Must be a positive integer.
+   * @returns Data in the specified port.
+   */
+  peek(portNumber: number): any;
+
+  /**
+   * Read data from a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Read data from that port. A port is a serialized queue.
+   * This function will remove the first element from that queue and return it.
+   * If the queue is empty, then the string “NULL PORT DATA” will be returned.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port to read from. Must be a positive integer.
+   * @returns The data read.
+   */
+  read(portNumber: number): any;
+
+  /**
+   * Write data to a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Write data to the given Netscript port.
+   *
+   * There is a limit on the maximum number of ports, but you won't reach that limit in normal situations. If you do, it
+   * usually means that there is a bug in your script that leaks port data. A port is freed when it does not have any
+   * data in its underlying queue. `ns.port.clear` deletes all data on a port. `ns.port.read` reads the first element in
+   * the port's queue, then removes it from the queue.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port to write to. Must be a positive integer.
+   * @param data - Data to write, it's cloned with structuredClone().
+   * @returns The data popped off the queue if it was full, or null if it was not full.
+   */
+  write(portNumber: number, data: any): any;
+
+  /**
+   * Attempt to write to a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Attempts to write data to the specified Netscript port.
+   * If the port is full, the data will not be written.
+   * Otherwise, the data will be written normally.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param portNumber - Port to attempt to write to. Must be a positive integer.
+   * @param data - Data to write, it's cloned with structuredClone().
+   * @returns True if the data is successfully written to the port, and false otherwise.
+   */
+  tryWrite(portNumber: number, data: any): boolean;
+
+  /**
+   * Listen for a port write.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Sleeps until the port is written to.
+   * Ports are shared across all hosts and contents are reset on game restart.
+   *
+   * @param port - Port to listen for a write on. Must be a positive integer.
+   */
+  nextWrite(port: number): Promise<void>;
+
+  /**
+   * Clear data from a port.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Delete all data from the underlying queue.
+   *
+   * @param portNumber - Port to clear data from. Must be a positive integer.
+   */
+  clear(portNumber: number): void;
 }
 
 /**
@@ -4460,7 +4644,7 @@ export interface Format {
  *
  * - NotFound: The API requires a specific resource (e.g., an exe file), but it does not exist on the server.
  *
- * - RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by network instability.
+ * - RequestTimeOut: The request failed (though the password may or may not have been correct). Caused by {@link Darknet.getDarknetInstability | Darknet Instability} penalties.
  *
  * - ServiceUnavailable: The server is offline.
  *
@@ -4522,11 +4706,16 @@ interface DarknetServerDetails {
    * You are supposed to experiment and discover the models.
    */
   modelId: string;
-  /** Static password reminder text set for this server. */
+  /**
+   * Static password reminder text set for this server.
+   *
+   * This is a static hint, which does not change when you try to authenticate with different passwords. For interactive
+   * feedback after attempting authentication, use {@link Darknet.heartbleed | heartbleed()}.
+   */
   passwordHint: string;
   /** Data from the passwordHint, if any. */
   data: string;
-  /** The frequency (in seconds) of the server adding its own messages to its logs, visible with heartBleed(). */
+  /** The frequency (in seconds) of the server adding its own messages to its logs, visible with {@link Darknet.heartbleed | heartbleed()}. */
   logTrafficInterval: number;
   /** The number of characters in the password */
   passwordLength: number;
@@ -4545,7 +4734,7 @@ interface DarknetServerDetails {
 }
 
 /**
- * Options to change the behavior of {@link Darknet.heartbleed | heartbleed} API.
+ * Options to change the behavior of {@link Darknet.heartbleed | heartbleed()} API.
  * @public
  */
 interface HeartbleedOptions {
@@ -4558,7 +4747,9 @@ interface HeartbleedOptions {
 }
 
 /**
- * Instability of the darknet caused by excessive backdoor-ing of servers.
+ * Instability penalties caused by excessive backdoor installations on the darknet.
+ *
+ * Backdoors on stationary servers are not factored for penalty calculations.
  * @public
  */
 interface DarknetInstability {
@@ -4574,16 +4765,16 @@ interface DarknetInstability {
  */
 export interface Darknet {
   /**
-   * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
+   * Sends a network request to try to authenticate on a darknet server. The target server must be directly connected
    * to the server that the script is running on. The speed of authentication scales with the number of threads used.
    *
-   * If successful, grants the current script a session, allowing it to exec() scripts on that server, or scp() files to it. (scp() *from* the server is always allowed.)
+   * If successful, grants the current script a session, allowing it to {@link NS.exec | exec()} scripts on that server, or {@link NS.scp | scp()} files to it. (scp() *from* the server is always allowed.)
    *
    * Note that the charisma level on a server is not a requirement for authentication, but authentication takes longer
    * if the player's charisma is below the server's charisma level.
    *
    * Note that the session granted is only for the current script instance (by PID) - other running scripts will need to
-   * use connectToSession with the correct password to also get a session with the target server.
+   * use {@link Darknet.connectToSession | connectToSession()} with the correct password to also get a session with the target server.
    *
    * @remarks
    * RAM cost: 0.4 GB
@@ -4592,20 +4783,21 @@ export interface Darknet {
    * @param password - Password to attempt to authenticate with.
    * @param additionalMsec - Optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
    * @returns A promise that resolves to a {@link DarknetResult} object. The resolved object may contain an optional
-   * property. The type of this property is intentionaly undocumented. You are supposed to experiment and discover the
-   * content of this property.
+   * property. The type of this property is intentionally undocumented. You are supposed to experiment and discover the
+   * content of this property. This property only exists when authenticating with some very special servers. For
+   * interactive feedback after attempting authentication, in most cases, use {@link Darknet.heartbleed | heartbleed()}.
    */
   authenticate(host: string, password: string, additionalMsec?: number): Promise<DarknetResult & { data?: any }>;
 
   /**
-   * Attempts to connect to a target darkweb server that you have previously authenticated on. Unlike `authenticate`,
+   * Attempts to connect to a target darknet server that you have previously authenticated on. Unlike {@link Darknet.authenticate | authenticate()},
    * connectToSession can be used to get a session on servers at any distance.
    *
-   * If successful, grants the script a session, allowing it to scp() files to that target. It also allows starting scripts
-   * with exec() on that target, if the target is directly connected to the server that the script is running on,
+   * If successful, grants the script a session, allowing it to {@link NS.scp | scp()} files to that target. It also allows starting scripts
+   * with {@link NS.exec | exec()} on that target, if the target is directly connected to the server that the script is running on,
    * or has a backdoor or stasis link.
    *
-   * If unsuccessful, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
+   * If unsuccessful, more detail may be able to be gathered by using {@link Darknet.heartbleed | heartbleed()} to look at the resulting logs on the server.
    *
    * Note that the session granted is only for the current script instance (by PID) - other running scripts will need to
    * use connectToSession with the correct password to also get a session with the target server.
@@ -4641,7 +4833,7 @@ export interface Darknet {
    *
    * Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
    *
-   * The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information.
+   * The speed of capture scales with the number of threads used. See {@link DarknetFormulas.getHeartbleedTime | getHeartbleedTime()} for more information.
    * Note that you cannot scrape logs from servers whose required charisma is higher than your charisma level.
    *
    * @remarks
@@ -4682,17 +4874,25 @@ export interface Darknet {
   probe(returnByIP?: boolean): string[];
 
   /**
-   * Applies or removes a stasis link to the script's current server. This will allow you to connectToSession() or exec() to the server remotely, even if it is
+   * Applies or removes a stasis link to the script's current server.
+   *
+   * This will allow you to {@link NS.exec | exec()} to the server remotely, even if it is
    * not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
    *
    * Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or
    * going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
    *
-   * There is a maximum of stasis links that can be applied globally, which can be seen using getStasisLinkLimit().
+   * There is a maximum number of stasis links that can be applied globally, which can be seen using {@link Darknet.getStasisLinkLimit | getStasisLinkLimit()}.
    * This limit can be increased by finding special augmentations in the deep darknet.
    *
    * @remarks
    * RAM cost: 12 GB
+   *
+   * Stasis links utilize backdoors in order to allow the remote {@link NS.exec | exec()} and terminal connection.
+   * When links are applied or removed, a backdoor is also applied or removed regardless of a server's preexisting backdoor status.
+   *
+   * Since stationary server backdoors are excluded from {@link Darknet.getDarknetInstability | Darknet Instability} penalty calculations,
+   * and since backdoors are always removed when a stasis link is removed, this means stasis links do not affect Instability values.
    *
    * @param shouldLink - true to apply a stasis link, false to remove it. Optional. Defaults to true.
    * @returns A promise that resolves to a {@link DarknetResult} object.
@@ -4736,10 +4936,10 @@ export interface Darknet {
   getServerDetails(host?: string): DarknetServerDetails & { isOnline: boolean };
 
   /**
-   * Increases the chance that the target server will move to other parts of the darknet, by overloading the connections between it and the current server.
+   * Attempts to move a target server to other parts of the darknet, by overloading the connections between it and the current server. Continued attempts accrue charge on the target server, which causes the server to move when charge reaches 100%.
    * The target must be a connected, non-stationary, darknet server - scripts cannot target the server they are running on.
    *
-   * Effect scales with threads and charisma level.
+   * The amount of charge gained scales with threads and charisma level.
    *
    * @remarks
    * RAM cost: 4 GB
@@ -4789,7 +4989,9 @@ export interface Darknet {
   memoryReallocation(host?: string): Promise<DarknetResult>;
 
   /**
-   * Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using dnet.memoryReallocation() .
+   * Gets the amount of RAM blocked by the server owner's processes. This RAM can be freed for your own use using {@link Darknet.memoryReallocation | memoryReallocation()}.
+   *
+   * Unlike {@link Darknet.memoryReallocation | memoryReallocation()}, getBlockedRam() can be evaluated regardless of distance or session held.
    *
    * @remarks
    * RAM cost: 0 GB
@@ -4800,10 +5002,10 @@ export interface Darknet {
   getBlockedRam(host?: string): number;
 
   /**
-   * Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and
+   * Gets the current depth of the specified server into the darknet. Servers immediately below the "darkweb" server are depth 0, and
    * each visual row in the UI below that increases the depth of the server.
    *
-   * Returns -1 if the server is offline, not found, or not a darkweb server.
+   * Returns -1 on the server "darkweb" or if the server is offline, not found, or not a darknet server.
    *
    * @remarks
    * RAM cost: 0.1 GB
@@ -4818,7 +5020,7 @@ export interface Darknet {
    * stock's forecasts, but a savvy investor can take advantage of the chaos. The effect scales with charisma and the
    * number of threads used, but degrades over time if left alone.
    *
-   * This function requires TIX API access. You can use {@link Stock.purchaseTixApi | purchaseTixApi} to purchase it.
+   * This function requires TIX API access. You can use {@link Stock.purchaseTixApi | purchaseTixApi()} to purchase it.
    *
    * @remarks
    * RAM cost: 2 GB
@@ -4844,11 +5046,15 @@ export interface Darknet {
   phishingAttack(): Promise<DarknetResult>;
 
   /**
-   * Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
+   * Gets the current instability penalties caused by excessive backdoor installations on the darknet.
+   *
+   * Note that instability only affects authentication duration, and the chance that authentication will fail with a timeout error.
    * @remarks
    * Ram cost: 0 GB
    *
-   * @returns An object containing the current instability values.
+   * Backdoors on stationary servers are excluded from penalty calculations.
+   *
+   * @returns An object containing the current instability penalty values.
    */
   getDarknetInstability(): DarknetInstability;
 
@@ -4868,14 +5074,13 @@ export interface Darknet {
    * - Some servers restart, which kills all running scripts on the server.
    *
    * - New servers appear on the net (which may be previously offline servers, but cleaned and with a new password).
-   *
    * @remarks
    * RAM cost: 0 GB
    */
   nextMutation(): Promise<void>;
 
   /**
-   * Gets the required charisma level to target the server with dnet.heartbleed().
+   * Gets the required charisma level to target the server with {@link Darknet.heartbleed | heartbleed()}.
    *
    * Insufficient charisma will also cause authentication to take much longer - or, in certain servers deep
    * in the darknet, be impossible.
@@ -4908,7 +5113,8 @@ export interface Darknet {
 /**
  * Gang API
  * @remarks
- * If you are not in BitNode-2, then you must have Source-File 2 in order to use this API.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Gang {
@@ -5475,8 +5681,11 @@ export interface GoAnalysis {
 }
 
 /**
- * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
+ * Illicit and dangerous IPvGO tools. Not for the faint of heart.
  *
+ * @remarks
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface GoCheat {
@@ -5634,8 +5843,8 @@ export interface GoCheat {
  */
 export interface Go {
   /**
-   *  Make a move on the IPvGO subnet game board, and await the opponent's response.
-   *  x:0 y:0 represents the bottom-left corner of the board in the UI.
+   * Make a move on the IPvGO subnet game board, and await the opponent's response.
+   * \{"x":0,"y":0\} represents the bottom-left corner of the board in the UI.
    *
    * @remarks
    * RAM cost: 4 GB
@@ -5657,7 +5866,7 @@ export interface Go {
 
   /**
    * Pass the player's turn rather than making a move, and await the opponent's response. This ends the game if the opponent
-   *   passed on the previous turn, or if the opponent passes on their following turn.
+   * passed on the previous turn, or if the opponent passes on their following turn.
    *
    * This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was
    * closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
@@ -5676,8 +5885,8 @@ export interface Go {
   }>;
 
   /**
-   *  Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable.
-   *  x:0 y:0 represents the bottom-left corner of the board in the UI.
+   * Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable.
+   * \{"x":0,"y":0\} represents the bottom-left corner of the board in the UI.
    *
    * @remarks
    * RAM cost: 0 GB
@@ -5807,7 +6016,8 @@ export interface Go {
 /**
  * Sleeve API
  * @remarks
- * If you are not in BitNode-10, then you must have Source-File 10 in order to use this API.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Sleeve {
@@ -6107,7 +6317,8 @@ export interface Sleeve {
 /**
  * Grafting API
  * @remarks
- * This API requires Source-File 10 to use.
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Grafting {
@@ -6533,6 +6744,22 @@ interface GangFormulas {
    */
   respectGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
   /**
+   * Calculate faction reputation gain per tick.
+   * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
+   * @param member - Member info from {@link Gang.getMemberInformation | getMemberInformation}
+   * @param task - Task info from {@link Gang.getTaskStats | getTaskStats}
+   * @param favor - Faction favor from {@link Singularity.getFactionFavor | getFactionFavor}
+   * @param factionRepMult - faction_rep multiplier from {@link NS.getPlayer | getPlayer}.
+   * @returns The calculated faction reputation gain.
+   */
+  reputationGain(
+    gang: GangGenInfo,
+    member: GangMemberInfo,
+    task: GangTaskStats,
+    favor: number,
+    factionRepMult: number,
+  ): number;
+  /**
    * Calculate wanted gain per tick.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
    * @param member - Member info from {@link Gang.getMemberInformation | getMemberInformation}
@@ -6607,12 +6834,20 @@ interface DarknetFormulas {
   getHeartbleedTime(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
 
   /**
-   * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+   * Gets the expected amount of ram that will be freed by a call to {@link Darknet.memoryReallocation | memoryReallocation()}
    * @param serverDetails - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
   getExpectedRamBlockRemoved(serverDetails: DarknetServerDetails, threads?: number, player?: Person): number;
+
+  /**
+   * Gets the expected amount of charge that will be gained by a call to {@link Darknet.induceServerMigration | induceServerMigration()}
+   * @param serverDetails - The server to estimate charge build-up on.
+   * @param player - The player object.
+   * @param threads - The number of threads used in the induceServerMigration call. Optional, defaults to 1
+   */
+  getExpectedMigrationCharge(serverDetails: DarknetServerDetails, player: Person, threads?: number): number;
 }
 
 /**
@@ -6670,20 +6905,58 @@ type FragmentType = _ValueOf<FragmentEnumType>;
 
 /** @public */
 interface Fragment {
+  /**
+   * A unique integer ID assigned to the combination of a fragment's shape, effect, and power.
+   */
   id: number;
+  /**
+   * A two-dimensional array representing with `true` the slots a fragment will obstruct, with no rotations applied.
+   */
   shape: boolean[][];
+  /**
+   * An enumerated value for the fragment's bonus type.
+   */
   type: FragmentType;
+  /**
+   * A fixed multiplier influencing the fragment's final chargedEffect value.
+   */
   power: number;
+  /**
+   * The maximum number of concurrent placements allowed, for fragments with this ID.
+   */
   limit: number;
+  /**
+   * The fragment's effect description.
+   */
   effect: string;
 }
 
 /** @public */
 interface ActiveFragment extends Fragment {
+  /**
+   * The highest effective (including server core bonus) number of threads ever used in a single script's {@link Stanek.chargeFragment | chargeFragment()} call on this fragment.
+   *
+   * This value persists for as long as the fragment remains placed, and is only updated when a higher effective thread count is used.
+   */
   highestCharge: number;
+  /**
+   * The current charge value in play for this fragment. This is the cumulative effective threads used to charge across all cycles, divided by the (current) highestCharge.
+   *
+   * This value persists for as long as the fragment remains placed, and is only updated when the fragment is charged.
+   */
   numCharge: number;
+  /**
+   * A non-negative integer representing the number of clockwise 90-degree turns to apply. Values greater than 3 wrap
+   * around to the 0–3 range.
+   */
   rotation: number;
+  /**
+   * The root x coordinate against which the top left of the fragment was aligned.
+   */
   x: number;
+  /**
+   * The root y coordinate against which the top left of the fragment was aligned.
+   */
   y: number;
   /**
    * This is the raw value of the modifier used to calculate the effect on your multipliers. It may not be a multiplier.
@@ -6723,7 +6996,9 @@ interface Stanek {
   giftHeight(): number;
 
   /**
-   * Charge a fragment, increasing its power.
+   * Charge a fragment, increasing its effect strength.
+   *
+   * See {@link ActiveFragment | ActiveFragment} for additional information.
    * @remarks
    * RAM cost: 0.4 GB
    * @param rootX - Root X against which to align the top left of the fragment.
@@ -6764,7 +7039,8 @@ interface Stanek {
    *
    * @param rootX - Root X against which to align the top left of the fragment.
    * @param rootY - Root Y against which to align the top left of the fragment.
-   * @param rotation - A number from 0 to 3, the amount of 90-degree turns to take.
+   * @param rotation - A non-negative integer representing the number of clockwise 90-degree turns to apply. Values
+   * greater than 3 wrap around to the 0–3 range.
    * @param fragmentId - ID of the fragment to place.
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
@@ -6776,7 +7052,8 @@ interface Stanek {
    *
    * @param rootX - X against which to align the top left of the fragment.
    * @param rootY - Y against which to align the top left of the fragment.
-   * @param rotation - A number from 0 to 3, the mount of 90 degree turn to take.
+   * @param rotation - A non-negative integer representing the number of clockwise 90-degree turns to apply. Values
+   * greater than 3 wrap around to the 0–3 range.
    * @param fragmentId - ID of the fragment to place.
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
@@ -7228,12 +7505,20 @@ interface UserInterface {
  */
 export interface NS {
   /**
-   * Namespace for {@link Hacknet | hacknet} functions. Some of this API contains spoilers.
+   * Namespace for {@link Hacknet | hacknet} functions. Some of this namespace contains spoilers.
+   *
+   * @remarks
+   * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly hacknet: Hacknet;
 
   /**
-   * Namespace for {@link Bladeburner | Bladeburner} functions. Contains spoilers.
+   * Namespace for {@link Bladeburner | Bladeburner} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly bladeburner: Bladeburner;
 
@@ -7248,7 +7533,12 @@ export interface NS {
   readonly cloud: Cloud;
 
   /**
-   * Namespace for darknet functions. Contains spoilers.
+   * Namespace for {@link Port | port} functions.
+   */
+  readonly port: Port;
+
+  /**
+   * Namespace for darknet functions.
    */
   readonly dnet: Darknet;
 
@@ -7258,7 +7548,11 @@ export interface NS {
   readonly format: Format;
 
   /**
-   * Namespace for {@link Gang | gang} functions. Contains spoilers.
+   * Namespace for {@link Gang | gang} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly gang: Gang;
 
@@ -7268,12 +7562,20 @@ export interface NS {
   readonly go: Go;
 
   /**
-   * Namespace for {@link Sleeve | sleeve} functions. Contains spoilers.
+   * Namespace for {@link Sleeve | sleeve} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly sleeve: Sleeve;
 
   /**
    * Namespace for {@link Stock | stock} functions.
+   *
+   * @remarks
+   * Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly stock: Stock;
 
@@ -7283,7 +7585,11 @@ export interface NS {
   readonly formulas: Formulas;
 
   /**
-   * Namespace for {@link Stanek | Stanek} functions. Contains spoilers.
+   * Namespace for {@link Stanek | Stanek} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly stanek: Stanek;
 
@@ -7293,7 +7599,11 @@ export interface NS {
   readonly infiltration: Infiltration;
 
   /**
-   * Namespace for {@link Corporation | corporation} functions. Contains spoilers.
+   * Namespace for {@link Corporation | corporation} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly corporation: Corporation;
 
@@ -7303,12 +7613,20 @@ export interface NS {
   readonly ui: UserInterface;
 
   /**
-   * Namespace for {@link Singularity | singularity} functions. Contains spoilers.
+   * Namespace for {@link Singularity | singularity} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly singularity: Singularity;
 
   /**
-   * Namespace for {@link Grafting | grafting} functions. Contains spoilers.
+   * Namespace for {@link Grafting | grafting} functions. This namespace contains spoilers.
+   *
+   * @remarks
+   * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+   * It will be very obvious when and how you can obtain this upgrade.
    */
   readonly grafting: Grafting;
 
@@ -7459,10 +7777,18 @@ export interface NS {
    *
    * This function returns the decimal number of script threads you need when running the hack command
    * to steal the specified amount of money from the target server.
-   * If hackAmount is less than zero, greater than the amount of money available on the server,
-   * or your hacking level is below the required level for the target server,
-   * then this function returns -1.
    *
+   * Returns -1 if any of the following conditions are met:
+   *
+   *  - `hackAmount` is less than 0.
+   *
+   *  - `hackAmount` is greater than the available money on the server.
+   *
+   *  - The available money on the server is 0.
+   *
+   *  - The player's hacking level is below the minimum required level to hack.
+   *
+   *  - The server security level is greater than or equal to 100.
    *
    * @example
    * ```js
@@ -7480,11 +7806,11 @@ export interface NS {
   hackAnalyzeThreads(host: string, hackAmount: number): number;
 
   /**
-   * Get the part of money stolen with a single thread.
+   * Get the fraction (between 0 and 1) of money stolen with a single thread.
    * @remarks
    * RAM cost: 1 GB
    *
-   * Returns the part of the specified server’s money you will steal with a single thread hack.
+   * Returns the fraction of the specified server’s money you will steal with a single thread hack.
    *
    * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
    * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.hackPercent | formulas.hacking.hackPercent}.
@@ -7496,7 +7822,7 @@ export interface NS {
    * //This means that if hack the foodnstuff server using a single thread, then you will steal 1%, or 0.01 of its total money. If you hack using N threads, then you will steal N*0.01 times its total money.
    * ```
    * @param host - Hostname/IP of the target server.
-   * @returns The part of money you will steal from the target server with a single thread hack.
+   * @returns The fraction of money you will steal from the target server with a single thread hack.
    */
   hackAnalyze(host: string): number;
 
@@ -7629,17 +7955,17 @@ export interface NS {
    * string with one of these strings:
    *
    * - `"ERROR"`: The whole string will be printed in red. Use this prefix to indicate
-   *   that an error has occurred.
+   * that an error has occurred.
    *
    * - `"SUCCESS"`: The whole string will be printed in green, similar to the default
-   *   theme of the Terminal. Use this prefix to indicate that something is correct.
+   * theme of the Terminal. Use this prefix to indicate that something is correct.
    *
    * - `"WARN"`: The whole string will be printed in yellow. Use this prefix to
-   *   indicate that you or a user of your script should be careful of something.
+   * indicate that you or a user of your script should be careful of something.
    *
    * - `"INFO"`: The whole string will be printed in purplish blue. Use this prefix to
-   *   remind yourself or a user of your script of something. Think of this prefix as
-   *   indicating an FYI (for your information).
+   * remind yourself or a user of your script of something. Think of this prefix as
+   * indicating an FYI (for your information).
    *
    * For custom coloring, use ANSI escape sequences. The examples below use the Unicode
    * escape code `\u001b`. The color coding also works if `\u001b` is replaced with
@@ -7852,8 +8178,8 @@ export interface NS {
    *
    * @example
    * ```js
-   * let recentScripts = ns.getRecentScripts();
-   * let mostRecent = recentScripts.shift();
+   * const recentScripts = ns.getRecentScripts();
+   * const mostRecent = recentScripts.shift();
    * if (mostRecent)
    *   ns.tprint(mostRecent.logs.join('\n'));
    * ```
@@ -7864,7 +8190,7 @@ export interface NS {
 
   /**
    * Get the list of hostnames or IP addresses connected to a server. This function does not return darknet servers
-   * (e.g., darkweb). Use {@link Darknet.probe | probe} if you want to list darknet servers.
+   * (e.g., "darkweb"). Use {@link Darknet.probe | probe()} if you want to list darknet servers.
    * @remarks
    * RAM cost: 0.2 GB
    *
@@ -7902,23 +8228,23 @@ export interface NS {
    * @example
    * ```js
    * // All servers that are one hop from the current server.
-   * ns.tprint("Neighbors of current server.");
-   * let neighbor = ns.scan();
-   * for (let i = 0; i < neighbor.length; i++) {
-   *     ns.tprint(neighbor[i]);
+   * ns.tprint("Neighbors of current server:");
+   * const neighbors = ns.scan();
+   * for (const neighbor of neighbors) {
+   *     ns.tprint(neighbor);
    * }
    * // All servers that are one hop from the current server, but by IP address.
-   * ns.tprint("IPs of current server's neighbors.");
-   * let neighbor = ns.scan(null, { returnByIP: true });
-   * for (let i = 0; i < neighbor.length; i++) {
-   *     ns.tprint(neighbor[i]);
+   * ns.tprint("IPs of current server's neighbors:");
+   * const neighborIPs = ns.scan(undefined, { returnByIP: true });
+   * for (const neighborIP of neighborIPs) {
+   *     ns.tprint(neighborIP);
    * }
    * // All neighbors of n00dles.
    * const target = "n00dles";
-   * neighbor = ns.scan(target);
-   * ns.tprintf("Neighbors of %s.", target);
-   * for (let i = 0; i < neighbor.length; i++) {
-   *     ns.tprint(neighbor[i]);
+   * const n00dlesNeighbors = ns.scan(target);
+   * ns.tprintf("Neighbors of %s:", target);
+   * for (const neighbor of n00dlesNeighbors) {
+   *     ns.tprint(neighbor);
    * }
    * ```
    *
@@ -7928,7 +8254,8 @@ export interface NS {
    */
   scan(host?: string | null, returnOpts?: HostReturnOptions): string[];
 
-  /** Returns whether the player has access to the darkweb.
+  /** Returns whether the player has access to the Dark Web via a TOR Router.
+   * Note that this is not the Darknet accessible via DarkscapeNavigator.exe.
    * @remarks
    * RAM cost: 0.05GB
    *
@@ -7937,7 +8264,7 @@ export interface NS {
    * if (ns.hasTorRouter()) ns.tprint("TOR router detected.");
    * ```
    *
-   * @returns Whether player has access to the dark web. */
+   * @returns Whether player has access to the Dark Web via a TOR Router. */
   hasTorRouter(): boolean;
 
   /**
@@ -8255,10 +8582,10 @@ export interface NS {
    * ns.scp(files, server, "home");
    * ```
    *
-   * For darknet servers: The destination requires a session, but unlike {@link NS.exec | exec}, does not
+   * For darknet servers: The destination requires a session, but unlike {@link NS.exec | exec()}, does not
    * require a direct connection — scp works at any distance. The source server has no darknet requirements
-   * (no session or connection needed). Use {@link Darknet.authenticate | dnet.authenticate} (requires direct
-   * connection) or {@link Darknet.connectToSession | dnet.connectToSession} (at any distance) to
+   * (no session or connection needed). Use {@link Darknet.authenticate | authenticate()} (requires direct
+   * connection) or {@link Darknet.connectToSession | connectToSession()} (at any distance) to
    * establish a session.
    *
    * @param files - Filename or an array of filenames of text/script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
@@ -8650,6 +8977,10 @@ export interface NS {
 
   /**
    * Attempt to write to a port.
+   *
+   * @deprecated
+   * Use {@link Port.tryWrite | Port.tryWrite} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8666,6 +8997,10 @@ export interface NS {
 
   /**
    * Listen for a port write.
+   *
+   * @deprecated
+   * Use {@link Port.nextWrite | Port.nextWrite} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8711,6 +9046,10 @@ export interface NS {
 
   /**
    * Get a copy of the data from a port without popping it.
+   *
+   * @deprecated
+   * Use {@link Port.peek | Port.peek} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8737,6 +9076,10 @@ export interface NS {
 
   /**
    * Clear data from a port.
+   *
+   * @deprecated
+   * Use {@link Port.clear | Port.clear} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8748,6 +9091,10 @@ export interface NS {
 
   /**
    * Write data to a port.
+   *
+   * @deprecated
+   * Use {@link Port.write | Port.write} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8767,6 +9114,10 @@ export interface NS {
 
   /**
    * Read data from a port.
+   *
+   * @deprecated
+   * Use {@link Port.read | Port.read} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8782,6 +9133,10 @@ export interface NS {
 
   /**
    * Get all data on a port.
+   *
+   * @deprecated
+   * Use {@link Port.getHandle | Port.getHandle} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8798,6 +9153,10 @@ export interface NS {
 
   /**
    * Check if a port is full.
+   *
+   * @deprecated
+   * Use {@link Port.isFull | Port.isFull} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8810,6 +9169,10 @@ export interface NS {
 
   /**
    * Check if a port is empty.
+   *
+   * @deprecated
+   * Use {@link Port.isEmpty | Port.isEmpty} instead
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -8887,7 +9250,7 @@ export interface NS {
    * RAM cost: 0.1 GB
    *
    * Returns the amount of RAM required to run the specified script on the target server.
-   * Returns 0 if the script does not exist.
+   * Returns 0 if the script does not exist, has syntax errors or import errors.
    *
    * @param script - Filename of script. This is case-sensitive.
    * @param host - Hostname/IP of the server the target script is located on. Optional. Defaults to the server the calling script is running on.
@@ -9025,34 +9388,34 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Prompts the player with a dialog box and returns a promise. If the player cancels this dialog box (press X button
-   * or click outside the dialog box), the promise is resolved with a default value (empty string or "false"). If this
-   * API is called again while the old dialog box still exists, the old dialog box will be replaced with a new one, and
-   * the old promise will be resolved with the default value.
+   * Prompts the player with a dialog box and returns a promise.
    *
-   * Here is an explanation of the various options.
+   * The prompt and the return value depend on the `options.type` and on the player's action.
    *
-   * - `options.type` is not provided to the function. If `options.type` is left out and
-   *   only a string is passed to the function, then the default behavior is to create a
-   *   boolean dialog box.
+   * If the `options.type` is `"boolean"`, not provided, or `undefined`:
+   * - Prompt options: Yes/No
+   * - Return value: `true` if the player selects Yes, or `false` if they click No or cancel the box.
    *
-   * - `options.type` has value `undefined` or `"boolean"`. A boolean dialog box is
-   *   created. The player is shown "Yes" and "No" prompts, which return true and false
-   *   respectively. The script's execution is halted until the player presses either the
-   *   "Yes" or "No" button.
+   * If the `options.type` is `"select"`:
+   * - Prompt options: Dropdown list of options
+   * - Return value: The value selected by the player, or `""` if they cancel the box.
    *
-   * - `options.type` has value `"text"`. The player is given a text field to enter
-   *   free-form text. The script's execution is halted until the player enters some text
-   *   and/or presses the "Confirm" button.
+   * If the `options.type` is `"text"`:
+   * - Prompt options: Free-form text field
+   * - Return value: The value entered by the player, or `""` if they cancel the box.
    *
-   * - `options.type` has value `"select"`. The player is shown a drop-down field.
-   *   Choosing type `"select"` will require an array to be passed via the
-   *   `options.choices` property. The array can be an array of strings, an array of
-   *   numbers (not BigInt numbers), or a mixture of both numbers and strings. Any other
-   *   types of array elements will result in an error or an undefined/unexpected
-   *   behavior. The `options.choices` property will be ignored if `options.type` has a
-   *   value other than `"select"`. The script's execution is halted until the player
-   *   chooses one of the provided options and presses the "Confirm" button.
+   * The `options.choices` property is an optional array, only needed for the "select" prompt and ignored otherwise. Its
+   * elements can be strings or numbers (excluding BigInt).
+   *
+   * Note that when the player selects an option from the choices array, the selected value will always be converted to a
+   * string. For example, if the choices array is `[1, "2"]` and the player chooses `1` (the number value), the promise
+   * resolves to `"1"` (the string value).
+   *
+   * The player can cancel the prompt in two ways: by clicking the X button in the top-right, or clicking outside the dialog
+   * box.
+   *
+   * If the prompt API is called again while the old dialog box still exists, the old dialog box will be replaced with
+   * a new one, and the old promise will be resolved with the default value.
    *
    * @example
    * ```js
@@ -9079,13 +9442,16 @@ export interface NS {
    * ns.tprint(`Your favorite fruit is ${resultD.toLowerCase()}.`);
    * ```
    *
-   * @param txt - Text to appear in the prompt dialog box.
+   * @param txt - Text to appear in the prompt's body.
    * @param options - Options to modify the prompt the player is shown.
-   * @returns True if the player clicks “Yes”; false if the player clicks “No”; or the value entered by the player.
+   * @returns Return value depends on the player action and `options.type`. If `options.type` is "boolean" or
+   * `undefined`, the return value is `true` if the player clicks Yes, and `false` if they click "No" or cancel the
+   * prompt. If the `options.type` is "text" or "select", the return value is the one selected or entered by the player,
+   * or `""` if they cancel the prompt.
    */
   prompt(
     txt: string,
-    options?: { type?: "boolean" | "text" | "select"; choices?: string[] },
+    options?: { type?: "boolean" | "text" | "select"; choices?: (string | number)[] },
   ): Promise<boolean | string>;
 
   /**
@@ -9323,21 +9689,30 @@ export interface NS {
   };
 
   /**
-   * Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is
-   * applied to all faction work of all factions.
+   * Multiplies the reputation gain rate of faction work by sharing the server's RAM with the faction.
+   *
+   * The multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
+   *
+   * Share power increases for each thread of share running on your server network, but the total amount is logarithmic. A server's cores bonus effectively increases its thread count.
+   *
+   * The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
+   *
+   * Share only boosts faction work. It does not affect your passive reputation gain rate (the rate at which your faction rep increases just by being a member).
    * @remarks
    * RAM cost: 2.4 GB
-   *
-   * Increases rep/second for all faction work while share is running. Each cycle of ns.share() is 10 seconds.
-   * Scales with thread count, but at a sharply decreasing rate.
    */
   share(): Promise<void>;
 
   /**
-   * Share power has a multiplicative effect on rep/second while doing hacking work for a faction. If you do non-hacking
-   * work, share power still increases the reputation gain rate, but the effect is non-linear.
+   * Share power has a multiplicative effect on the reputation gain rate of faction work.
    *
-   * Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+   * The multiplier is applied fully to Hacking Contracts work, but only partially to Security Work and Field Work.
+   *
+   * Share power increases for each thread of share running on your server network, but the total amount is logarithmic. A server's cores bonus effectively increases its thread count.
+   *
+   * The effect of share lasts while it's running. Each cycle of share lasts 10 seconds.
+   *
+   * Share only boosts faction work. It does not affect your passive reputation gain rate (the rate at which your faction rep increases just by being a member).
    * @remarks
    * RAM cost: 0.2 GB
    */
@@ -9898,6 +10273,8 @@ type NSEnums = {
   DarknetResponseCode: DarknetResponseCodeType;
   ProgramName: ProgramNameEnumType;
   GangTaskName: GangTaskNameEnumType;
+  GangMemberUpgradeName: GangMemberUpgradeNameEnumType;
+  HacknetServerHashUpgrade: HacknetServerHashUpgradeEnumType;
 };
 
 /**
@@ -10454,6 +10831,9 @@ type CreatingCorporationCheckResult = _ValueOf<CreatingCorporationCheckResultEnu
 
 /**
  * Corporation API
+ * @remarks
+ * This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game.
+ * It will be very obvious when and how you can obtain this upgrade.
  * @public
  */
 export interface Corporation extends WarehouseAPI, OfficeAPI {

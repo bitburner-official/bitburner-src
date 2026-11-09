@@ -1,6 +1,7 @@
 import type { FragmentType } from "@nsdefs";
 import { FragmentTypeEnum, Effect } from "./FragmentType";
 import { Shapes } from "./data/Shapes";
+import { normalizeFragmentRotation } from "./Helper";
 
 export const Fragments: Fragment[] = [];
 
@@ -22,6 +23,8 @@ export class Fragment {
   }
 
   fullAt(x: number, y: number, rotation: number): boolean {
+    rotation = normalizeFragmentRotation(rotation);
+
     if (y < 0) return false;
     if (y >= this.height(rotation)) return false;
     if (x < 0) return false;
@@ -101,7 +104,6 @@ export function FragmentById(id: number): Fragment | null {
       1,
       1, // limit
       Effect(FragmentTypeEnum.Hacking),
-      //Effect(FragmentType.Hacking],
     ),
   );
   Fragments.push(
