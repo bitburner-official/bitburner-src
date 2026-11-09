@@ -62,6 +62,7 @@ import { Crimes } from "../Crime/Crimes";
 import { DarknetServer } from "../Server/DarknetServer";
 import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
 import { deprecationWarning } from "../utils/DeprecationHelper";
+import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -482,7 +483,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const filename = helpers.string(ctx, "filename", _filename);
       const server = Player.getCurrentServer();
-      cat([filename], server, ctx.workerScript.scriptRef.terminalStdOut);
+      cat([filename], server, getTerminalStdIO());
     },
     connect: (ctx, _host?) => {
       helpers.checkSingularityAccess(ctx);

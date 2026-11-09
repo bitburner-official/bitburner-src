@@ -497,16 +497,14 @@ export class Terminal {
 
     const commandName = commandArray[0];
     if (typeof commandName !== "string") return this.fatal(`${commandName} is not a valid command.`, stdIO);
-    // run by path command
-    if (isBasicFilePath(commandName)) {
-      run(commandArray, currentServer, stdIO);
-      return;
-    }
+    const isRunByPath = isBasicFilePath(commandName);
 
     // Aside from the run-by-path command, we don't need the first entry once we've stored it in commandName.
-    commandArray.shift();
+    if (!isRunByPath) {
+      commandArray.shift();
+    }
 
-    const f = TerminalCommands[commandName.toLowerCase()];
+    const f = isRunByPath ? run : TerminalCommands[commandName.toLowerCase()];
     if (!f) {
       const similarCommands = findSimilarCommands(commandName);
       const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
@@ -520,6 +518,7 @@ export class Terminal {
         this.action = result;
         TerminalEvents.emit();
         await result.finished;
+        stdIO.close();
         this.action = null;
         TerminalEvents.emit();
       } else if (!isLongRunningCommand(rawCommandArray)) {

@@ -3,7 +3,7 @@ import { GetServer, GetServerOrThrow, prestigeAllServers } from "../../../src/Se
 import { Player } from "@player";
 import { type TextFilePath } from "../../../src/Paths/TextFilePath";
 import { type ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
-import { LiteratureName, MessageFilename } from "@enums";
+import { CompletedProgramName, LiteratureName, MessageFilename } from "@enums";
 import { fixDoImportIssue, initGameEnvironment } from "../Utilities";
 import { runScript } from "../../../src/Terminal/commands/runScript";
 import { getTerminalStdIO } from "../../../src/Terminal/StdIO/RedirectIO";
@@ -81,6 +81,35 @@ describe("Terminal Pipes", () => {
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(fileName as TextFilePath)?.text;
       expect(fileContent).toBe("second line");
+    });
+
+    it("should treat quoted pipe symbols as literal arguments", async () => {
+      const fileName = "quoted.txt" as TextFilePath;
+      await Terminal.executeCommands(`echo "a | b"; echo ">" > ${fileName}`);
+
+      expect(getOutput(Terminal.outputHistory, 0).text).toBe("a | b");
+      expect(GetServer(Player.currentServer)?.textFiles.get(fileName)?.text).toBe(">");
+    });
+
+    it("should not overwrite a file passed after a quoted > argument", async () => {
+      const fileName = "notes.txt" as TextFilePath;
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToTextFile(fileName, "a > b\nkeep me");
+
+      await Terminal.executeCommands(`grep ">" ${fileName}`);
+
+      expect(server.textFiles.get(fileName)?.text).toBe("a > b\nkeep me");
+    });
+
+    it("should not truncate large files when appending", async () => {
+      const fileName = "big.txt" as TextFilePath;
+      const server = GetServerOrThrow(Player.currentServer);
+      const lines = Array.from({ length: 3000 }, (_, i) => `line ${i}`);
+      server.writeToTextFile(fileName, lines.join("\n"));
+
+      await Terminal.executeCommands(`echo extra >> ${fileName}`);
+
+      expect(server.textFiles.get(fileName)?.text).toBe([...lines, "extra"].join("\n"));
     });
 
     it("should only overwrite file contents once per > pipe", async () => {
@@ -238,6 +267,17 @@ describe("Terminal Pipes", () => {
   });
 
   describe("piping to and from scripts", () => {
+    it("should run a script by path with its arguments", async () => {
+      const scriptName = "byPath.js" as ScriptFilePath;
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToScriptFile(scriptName, `export function main(ns) { ns.tprint(JSON.stringify(ns.args)); }`);
+
+      await Terminal.executeCommands(`./${scriptName} a 1`);
+      await sleep(100);
+
+      expect(getOutput(Terminal.outputHistory, -1).text).toBe(`${scriptName}: ["a",1]`);
+    });
+
     it("should handle piping to a script file, and passing arguments into a script to run", async () => {
       const scriptName = "testScript2.js" as ScriptFilePath;
       const scriptContent = `export function main(ns) { ns.tprint('Input received: ', ns.getStdin().peek()); }`;
@@ -508,6 +548,29 @@ describe("Terminal Pipes", () => {
 
       const file = GetServer(Player.currentServer)?.textFiles?.get(fileName);
       expect(file?.text).toBe("after");
+    });
+
+    it("should close a timed action's output so the rest of the ; chain runs", async () => {
+      const fileName = "afterAnalyze.txt" as TextFilePath;
+      const commands = Terminal.executeCommands(`analyze | grep 'missing'; echo 'after' > ${fileName}`);
+
+      const timeout = new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 3000));
+      const result = await Promise.race([commands.then(() => "finished" as const), timeout]);
+
+      expect(result).toBe("finished");
+      expect(GetServer(Player.currentServer)?.textFiles?.get(fileName)?.text).toBe("after");
+    }, 10000);
+
+    it("should close a program's output when run by path so the rest of the ; chain runs", async () => {
+      const fileName = "afterNuke.txt" as TextFilePath;
+      Player.getHomeComputer().pushProgram(CompletedProgramName.nuke);
+      const commands = Terminal.executeCommands(`NUKE.exe | grep 'missing'; echo 'after' > ${fileName}`);
+
+      const timeout = new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 1000));
+      const result = await Promise.race([commands.then(() => "finished" as const), timeout]);
+
+      expect(result).toBe("finished");
+      expect(GetServer(Player.currentServer)?.textFiles?.get(fileName)?.text).toBe("after");
     });
 
     it("should write both tprint chunks to a script file across a single > redirect when the file does not yet exist", async () => {

@@ -1,16 +1,15 @@
-import { parseCommand } from "../Parser";
+import { parseArg, parseCommand } from "../Parser";
 import { IOStream } from "./IOStream";
 import { StdIO } from "./StdIO";
 import { Terminal } from "../../Terminal";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { hasScriptExtension, resolveScriptFilePath } from "../../Paths/ScriptFilePath";
 import { Player } from "@player";
-import { Settings } from "../../Settings/Settings";
 import { Args, isPipeSymbol, PipeSymbols, stringify } from "./utils";
 import { sleep } from "../../utils/Utility";
 
 export async function parseRedirectedCommands(commandString: string) {
-  const parsed = parseCommand(commandString);
+  const parsed = parseCommand(commandString, false);
   const commandSets = findCommandsSplitByRedirects(parsed);
   if (!commandSets.length) return;
   if (commandSets.length === 1) {
@@ -81,7 +80,7 @@ export function findCommandsSplitByRedirects(commands: Args[]) {
       result.push(currentCommand);
       currentCommand = [token];
     } else if (token) {
-      currentCommand.push(token);
+      currentCommand.push(parseArg(`${token}`));
     }
   }
   result.push(currentCommand);
@@ -124,71 +123,37 @@ function handlePipeToFile(fileName: string, pipeType: string | null, stdIO: StdI
   // No output from writing to files
   stdIO.stdout?.close();
 
-  if (hasTextExtension(fileName)) {
-    writeToTextFile(fileName, pipeType, stdIO);
-  } else if (hasScriptExtension(fileName)) {
-    writeToScriptFile(fileName, pipeType, stdIO);
-  } else {
+  if (!hasTextExtension(fileName) && !hasScriptExtension(fileName)) {
     return handleIoError(stdIO, `Invalid file extension for piping to file: ${fileName}`);
   }
+  writeToContentFile(fileName, pipeType, stdIO);
 }
 
-function writeToTextFile(filename: string, pipeType: string, stdIO: StdIO) {
+function writeToContentFile(filename: string, pipeType: string, stdIO: StdIO): void {
+  const server = Player.getCurrentServer();
   const filePath = Terminal.getFilepath(filename);
-  if (!filePath || !hasTextExtension(filePath)) {
+  if (!filePath || (!hasTextExtension(filePath) && !hasScriptExtension(filePath))) {
     return handleIoError(stdIO, `Invalid file path provided: ${filename}`);
   }
-  if (!Terminal.getFile(filePath)) {
-    Player.getCurrentServer().writeToTextFile(filePath, "");
+  if (!server.getContentFile(filePath)) {
+    server.writeToContentFile(filePath, "");
   }
-
-  const file = Terminal.getTextFile(filePath);
-  const overwrite = pipeType === PipeSymbols.OutputRedirection;
-
+  const file = server.getContentFile(filePath);
   if (!file) {
-    return handleIoError(stdIO, `Failed to create text file for piping output: ${filePath}`);
+    return handleIoError(stdIO, `Failed to create file for piping output: ${filePath}`);
   }
 
-  if (file?.content && overwrite) {
+  if (pipeType === PipeSymbols.OutputRedirection) {
     file.content = "";
   }
 
   void callOnRead(stdIO, (data: unknown) => {
-    const currentFile = Terminal.getTextFile(filePath);
+    const currentFile = server.getContentFile(filePath);
     if (!currentFile) {
       return;
     }
-    const output = stringify(data);
-    currentFile.content = concatenateFileContents(currentFile.content, output);
-  });
-}
-
-function writeToScriptFile(filename: string, pipeType: string, stdIO: StdIO): void {
-  const scriptPath = Terminal.getFilepath(filename);
-  if (!scriptPath || !hasScriptExtension(scriptPath)) {
-    return handleIoError(stdIO, `Invalid file path provided: ${filename}`);
-  }
-  if (!Terminal.getScript(scriptPath)) {
-    Player.getCurrentServer().writeToScriptFile(scriptPath, "");
-  }
-  const file = Terminal.getScript(scriptPath);
-  const overwrite = pipeType === PipeSymbols.OutputRedirection;
-
-  if (!file) {
-    return handleIoError(stdIO, `Failed to create script file for piping output: ${scriptPath}`);
-  }
-
-  if (file?.content && overwrite) {
-    file.content = "";
-  }
-
-  void callOnRead(stdIO, (data: unknown) => {
-    const currentFile = Terminal.getScript(scriptPath);
-    if (!currentFile) {
-      return;
-    }
-    const output = stringify(data);
-    currentFile.content = concatenateFileContents(currentFile.content, output);
+    const content = currentFile.content;
+    currentFile.content = content + (content ? "\n" : "") + stringify(data);
   });
 }
 
@@ -210,17 +175,6 @@ export function isLongRunningCommand(commandSet: Args[]) {
   const pipeSymbol = isPipeSymbol(commandSet[0]) ? `${commandSet[0]}` : null;
   const command = `${pipeSymbol ? commandSet[1] : commandSet[0]}`.toLowerCase();
   return ["tail", "run", "cat", "grep"].includes(command) || !!resolveScriptFilePath(command);
-}
-
-function concatenateFileContents(content: string, newContent: string): string {
-  const concatenatedContent = content + (content ? "\n" : "") + newContent;
-  const splitLines = concatenatedContent.split("\n");
-  if (splitLines.length > Settings.MaxTerminalCapacity * 5) {
-    const truncatedFileContent = splitLines.slice(-Settings.MaxTerminalCapacity * 5).join("\n");
-    return `(File truncated at ${Settings.MaxTerminalCapacity * 5} lines)\n${truncatedFileContent}`;
-  }
-
-  return concatenatedContent;
 }
 
 async function waitUntilClosed(stdio: StdIO): Promise<void> {

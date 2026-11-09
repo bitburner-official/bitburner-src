@@ -12,6 +12,8 @@ import { Player } from "@player";
 import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
 import { TextFilePath } from "../../../src/Paths/TextFilePath";
 import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
+import { ContentFilePath } from "../../../src/Paths/ContentFile";
+import { Directory, root } from "../../../src/Paths/Directory";
 import { Output } from "../../../src/Terminal/OutputTypes";
 import { ANSI_ESCAPE } from "../../../src/ui/React/ANSIITypography";
 import { getOutput } from "./Pipes.test";
@@ -92,6 +94,37 @@ describe("RedirectIOTests", () => {
       const file = server?.textFiles.get(filename as TextFilePath);
       expect(file).toBeDefined();
       expect(file?.content).toBe("First Line\nSecond Line");
+    });
+
+    describe("from a subdirectory", () => {
+      beforeEach(() => {
+        Terminal.setcwd("sub/" as Directory);
+      });
+      afterEach(() => {
+        Terminal.setcwd(root);
+      });
+
+      it.each(["out.txt", "out.js"])("should overwrite %s relative to the current directory with >", async (name) => {
+        const server = Player.getCurrentServer();
+        const filePath = `sub/${name}` as ContentFilePath;
+        server.writeToContentFile(filePath, "old content");
+
+        await parseRedirectedCommands(`echo new content > ${name}`);
+
+        expect(server.getContentFile(filePath)?.content).toBe("new content");
+        expect(server.getContentFile(`sub/sub/${name}` as ContentFilePath)).toBeNull();
+      });
+
+      it.each(["out.txt", "out.js"])("should append to %s relative to the current directory with >>", async (name) => {
+        const server = Player.getCurrentServer();
+        const filePath = `sub/${name}` as ContentFilePath;
+        server.writeToContentFile(filePath, "old content");
+
+        await parseRedirectedCommands(`echo new content >> ${name}`);
+
+        expect(server.getContentFile(filePath)?.content).toBe("old content\nnew content");
+        expect(server.getContentFile(`sub/sub/${name}` as ContentFilePath)).toBeNull();
+      });
     });
   });
 

@@ -2,7 +2,7 @@ import { trimQuotes } from "../utils/helpers/string";
 import { substituteAliases } from "../Alias";
 
 // Helper function to parse individual arguments into number/boolean/string as appropriate
-function parseArg(arg: string): string | number | boolean {
+export function parseArg(arg: string): string | number | boolean {
   if (arg === "true") return true;
   if (arg === "false") return false;
   const argAsNumber = Number(arg);
@@ -27,12 +27,12 @@ export function parseCommands(commandsText: string): string[] {
 }
 
 /** get a commandArgs array from a single command string */
-export function parseCommand(command: string): (string | number | boolean)[] {
+export function parseCommand(command: string, parseArgs = true): (string | number | boolean)[] {
   // Match every command arg in a given command string
   const argDetection = /(?:([^ ;"']*"[^"]*"|[^ ;"']*'[^']*'|[^\s]+))/g;
   const commandArgs = command.match(argDetection);
   if (!commandArgs) return [];
-  return commandArgs.map(parseArg);
+  return parseArgs ? commandArgs.map(parseArg) : commandArgs;
 }
 
 export function applyLastPidVariables(
