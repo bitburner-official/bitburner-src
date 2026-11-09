@@ -40,7 +40,7 @@ describe("grep command", () => {
     const output = stdOut.read();
 
     expect(Terminal.outputHistory).toEqual([]);
-    expect(output).toBe(`example.txt:This is line 2 of file 1`);
+    expect(output).toBe(`This is line 2 of file 1`);
   });
 
   it("should retrieve lines matching the pattern from the specified script file", () => {
@@ -56,7 +56,47 @@ describe("grep command", () => {
     const output = stdOut.read();
 
     expect(Terminal.outputHistory).toEqual([]);
-    expect(output).toBe(`script.js:// This is line 2 of the script`);
+    expect(output).toBe(`// This is line 2 of the script`);
+  });
+
+  it("should prefix matches with the filename when searching more than one file", () => {
+    const server = GetServerOrThrow(Player.currentServer);
+    const stdOut = new IOStream();
+    const stdIO = new StdIO(null, stdOut);
+
+    grep(["line 2", fileName, fileName2], server, stdIO);
+
+    expect(stdOut.read()).toBe(`example.txt:This is line 2 of file 1\nexample2.txt:This is line 2 of file 2`);
+  });
+
+  it("should error when given a pattern but no file and no stdin", () => {
+    const server = GetServerOrThrow(Player.currentServer);
+    const stdOut = new IOStream();
+
+    grep(["line 2"], server, new StdIO(null, stdOut));
+
+    expect(getOutput(Terminal.outputHistory, -1).text).toContain("At least one FILE argument must be passed");
+    expect(stdOut.isClosed).toBe(true);
+  });
+
+  it("should separate context blocks from different files with --", () => {
+    const server = GetServerOrThrow(Player.currentServer);
+    const stdOut = new IOStream();
+    const stdIO = new StdIO(null, stdOut);
+
+    grep(["-A", "1", "line 2", fileName, fileName2], server, stdIO);
+
+    expect(stdOut.read()).toBe(`example.txt:This is line 2 of file 1\n--\nexample2.txt:This is line 2 of file 2`);
+  });
+
+  it("should not print a -- separator without a context flag", () => {
+    const server = GetServerOrThrow(Player.currentServer);
+    const stdOut = new IOStream();
+    const stdIO = new StdIO(null, stdOut);
+
+    grep(["line 2", fileName, fileName2], server, stdIO);
+
+    expect(stdOut.read()).not.toContain("--");
   });
 
   it("should retrieve lines matching the pattern from stdin", () => {

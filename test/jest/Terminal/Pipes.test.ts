@@ -638,7 +638,7 @@ describe("Terminal Pipes", () => {
         ["echo hi | grep h | run reader.js", ["hi"]],
         ["echo hi | cat | run reader.js", ["hi"]],
         ["cat notes.txt | run reader.js", ["keep me\nother"]],
-        ["grep keep notes.txt | run reader.js", ["notes.txt:keep me"]],
+        ["grep keep notes.txt | run reader.js", ["keep me"]],
         ["run legacy.script | run reader.js", []],
       ])("%s", async (command, expected) => {
         const server = GetServerOrThrow(Player.currentServer);

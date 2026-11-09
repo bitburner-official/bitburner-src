@@ -391,11 +391,11 @@ export function grep(args: (string | number | boolean)[], server: BaseServer, st
 
   const stdinContent = stdIO.getAllCurrentStdin();
 
-  if (!options.isPipeIn && !options.isSearchAll && !otherArgs.length && noStdinProvided)
+  if (!options.isPipeIn && !options.isSearchAll && otherArgs.length <= 1 && noStdinProvided)
     return Terminal.fatal(ERR.noSearchArg, stdIO);
   if (options.isPipeIn && stdinContent.length) return Terminal.fatal(ERR.tooManyInputs(), stdIO);
 
-  options.isMultiFile = otherArgs.length > 1;
+  options.isMultiFile = otherArgs.length > 2; // the pattern plus more than one file
   const outFilePath = checkOutFile(params.outfile, options, server, stdIO);
   if (params.outfile && !outFilePath) return; // associated errors are printed in checkOutFile
 
@@ -476,9 +476,24 @@ function getContentToMatch(pattern: RegExp | string, options: Options, fileConte
     return grabTerminal().map((terminalOutput, i) => parseLine(pattern, options, "Terminal", terminalOutput, i));
   }
 
-  return fileContent.flatMap((fileContent) =>
-    fileContent.content.split("\n").map((line, i) => parseLine(pattern, options, fileContent.filename, line, i)),
-  );
+  return fileContent.flatMap((fileContent, fileIndex) => {
+    const lines = fileContent.content
+      .split("\n")
+      .map((line, i) => parseLine(pattern, options, fileContent.filename, line, i));
+    const isPrintFileSep = options.hasContextFlag && fileIndex !== 0 && lines.some((line) => line.isMatched);
+    return isPrintFileSep ? [fileSeparator(), ...lines] : lines;
+  });
+}
+
+function fileSeparator(): ParsedLine {
+  return {
+    lines: { prettyLine: `${CYAN}--${DEFAULT}`, rawLine: "--" },
+    isPrint: true,
+    isMatched: false,
+    isFileSep: true,
+    filename: "",
+    isEmitted: false,
+  };
 }
 
 function getDataToGrep(filenames: string[], server: BaseServer, stdinContent: string): DataToSearch[] {
