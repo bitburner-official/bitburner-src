@@ -1,4 +1,5 @@
-import { parseArg, parseCommand } from "../Parser";
+import { parseCommand } from "../Parser";
+import { trimQuotes } from "../../utils/helpers/string";
 import { IOStream } from "./IOStream";
 import { StdIO } from "./StdIO";
 import { Terminal } from "../../Terminal";
@@ -33,15 +34,16 @@ export async function parseRedirectedCommands(commandString: string) {
 
 export async function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
   const pipeSymbol = isPipeSymbol(commandStrings[0]) ? `${commandStrings[0]}` : null;
-  const command = `${pipeSymbol ? commandStrings[1] : commandStrings[0]}`;
+  const rawCommand = pipeSymbol ? commandStrings[1] : commandStrings[0];
   const args = pipeSymbol ? commandStrings.slice(2) : commandStrings.slice(1);
 
-  if (!command) {
+  if (rawCommand === undefined) {
     return handleIoError(stdIO, `Invalid command string: no command found after output redirect ${pipeSymbol}.`);
   }
+  const command = trimQuotes(`${rawCommand}`);
 
   // Pipe to file
-  if (command && (hasTextExtension(command) || (hasScriptExtension(command) && pipeSymbol !== PipeSymbols.Pipe))) {
+  if (hasTextExtension(command) || (hasScriptExtension(command) && pipeSymbol !== PipeSymbols.Pipe)) {
     return handlePipeToFile(command, pipeSymbol, stdIO);
   }
 
@@ -52,10 +54,7 @@ export async function handleCommand(stdIO: StdIO, commandStrings: Args[]) {
       `Invalid pipe symbol '${pipeSymbol}' for command: ${command}. > and >> can only be used to pipe into files.`,
     );
   }
-  const commandArgs = args.map((arg) => (`${arg}`.includes(" ") ? `"${arg}"` : `${arg}`));
-  const commandString = [command, ...commandArgs].join(" ");
-
-  await Terminal.executeCommand(commandString, stdIO);
+  await Terminal.executeCommand([rawCommand, ...args].join(" "), stdIO);
 }
 
 export function buildStdIOChain(length: number, initialStdIO: StdIO | null = null): StdIO[] {
@@ -79,8 +78,8 @@ export function findCommandsSplitByRedirects(commands: Args[]) {
     if (isPipeSymbol(token) && currentCommand.length) {
       result.push(currentCommand);
       currentCommand = [token];
-    } else if (token) {
-      currentCommand.push(parseArg(`${token}`));
+    } else {
+      currentCommand.push(token);
     }
   }
   result.push(currentCommand);
@@ -158,22 +157,26 @@ function writeToContentFile(filename: string, pipeType: string, stdIO: StdIO): v
 }
 
 export async function callOnRead(stdIO: StdIO, callback: (data: unknown, stdIO: StdIO) => Promise<void> | void) {
-  for await (const data of stdIO.read()) {
-    const streamIsCleared = stdIO.stdin?.deref()?.isClosed && stdIO.stdin?.deref()?.empty();
-    if (data === null || streamIsCleared) {
-      return;
+  try {
+    for await (const data of stdIO.read()) {
+      const streamIsCleared = stdIO.stdin?.deref()?.isClosed && stdIO.stdin?.deref()?.empty();
+      if (data === null || streamIsCleared) {
+        return;
+      }
+      await callback(data, stdIO);
     }
-    await callback(data, stdIO);
+  } finally {
+    stdIO.close();
   }
 }
 
 function handleIoError(stdIO: StdIO, error: string) {
-  Terminal.error(error, stdIO);
+  Terminal.fatal(error, stdIO);
 }
 
 export function isLongRunningCommand(commandSet: Args[]) {
   const pipeSymbol = isPipeSymbol(commandSet[0]) ? `${commandSet[0]}` : null;
-  const command = `${pipeSymbol ? commandSet[1] : commandSet[0]}`.toLowerCase();
+  const command = trimQuotes(`${pipeSymbol ? commandSet[1] : commandSet[0]}`).toLowerCase();
   return ["tail", "run", "cat", "grep"].includes(command) || !!resolveScriptFilePath(command);
 }
 

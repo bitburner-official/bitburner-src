@@ -21,6 +21,7 @@ export function runScript(
 ): RunningScript | undefined {
   if (isLegacyScript(scriptPath)) {
     sendDeprecationNotice();
+    stdIO.close();
     return;
   }
   const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number, "--temporary": Boolean };

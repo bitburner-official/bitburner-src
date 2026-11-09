@@ -2,7 +2,7 @@ import { trimQuotes } from "../utils/helpers/string";
 import { substituteAliases } from "../Alias";
 
 // Helper function to parse individual arguments into number/boolean/string as appropriate
-export function parseArg(arg: string): string | number | boolean {
+function parseArg(arg: string): string | number | boolean {
   if (arg === "true") return true;
   if (arg === "false") return false;
   const argAsNumber = Number(arg);

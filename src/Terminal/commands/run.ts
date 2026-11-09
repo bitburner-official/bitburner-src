@@ -93,6 +93,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer, std
         }
       }
       Terminal.contractOpen = false;
+      stdIO.close();
     })().catch((error) => {
       console.error(error);
       Terminal.fatal(`Cannot run contract ${path} on ${server.hostname}. Error: ${error}.`, stdIO);

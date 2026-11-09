@@ -1,5 +1,6 @@
 import { Terminal } from "../../../src/Terminal";
-import { GetServer, GetServerOrThrow, prestigeAllServers } from "../../../src/Server/AllServers";
+import { AddToAllServers, GetServer, GetServerOrThrow, prestigeAllServers } from "../../../src/Server/AllServers";
+import { Server } from "../../../src/Server/Server";
 import { Player } from "@player";
 import { type TextFilePath } from "../../../src/Paths/TextFilePath";
 import { type ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
@@ -9,6 +10,8 @@ import { runScript } from "../../../src/Terminal/commands/runScript";
 import { getTerminalStdIO } from "../../../src/Terminal/StdIO/RedirectIO";
 import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
 import { IOStream } from "../../../src/Terminal/StdIO/IOStream";
+import { stringify } from "../../../src/Terminal/StdIO/utils";
+import { ITutorial, iTutorialSteps } from "../../../src/InteractiveTutorial";
 import { Link, Output, RawOutput } from "../../../src/Terminal/OutputTypes";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -89,6 +92,13 @@ describe("Terminal Pipes", () => {
 
       expect(getOutput(Terminal.outputHistory, 0).text).toBe("a | b");
       expect(GetServer(Player.currentServer)?.textFiles.get(fileName)?.text).toBe(">");
+    });
+
+    it("should keep a quoted pipe symbol literal when the command is piped", async () => {
+      await Terminal.executeCommands(`echo "a | b" | grep a`);
+
+      // grep highlights matches with ANSI color codes
+      expect(stringify(getOutput(Terminal.outputHistory, -1).text, true)).toBe("a | b");
     });
 
     it("should not overwrite a file passed after a quoted > argument", async () => {
@@ -276,6 +286,21 @@ describe("Terminal Pipes", () => {
       await sleep(100);
 
       expect(getOutput(Terminal.outputHistory, -1).text).toBe(`${scriptName}: ["a",1]`);
+    });
+
+    it("should pass the same args to a piped script as to an unpiped one", async () => {
+      const scriptName = "pipedArgs.js" as ScriptFilePath;
+      const argsFile = "pipedArgs.txt" as TextFilePath;
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToScriptFile(
+        scriptName,
+        `export function main(ns) { ns.write("${argsFile}", JSON.stringify(ns.args), "w"); }`,
+      );
+
+      await Terminal.executeCommands(`run ${scriptName} "007" true 'say "hi" now' | grep x`);
+      await sleep(100);
+
+      expect(JSON.parse(server.textFiles.get(argsFile)?.text ?? "null")).toEqual(["007", true, 'say "hi" now']);
     });
 
     it("should handle piping to a script file, and passing arguments into a script to run", async () => {
@@ -588,6 +613,100 @@ describe("Terminal Pipes", () => {
       const fileContent = GetServer(Player.currentServer)?.scripts?.get(outputScriptName)?.content;
       expect(fileContent).toContain(`${scriptName}: first second\n${scriptName}: null`);
     });
+
+    describe("closing stdout so a downstream script sees end of input", () => {
+      const readerScript = `export async function main(ns) {
+        const stdin = ns.getStdin();
+        const received = [];
+        while (true) {
+          if (stdin.empty()) await stdin.nextWrite();
+          const data = stdin.read();
+          if (data === null) break;
+          received.push(data);
+        }
+        ns.write("eof.txt", JSON.stringify(received), "w");
+      }`;
+
+      beforeEach(() => {
+        const server = GetServerOrThrow(Player.currentServer);
+        server.writeToScriptFile("reader.js" as ScriptFilePath, readerScript);
+        server.writeToTextFile("notes.txt" as TextFilePath, "keep me\nother");
+        server.writeToScriptFile("legacy.script" as ScriptFilePath, "tprint('x');");
+      });
+
+      it.each([
+        ["echo hi | grep h | run reader.js", ["hi"]],
+        ["echo hi | cat | run reader.js", ["hi"]],
+        ["cat notes.txt | run reader.js", ["keep me\nother"]],
+        ["grep keep notes.txt | run reader.js", ["notes.txt:keep me"]],
+        ["run legacy.script | run reader.js", []],
+      ])("%s", async (command, expected) => {
+        const server = GetServerOrThrow(Player.currentServer);
+        await Terminal.executeCommands(command);
+        for (let i = 0; i < 50 && !server.textFiles.get("eof.txt" as TextFilePath); i++) {
+          await sleep(20);
+        }
+
+        expect(JSON.parse(server.textFiles.get("eof.txt" as TextFilePath)?.text ?? "null")).toEqual(expected);
+      });
+    });
+
+    it.each([
+      ["todo.txt | grep x", "Invalid command string: no pipe symbol found for piping to file todo.txt."],
+      [
+        "echo hi > ls | grep x",
+        "Invalid pipe symbol '>' for command: ls. > and >> can only be used to pipe into files.",
+      ],
+      ["ls |", "Invalid command string: no command found after output redirect |."],
+      ["ls > | grep x", "Invalid command string: no command found after output redirect >."],
+    ])("should print the redirect error for '%s' to the terminal and finish the pipeline", async (command, error) => {
+      const commands = Terminal.executeCommands(command);
+
+      const timeout = new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 1000));
+      const result = await Promise.race([commands.then(() => "finished" as const), timeout]);
+
+      expect(result).toBe("finished");
+      expect(getOutput(Terminal.outputHistory, -1).text).toBe(error);
+    });
+    describe("during the interactive tutorial", () => {
+      beforeEach(() => {
+        // The tutorial looks up n00dles before checking the command
+        AddToAllServers(new Server({ hostname: "n00dles" }));
+      });
+
+      afterEach(() => {
+        ITutorial.isRunning = false;
+      });
+
+      it.each([
+        [
+          iTutorialSteps.TerminalHelp,
+          "ls | grep x",
+          "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.",
+        ],
+        [iTutorialSteps.TerminalLs, "1s | grep x", "Command '1s' not found. Did you mean 'ls' with a lowercase L?"],
+        [iTutorialSteps.TerminalConnect, "connect foo | grep x", "Wrong command! Try again!"],
+        [
+          iTutorialSteps.Start,
+          "ls | grep x",
+          "Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it",
+        ],
+      ])(
+        "should print the rejection for '%s' (step %s) to the terminal and finish the pipeline",
+        async (step, command, error) => {
+          ITutorial.isRunning = true;
+          ITutorial.currStep = step;
+          const commands = Terminal.executeCommands(command);
+
+          const timeout = new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 1000));
+          const result = await Promise.race([commands.then(() => "finished" as const), timeout]);
+
+          expect(result).toBe("finished");
+          // Every stage is rejected, so grep prints its own rejection too
+          expect(Terminal.outputHistory.map((line) => (line as Output).text)).toContain(error);
+        },
+      );
+    });
   });
 
   describe("cancellation", () => {
@@ -643,6 +762,26 @@ describe("Terminal Pipes", () => {
       expect(received).toEqual(["first"]);
       expect(downstreamStdin?.isClosed).toBe(true);
     });
+
+    it.each(["analyze", "analyze | grep missing"])(
+      "Ctrl-C during '%s' stops the rest of the ; chain",
+      async (command) => {
+        const fileName = "afterCancel.txt" as TextFilePath;
+        const commands = Terminal.executeCommands(`${command}; echo after > ${fileName}`);
+        for (let i = 0; i < 50 && !Terminal.action; i++) {
+          await sleep(10);
+        }
+        expect(Terminal.action).not.toBeNull();
+
+        Terminal.cancelAction();
+        const timeout = new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 1000));
+        const result = await Promise.race([commands.then(() => "finished" as const), timeout]);
+
+        expect(result).toBe("finished");
+        expect(Terminal.action).toBeNull();
+        expect(GetServer(Player.currentServer)?.textFiles?.get(fileName)).toBeUndefined();
+      },
+    );
   });
 });
 
