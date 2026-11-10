@@ -192,7 +192,7 @@ export async function main(ns) {
 }
 ```
 
-Scripts can be aliased to the command they support - for example, `alias -g cut="run cut.js"` will let you run the above using just the `cut` command:
+Scripts can be aliased to the command they support - for example, `alias cut="run cut.js"` will let you run the above using just the `cut` command:
 
 ```
 [home /]> echo "Hello World!" | cut -c 2-5
