@@ -26,11 +26,15 @@ export function parseCommands(commandsText: string): string[] {
   return commands;
 }
 
+/**
+ * Matches each argument in a command string, keeping quoted strings (and any pipe symbols inside them) whole.
+ * See https://regex101.com/r/kO7ijG/1 for a breakdown of this regex
+ */
+export const commandArgRegex = /(?:([^ ;"']*"[^"]*"|[^ ;"']*'[^']*'|[^\s]+))/g;
+
 /** get a commandArgs array from a single command string */
 export function parseCommand(command: string, parseArgs = true): (string | number | boolean)[] {
-  // Match every command arg in a given command string
-  const argDetection = /(?:([^ ;"']*"[^"]*"|[^ ;"']*'[^']*'|[^\s]+))/g;
-  const commandArgs = command.match(argDetection);
+  const commandArgs = command.match(commandArgRegex);
   if (!commandArgs) return [];
   return parseArgs ? commandArgs.map(parseArg) : commandArgs;
 }

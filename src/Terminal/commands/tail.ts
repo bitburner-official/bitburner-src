@@ -67,6 +67,7 @@ function handleTail(script: RunningScript, stdIO: StdIO): void {
     return LogBoxEvents.emit(script);
   }
 
+  script.tailStdOut?.close();
   script.tailStdOut = stdIO;
   script.logs.forEach((log) => {
     script.tailStdOut?.write?.(log);

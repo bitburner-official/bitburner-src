@@ -13,6 +13,7 @@ import { IOStream } from "../../../src/Terminal/StdIO/IOStream";
 import { stringify } from "../../../src/Terminal/StdIO/utils";
 import { ITutorial, iTutorialSteps } from "../../../src/InteractiveTutorial";
 import { Link, Output, RawOutput } from "../../../src/Terminal/OutputTypes";
+import { PromptEvent } from "../../../src/ui/React/PromptManager";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -675,6 +676,68 @@ describe("Terminal Pipes", () => {
         }
 
         expect(JSON.parse(server.textFiles.get("eof.txt" as TextFilePath)?.text ?? "null")).toEqual(expected);
+      });
+
+      it("a second piped tail of the same script ends the first tail's pipe", async () => {
+        const server = GetServerOrThrow(Player.currentServer);
+        server.writeToScriptFile(
+          "long.js" as ScriptFilePath,
+          `export async function main(ns) { ns.print("first"); await ns.sleep(10000); }`,
+        );
+
+        await Terminal.executeCommands("run long.js; tail long.js | run reader.js");
+        await sleep(50);
+        expect(server.textFiles.get("eof.txt" as TextFilePath)).toBeUndefined();
+
+        await Terminal.executeCommands("tail long.js > second.txt");
+        for (let i = 0; i < 50 && !server.textFiles.get("eof.txt" as TextFilePath); i++) {
+          await sleep(20);
+        }
+        await Terminal.executeCommands("kill long.js");
+
+        expect(JSON.parse(server.textFiles.get("eof.txt" as TextFilePath)?.text ?? "null")).toContain("first");
+      });
+
+      describe("rm with a confirmation prompt", () => {
+        let answerPrompt: ((value: boolean) => void) | undefined;
+        let unsubscribe: () => void;
+
+        beforeEach(() => {
+          answerPrompt = undefined;
+          unsubscribe = PromptEvent.subscribe((prompt) => {
+            answerPrompt = prompt.resolve;
+          });
+          const server = GetServerOrThrow(Player.currentServer);
+          server.writeToTextFile("a.txt" as TextFilePath, "a");
+          server.writeToTextFile("b.txt" as TextFilePath, "b");
+        });
+
+        afterEach(() => unsubscribe());
+
+        it("should write its result to the pipe once the prompt is confirmed", async () => {
+          const server = GetServerOrThrow(Player.currentServer);
+          await Terminal.executeCommands("rm a.txt b.txt | grep Deleted > rm.txt");
+          expect(answerPrompt).toBeDefined();
+
+          answerPrompt?.(true);
+          await sleep(50);
+
+          expect(server.textFiles.has("a.txt" as TextFilePath)).toBe(false);
+          expect(server.textFiles.get("rm.txt" as TextFilePath)?.text).toBe("Deleted: a.txt\nDeleted: b.txt");
+        });
+
+        it("should close the pipe without deleting anything when the prompt is declined", async () => {
+          const server = GetServerOrThrow(Player.currentServer);
+          await Terminal.executeCommands("rm a.txt b.txt | run reader.js");
+
+          answerPrompt?.(false);
+          for (let i = 0; i < 50 && !server.textFiles.get("eof.txt" as TextFilePath); i++) {
+            await sleep(20);
+          }
+
+          expect(server.textFiles.has("a.txt" as TextFilePath)).toBe(true);
+          expect(JSON.parse(server.textFiles.get("eof.txt" as TextFilePath)?.text ?? "null")).toEqual([]);
+        });
       });
     });
 

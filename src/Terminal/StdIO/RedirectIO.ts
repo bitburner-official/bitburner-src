@@ -177,7 +177,7 @@ function handleIoError(stdIO: StdIO, error: string) {
 export function isLongRunningCommand(commandSet: Args[]) {
   const pipeSymbol = isPipeSymbol(commandSet[0]) ? `${commandSet[0]}` : null;
   const command = trimQuotes(`${pipeSymbol ? commandSet[1] : commandSet[0]}`).toLowerCase();
-  return ["tail", "run", "cat", "grep"].includes(command) || !!resolveScriptFilePath(command);
+  return ["tail", "run", "cat", "grep", "rm"].includes(command) || !!resolveScriptFilePath(command);
 }
 
 async function waitUntilClosed(stdio: StdIO): Promise<void> {

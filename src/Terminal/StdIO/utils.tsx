@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { Link, Output, RawOutput } from "../OutputTypes";
 import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
 import { PortHandle, PortNumber } from "../../NetscriptPort";
-import { parseCommand } from "../Parser";
+import { commandArgRegex } from "../Parser";
 import { TTheme } from "../../Themes/ui/Theme";
 
 export type Args = string | number | boolean;
@@ -55,13 +55,11 @@ export function stringifyReactElement(element: React.ReactNode): string {
 }
 
 export function getCommandAfterLastPipe(commandString: string): string {
-  const parsedCommands = parseCommand(commandString);
-  const lastPipeIndex = parsedCommands.findLastIndex(isPipeSymbol);
-  if (lastPipeIndex === -1) {
-    return commandString;
-  }
-
-  return parsedCommands.slice(lastPipeIndex + 1).join(" ");
+  // Only the command after the last unquoted ; can be in a pipe
+  // See https://regex101.com/r/uAbnpN/1 for a breakdown of this regex
+  const lastCommand = commandString.replace(/^(?:'[^']*'|"[^"]*"|[^;"'])*;/, "");
+  const lastPipe = [...lastCommand.matchAll(commandArgRegex)].findLast((match) => isPipeSymbol(match[0]));
+  return lastPipe ? lastCommand.slice(lastPipe.index + lastPipe[0].length) : commandString;
 }
 
 function clean(str: string, stripAnsiEscape: boolean) {

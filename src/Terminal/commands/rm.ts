@@ -133,6 +133,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer, stdI
     (files.length === 1 && !files[0].endsWith(".exe") && !files[0].endsWith(".lit") && !files[0].endsWith(".cct"))
   ) {
     deleteSelectedTargets();
+    stdIO.close();
   } else {
     const promptText = `Are you sure you want to delete ${
       files.length === 1 ? files[0] : "these files"
@@ -143,6 +144,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer, stdI
       resolve: (value: string | boolean) => {
         if (typeof value === "string") throw new Error("PromptEvent got a string, expected boolean");
         if (value) deleteSelectedTargets();
+        stdIO.close();
       },
     });
   }
