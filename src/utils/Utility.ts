@@ -6,5 +6,5 @@ export function sleep(ms: number): Promise<void> {
 }
 
 export function hasDevQueryParam() {
-  return new URLSearchParams(window.location.search).has("dev");
+  return process.env.NODE_ENV === "development" && new URLSearchParams(window.location.search).has("dev");
 }
