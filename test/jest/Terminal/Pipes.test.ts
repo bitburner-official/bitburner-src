@@ -716,21 +716,27 @@ describe("Terminal Pipes", () => {
 
         it("should write its result to the pipe once the prompt is confirmed", async () => {
           const server = GetServerOrThrow(Player.currentServer);
-          await Terminal.executeCommands("rm a.txt b.txt | grep Deleted > rm.txt");
+          const commands = Terminal.executeCommands("rm a.txt b.txt | grep Deleted > rm.txt; echo after > after.txt");
+          await sleep(20);
           expect(answerPrompt).toBeDefined();
+          // The rest of the ; chain waits for the prompt
+          expect(server.textFiles.get("after.txt" as TextFilePath)).toBeUndefined();
 
           answerPrompt?.(true);
-          await sleep(50);
+          await commands;
 
+          expect(server.textFiles.get("after.txt" as TextFilePath)?.text).toBe("after");
           expect(server.textFiles.has("a.txt" as TextFilePath)).toBe(false);
           expect(server.textFiles.get("rm.txt" as TextFilePath)?.text).toBe("Deleted: a.txt\nDeleted: b.txt");
         });
 
         it("should close the pipe without deleting anything when the prompt is declined", async () => {
           const server = GetServerOrThrow(Player.currentServer);
-          await Terminal.executeCommands("rm a.txt b.txt | run reader.js");
+          const commands = Terminal.executeCommands("rm a.txt b.txt | run reader.js");
+          await sleep(20);
 
           answerPrompt?.(false);
+          await commands;
           for (let i = 0; i < 50 && !server.textFiles.get("eof.txt" as TextFilePath); i++) {
             await sleep(20);
           }
@@ -739,6 +745,38 @@ describe("Terminal Pipes", () => {
           expect(JSON.parse(server.textFiles.get("eof.txt" as TextFilePath)?.text ?? "null")).toEqual([]);
         });
       });
+    });
+
+    describe("; chains wait for each pipeline's output", () => {
+      it.each([
+        ["echo hi | grep h > first.txt", "hi"],
+        ["echo hi | cat > first.txt", "hi"],
+        ["echo hi > first.txt", "hi"],
+      ])("'%s' has finished writing before the next command runs", async (pipeline, expected) => {
+        await Terminal.executeCommands(`${pipeline}; grep h first.txt > second.txt`);
+
+        expect(GetServerOrThrow(Player.currentServer).textFiles.get("second.txt" as TextFilePath)?.text).toBe(expected);
+      });
+
+      it.each(["run long.js | grep first > out.txt", "tail long.js | grep first > out.txt"])(
+        "'%s' does not hold up the rest of the chain while the script runs",
+        async (pipeline) => {
+          const server = GetServerOrThrow(Player.currentServer);
+          server.writeToScriptFile(
+            "long.js" as ScriptFilePath,
+            `export async function main(ns) { ns.print("first"); ns.tprint("first"); await ns.sleep(10000); }`,
+          );
+          if (pipeline.startsWith("tail")) await Terminal.executeCommands("run long.js");
+
+          const commands = Terminal.executeCommands(`${pipeline}; echo after > after.txt`);
+          const timeout = new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 1000));
+          const result = await Promise.race([commands.then(() => "finished" as const), timeout]);
+          await Terminal.executeCommands("kill long.js");
+
+          expect(result).toBe("finished");
+          expect(server.textFiles.get("after.txt" as TextFilePath)?.text).toBe("after");
+        },
+      );
     });
 
     it.each([

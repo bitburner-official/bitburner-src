@@ -12,7 +12,7 @@ import { stringify } from "../StdIO/utils";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
-export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
+export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): Promise<void> | undefined {
   const initialStdIn = stdIO.getAllCurrentStdin(false);
   const stdin = stdIO.stdin?.deref();
   const stdinIsClosed = !stdin || (stdin.isClosed && stdin.empty());
@@ -37,10 +37,8 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
 
   stdIO.write(output);
 
-  if (stdinIsClosed) {
-    stdIO.close();
-  } else {
-    void callOnRead(stdIO, (data: unknown, stdInOut) => {
+  if (!stdinIsClosed) {
+    return callOnRead(stdIO, (data: unknown, stdInOut) => {
       stdInOut.write(stringify(data));
     });
   }

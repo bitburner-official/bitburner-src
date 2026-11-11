@@ -5,7 +5,6 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { StdIO } from "../StdIO/StdIO";
 
-// TODO-FICO: unit tests
 export function wget(
   args: (string | number | boolean)[],
   server: BaseServer,
@@ -50,7 +49,6 @@ export function wget(
       if (stdIO.stdout) {
         Terminal.printAndBypassPipes(`wget successfully retrieved content`);
         stdIO.write(content);
-        stdIO.close();
         return;
       }
 

@@ -8,7 +8,11 @@ import { RunningScript } from "../../Script/RunningScript";
 import { matchScriptPathExact } from "../../utils/helpers/scriptKey";
 import { StdIO } from "../StdIO/StdIO";
 
-export function tail(commandArray: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
+export function tail(
+  commandArray: (string | number | boolean)[],
+  server: BaseServer,
+  stdIO: StdIO,
+): RunningScript | undefined {
   try {
     if (commandArray.length < 1) {
       Terminal.fatal("Incorrect number of arguments. Usage: tail [pid] or tail [scriptname] [arg1] [arg2]...", stdIO);
@@ -46,7 +50,7 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
       // arguments, they can't be distinguished except by pid).
       const next = scriptMatchingName ?? candidates?.values().next();
       if (next && !next.done) {
-        handleTail(next.value, stdIO);
+        return handleTail(next.value, stdIO);
       }
     } else if (typeof commandArray[0] === "number") {
       const runningScript = findRunningScriptByPid(commandArray[0]);
@@ -54,7 +58,7 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
         Terminal.fatal(`No script with PID ${commandArray[0]} is running`, stdIO);
         return;
       }
-      handleTail(runningScript, stdIO);
+      return handleTail(runningScript, stdIO);
     }
   } catch (error) {
     console.error(error);
@@ -62,9 +66,11 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
   }
 }
 
-function handleTail(script: RunningScript, stdIO: StdIO): void {
+/** Pipes the script's logs to stdout, returning the script (which then owns the output), or opens its log window */
+function handleTail(script: RunningScript, stdIO: StdIO): RunningScript | undefined {
   if (!stdIO.stdout) {
-    return LogBoxEvents.emit(script);
+    LogBoxEvents.emit(script);
+    return;
   }
 
   script.tailStdOut?.close();
@@ -72,6 +78,7 @@ function handleTail(script: RunningScript, stdIO: StdIO): void {
   script.logs.forEach((log) => {
     script.tailStdOut?.write?.(log);
   });
+  return script;
 }
 
 function findRunningScriptsByFilename(path: ScriptFilePath, server: BaseServer): Map<number, RunningScript> | null {

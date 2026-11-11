@@ -2,7 +2,8 @@ import { Output, Link, RawOutput } from "./OutputTypes";
 import { Player } from "@player";
 import type { BaseServer } from "../Server/BaseServer";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
-import { type TerminalAction, Cancellation } from "./TerminalAction";
+import { type CommandResult, type StageResult, type TerminalAction, Cancellation } from "./TerminalAction";
+import { RunningScript } from "../Script/RunningScript";
 
 import { TextFile } from "../TextFile";
 import { Script } from "../Script/Script";
@@ -67,12 +68,12 @@ import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
 import { StdIO } from "./StdIO/StdIO";
-import { isLongRunningCommand, parseRedirectedCommands } from "./StdIO/RedirectIO";
+import { closeWhenSettled, parseRedirectedCommands } from "./StdIO/RedirectIO";
 import { mkdir } from "./commands/mkdir";
 
 export const TerminalCommands: Record<
   string,
-  (args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO) => undefined | TerminalAction
+  (args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO) => CommandResult
 > = {
   "scan-analyze": scananalyze,
   alias: alias,
@@ -344,12 +345,35 @@ export class Terminal {
     this.clear();
   }
 
-  async executeCommand(command: string, stdIO: StdIO): Promise<void> {
-    if (this.action !== null)
-      return this.fatal(`Cannot execute command (${command}) while an action is in progress`, stdIO);
+  /** Runs one command, and closes its output once the command is done with it */
+  async executeCommand(command: string, stdIO: StdIO): Promise<StageResult> {
+    if (this.action !== null) {
+      this.fatal(`Cannot execute command (${command}) while an action is in progress`, stdIO);
+      return { done: Promise.resolve(), ownedByScript: false };
+    }
+    try {
+      const result = this.startCommand(command, stdIO);
+      if (result instanceof RunningScript) return { done: Promise.resolve(), ownedByScript: true };
+      if (result instanceof Promise) return { done: closeWhenSettled(stdIO, result), ownedByScript: false };
+      if (result) {
+        this.action = result;
+        TerminalEvents.emit();
+        await result.finished;
+        this.action = null;
+      }
+      stdIO.close();
+      return { done: Promise.resolve(), ownedByScript: false };
+    } catch (ex) {
+      stdIO.close();
+      throw ex;
+    } finally {
+      this.cancelAction();
+      TerminalEvents.emit();
+    }
+  }
 
-    const rawCommandArray = parseCommand(command);
-    const commandArray = applyLastPidVariables(rawCommandArray, this.pidOfLastScriptRun);
+  private startCommand(command: string, stdIO: StdIO): CommandResult {
+    const commandArray = applyLastPidVariables(parseCommand(command), this.pidOfLastScriptRun);
     if (!commandArray.length) return;
 
     const currentServer = Player.getCurrentServer();
@@ -497,27 +521,7 @@ export class Terminal {
       return this.fatal(`Command ${commandName} not found.${didYouMeanString}`, stdIO);
     }
 
-    try {
-      const result = f(commandArray, currentServer, stdIO);
-
-      if (result) {
-        this.action = result;
-        TerminalEvents.emit();
-        await result.finished;
-        stdIO.close();
-        this.action = null;
-        TerminalEvents.emit();
-      } else if (!isLongRunningCommand(rawCommandArray)) {
-        stdIO.close();
-      }
-    } catch (ex) {
-      stdIO.close();
-      throw ex;
-    } finally {
-      // If we throw for any reason, abort the current action.
-      this.cancelAction();
-      TerminalEvents.emit();
-    }
+    return f(commandArray, currentServer, stdIO);
   }
 
   getProgressText(): string {

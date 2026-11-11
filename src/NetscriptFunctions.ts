@@ -1492,7 +1492,7 @@ export const ns: InternalAPI<NSFull> = {
     if (!stdin) {
       return null;
     }
-    return stdin.handle;
+    return stdin;
   },
   flags: (ctx, ...args) => Flags(ctx, false)(...args),
   heart: { break: () => Player.karma },

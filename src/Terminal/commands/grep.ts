@@ -372,7 +372,7 @@ function grabTerminal(): string[] {
   return Terminal.outputHistory.map((line) => (line as Output).text ?? "");
 }
 
-export function grep(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined {
+export function grep(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): Promise<void> | undefined {
   const stdin = stdIO.stdin?.deref();
   const noStdinProvided = !stdin || (stdin.isClosed && stdin.empty());
   if (!args.length && noStdinProvided) return Terminal.fatal(ERR.noArgs, stdIO);
@@ -432,7 +432,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer, st
   };
 
   if (stdinContent) filterStdin(stdinContent.replace(/\n$/, ""));
-  void callOnRead(stdIO, (data: unknown) => filterStdin(stringify(data)));
+  return callOnRead(stdIO, (data: unknown) => filterStdin(stringify(data)));
 }
 
 function applyFilters(

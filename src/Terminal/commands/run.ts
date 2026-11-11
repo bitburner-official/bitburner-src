@@ -1,6 +1,6 @@
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
-import type { TerminalAction } from "../TerminalAction";
+import type { CommandResult } from "../TerminalAction";
 import { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
 import { CodingContractResult } from "../../CodingContract/Contract";
@@ -14,7 +14,7 @@ import { hasCacheExtension } from "../../Paths/CacheFilePath";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getRewardFromCache } from "../../DarkNet/effects/cacheFiles";
 
-export function run(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): undefined | TerminalAction {
+export function run(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): CommandResult {
   // Run a program or a script
   const arg = args.shift();
   if (!arg)
@@ -26,10 +26,9 @@ export function run(args: (string | number | boolean)[], server: BaseServer, std
   const path = Terminal.getFilepath(String(arg));
   if (!path) return Terminal.fatal(`${arg} is not a valid filepath.`, stdIO);
   if (hasScriptExtension(path)) {
-    runScript(path, args, server, stdIO);
-    return;
+    return runScript(path, args, server, stdIO);
   } else if (hasContractExtension(path)) {
-    (async () => {
+    return (async () => {
       // There's already an opened contract
       if (Terminal.contractOpen) {
         return Terminal.fatal("There's already a Coding Contract in Progress", stdIO);
@@ -93,12 +92,10 @@ export function run(args: (string | number | boolean)[], server: BaseServer, std
         }
       }
       Terminal.contractOpen = false;
-      stdIO.close();
     })().catch((error) => {
       console.error(error);
       Terminal.fatal(`Cannot run contract ${path} on ${server.hostname}. Error: ${error}.`, stdIO);
     });
-    return;
   } else if (hasProgramExtension(path)) {
     runProgram(path, args, server, stdIO);
     return;

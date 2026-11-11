@@ -166,7 +166,6 @@ describe("RedirectIOTests", () => {
       await Terminal.executeCommands(`echo "${inputData}" | run ${scriptName}`);
       await sleep(50);
 
-      console.log(Terminal.outputHistory);
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
       const outputText: Output | undefined = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
       expect(outputText?.text).toEqual(`${scriptName}: Received input: ${inputData}`);
@@ -189,7 +188,6 @@ describe("RedirectIOTests", () => {
       await Terminal.executeCommands(`echo "${inputData}" | ${scriptName} | run ${scriptName}`);
       await sleep(50);
 
-      console.log(Terminal.outputHistory);
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
       const outputText: Output | undefined = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
       expect(outputText?.text).toEqual(`${scriptName}: Received input: ${scriptName}: Received input: ${inputData}`);
