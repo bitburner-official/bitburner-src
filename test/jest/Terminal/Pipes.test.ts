@@ -18,6 +18,9 @@ import { PromptEvent } from "../../../src/ui/React/PromptManager";
 import { TerminalEvents } from "../../../src/Terminal/TerminalEvents";
 import { workerScripts } from "../../../src/Netscript/WorkerScripts";
 import type { TerminalAction } from "../../../src/Terminal/TerminalAction";
+import { Settings } from "../../../src/Settings/Settings";
+import { NetscriptPorts } from "../../../src/NetscriptPort";
+import React from "react";
 
 function findRunningScript(filename: string) {
   return [...workerScripts.values()].find((ws) => ws.name === filename)?.scriptRef;
@@ -863,6 +866,71 @@ describe("Terminal Pipes", () => {
         },
       );
     });
+  });
+
+  describe("with timestamps enabled", () => {
+    const timestamp = String.raw`\[\d\d:\d\d:\d\d\] `;
+
+    beforeEach(() => {
+      Settings.TimestampsFormat = "HH:mm:ss";
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToTextFile("a.txt" as TextFilePath, "a");
+      server.writeToTextFile("b.txt" as TextFilePath, "b");
+    });
+
+    afterEach(() => {
+      Settings.TimestampsFormat = "";
+    });
+
+    it("keeps timestamps out of redirected files", async () => {
+      await Terminal.executeCommands("cp a.txt b.txt > log.txt");
+
+      expect(GetServerOrThrow(Player.currentServer).textFiles.get("log.txt" as TextFilePath)?.text).toBe(
+        "File a.txt copied to b.txt\nb.txt was overwritten.",
+      );
+    });
+
+    it("shows one timestamp on a coloured line piped back to the terminal", async () => {
+      await Terminal.executeCommands("cp a.txt b.txt | grep overwritten");
+
+      expect(stringify(getOutput(Terminal.outputHistory, -1), true)).toMatch(
+        new RegExp(`^${timestamp}b\\.txt was overwritten\\.$`),
+      );
+    });
+
+    it("still timestamps every kind of output shown directly on the terminal", async () => {
+      await Terminal.executeCommands("cp a.txt b.txt");
+      Terminal.printRaw(React.createElement("span", null, "raw"), getTerminalStdIO());
+
+      const lines = Terminal.outputHistory.map((line) => stringify(line, true));
+      expect(lines).toHaveLength(3);
+      for (const line of lines) expect(line).toMatch(new RegExp(`^${timestamp}`));
+    });
+  });
+
+  describe("freeing pipe data nobody reads", () => {
+    const pipePorts = () => [...NetscriptPorts.keys()].filter((n) => n < 0);
+
+    beforeEach(() => {
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToScriptFile("noread.js" as ScriptFilePath, `export async function main(ns) { await ns.sleep(10); }`);
+      server.writeToScriptFile(
+        "chatty.js" as ScriptFilePath,
+        `export async function main(ns) { for (let i = 0; i < 5; i++) { ns.tprintf("x%d", i); await ns.sleep(10); } }`,
+      );
+    });
+
+    it.each(["echo hi | ls", "echo hi | run noread.js", "run chatty.js | run noread.js"])(
+      "'%s' leaves no pipe data behind",
+      async (command) => {
+        const before = pipePorts();
+
+        await Terminal.executeCommands(command);
+        await waitForScripts();
+
+        expect(pipePorts()).toEqual(before);
+      },
+    );
   });
 
   describe("re-review regressions", () => {

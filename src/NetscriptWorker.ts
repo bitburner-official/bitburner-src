@@ -146,17 +146,17 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
     // Once the code finishes (either resolved or rejected, doesn't matter), set its
     // running status to false
     .then(function () {
-      killWorkerScript(workerScript);
       workerScript.log("", () => "Script finished running");
+      killWorkerScript(workerScript);
     })
     .catch(function (error) {
       handleUnknownError(error, workerScript);
-      killWorkerScript(workerScript);
       workerScript.log("", () =>
         error instanceof ScriptDeath
           ? "main() terminated."
           : getErrorMessageWithStackAndCause(error, "Script crashed due to an error: "),
       );
+      killWorkerScript(workerScript);
     })
     .finally(() => {
       // The earnings are transferred to the parent if it still exists.

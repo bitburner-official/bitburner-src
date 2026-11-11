@@ -72,6 +72,6 @@ export class StdIO {
 
   close(): void {
     this.stdout?.close();
-    this.stdin?.deref()?.close();
+    this.stdin?.deref()?.close(true);
   }
 }

@@ -1,4 +1,4 @@
-import { Output, Link, RawOutput } from "./OutputTypes";
+import { Output, Link, RawOutput, withTimestamp } from "./OutputTypes";
 import { Player } from "@player";
 import type { BaseServer } from "../Server/BaseServer";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
@@ -150,7 +150,7 @@ export class Terminal {
   pidOfLastScriptRun: number = -1;
 
   terminalOutput(item: Output | Link | RawOutput): void {
-    this.outputHistory.push(item);
+    this.outputHistory.push(withTimestamp(item));
     if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
       this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
     }
@@ -334,7 +334,9 @@ export class Terminal {
   }
 
   clear(): void {
-    this.outputHistory = [new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary")];
+    this.outputHistory = [
+      withTimestamp(new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary")),
+    ];
     TerminalEvents.emit();
     TerminalClearEvents.emit();
   }

@@ -85,7 +85,7 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   ws.stopFlag = true;
   ws.scriptRef.terminalStdOut.close();
   ws.scriptRef.tailStdOut?.close();
-  ws.scriptRef.stdin?.close();
+  ws.scriptRef.stdin?.close(true);
   removeWorkerScript(ws);
 }
 

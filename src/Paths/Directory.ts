@@ -20,12 +20,12 @@ export const root = "" as Directory;
  * *, ?, [, and ]: Invalid in actual paths because they are used for globbing.
  * !: Invalid because it conflicts with terminal history fetching
  * \: Invalid to avoid confusion with an escape character
+ * |,<,>: Invalid because they are used for piping in the terminal
  * ~: Invalid because it might have a use in the terminal in the future.
- * |: Invalid because it might have a use in the terminal in the future.
  * #: Invalid because it might have a use in the terminal in the future.
  * (quote marks): Invalid to avoid conflict with quote marks used in the terminal.
  * (whitespace): Invalid to avoid confusion with terminal command separator */
-export const invalidCharacters = ["/", "*", "?", "[", "]", "!", "\\", "~", "|", "#", '"', "'"] as const;
+export const invalidCharacters = ["/", "*", "?", "[", "]", "!", "\\", "~", "|", "<", ">", "#", '"', "'"] as const;
 
 /** A valid character is any character that is not one of the invalid characters */
 export const oneValidCharacter = `[^${escapeRegExp(invalidCharacters.join(""))}\\s]`;

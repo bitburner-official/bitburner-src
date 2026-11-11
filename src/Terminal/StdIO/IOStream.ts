@@ -1,5 +1,5 @@
 import { NetscriptPort } from "@nsdefs";
-import { getPort, PortHandle, PortNumber } from "../../NetscriptPort";
+import { getPort, NetscriptPorts, PortHandle, PortNumber } from "../../NetscriptPort";
 import { allocateStdInHandle } from "./utils";
 
 export class IOStream implements NetscriptPort {
@@ -18,8 +18,21 @@ export class IOStream implements NetscriptPort {
     return this.#isClosed && this.empty();
   }
 
-  close(): void {
-    this.write(null);
+  /**
+   * Ends the stream. The writer closes it so the reader sees the end of the input after reading what's left.
+   * The reader passes discardUnread when it's done, to free anything written that it will never read.
+   */
+  close(discardUnread = false): void {
+    if (!discardUnread) {
+      this.write(null);
+      return;
+    }
+    this.#isClosed = true;
+    const port = NetscriptPorts.get(this.#handle.n);
+    if (!port) return;
+    NetscriptPorts.delete(this.#handle.n);
+    // Wake anything waiting on nextWrite, so it sees the stream has ended
+    port.resolver?.();
   }
 
   write(value: any): unknown {

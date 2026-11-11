@@ -1,5 +1,6 @@
 import { IOStream } from "../../../src/Terminal/StdIO/IOStream";
 import { Settings } from "../../../src/Settings/Settings";
+import { NetscriptPorts } from "../../../src/NetscriptPort";
 
 function fillStream(stream: IOStream, count: number) {
   for (let i = 0; i < count; i++) stream.write(i);
@@ -94,6 +95,42 @@ describe("IOStream", () => {
       expect(await readAll()).toEqual([]);
       stream.clear();
       expect(await readAll()).toEqual([]);
+    });
+  });
+
+  describe("closing from the reading side", () => {
+    it("frees unread data and ends the stream", () => {
+      const before = NetscriptPorts.size;
+      const stream = new IOStream();
+      fillStream(stream, 3);
+      expect(NetscriptPorts.size).toBe(before + 1);
+
+      stream.close(true);
+
+      expect(NetscriptPorts.size).toBe(before);
+      expect(stream.isExhausted).toBe(true);
+      expect(stream.read()).toBe(null);
+    });
+
+    it("ignores writes after the reader closes it, without recreating the port", () => {
+      const before = NetscriptPorts.size;
+      const stream = new IOStream();
+      stream.close(true);
+
+      expect(stream.tryWrite("a")).toBe(false);
+      stream.write("b");
+      stream.close();
+      expect(NetscriptPorts.size).toBe(before);
+    });
+
+    it("wakes a reader waiting on nextWrite", async () => {
+      const stream = new IOStream();
+      const waiting = stream.nextWrite();
+
+      stream.close(true);
+
+      await expect(waiting).resolves.toBeUndefined();
+      expect(stream.isExhausted).toBe(true);
     });
   });
 
