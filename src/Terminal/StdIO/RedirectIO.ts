@@ -1,4 +1,4 @@
-import { parseCommand } from "../Parser";
+import { parseCommand, PipeSymbols } from "../Parser";
 import { trimQuotes } from "../../utils/helpers/string";
 import { IOStream } from "./IOStream";
 import { StdIO } from "./StdIO";
@@ -6,7 +6,7 @@ import { Terminal } from "../../Terminal";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { Player } from "@player";
-import { Args, isPipeSymbol, PipeSymbols, stringify } from "./utils";
+import { Args, isPipeSymbol, stringify } from "./utils";
 import type { StageResult } from "../TerminalAction";
 
 /** Runs a command and any pipeline it contains, resolving once all of its output has been written */

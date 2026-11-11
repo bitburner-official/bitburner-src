@@ -1,4 +1,4 @@
-import { parseCommand } from "../../../src/Terminal/Parser";
+import { parseCommand, parseCommands } from "../../../src/Terminal/Parser";
 import { getCommandAfterLastPipe } from "../../../src/Terminal/StdIO/utils";
 test("parseCommand Tests", () => {
   const expectedParsings = {
@@ -16,6 +16,29 @@ test("parseCommand Tests", () => {
   }
 });
 
+describe("parseCommands with pipe symbols that have no spaces around them", () => {
+  it.each([
+    ["echo 1|grep 1", ["echo", "1", "|", "grep", "1"]],
+    ["echo hi>o.txt", ["echo", "hi", ">", "o.txt"]],
+    ["echo hi>>o.txt", ["echo", "hi", ">>", "o.txt"]],
+    ["cat<in.txt|grep x", ["cat", "<", "in.txt", "|", "grep", "x"]],
+    ['echo "a|b">o.txt', ["echo", '"a|b"', ">", "o.txt"]],
+    ["echo 'a>b'|cat", ["echo", "'a>b'", "|", "cat"]],
+    ['echo "a|b', ["echo", '"a|b']],
+  ])("splits '%s' outside quotes", (command, expected) => {
+    const commands = parseCommands(command);
+    expect(commands.length).toBe(1);
+    expect(parseCommand(commands[0], false)).toEqual(expected);
+  });
+
+  it("still splits commands on ;", () => {
+    expect(parseCommands("echo a|cat;ls>o.txt").map((command) => parseCommand(command, false))).toEqual([
+      ["echo", "a", "|", "cat"],
+      ["ls", ">", "o.txt"],
+    ]);
+  });
+});
+
 describe("getCommandAfterLastPipe", () => {
   it.each([
     ["run x", "run x"],
@@ -26,6 +49,9 @@ describe("getCommandAfterLastPipe", () => {
     ['echo "a;b" | cat ', " cat "],
     ['ls | cat "a;b|c" ', ' cat "a;b|c" '],
     ['ls; echo "x | y; z" | cat ', " cat "],
+    ["ls|cat ", "cat "],
+    ["ls>>o", "o"],
+    ['ls|cat "a|b"', 'cat "a|b"'],
   ])("returns the text after the last pipe in '%s'", (command, expected) => {
     expect(getCommandAfterLastPipe(command)).toBe(expected);
   });

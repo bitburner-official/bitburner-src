@@ -399,14 +399,19 @@ export function grep(args: (string | number | boolean)[], server: BaseServer, st
   if (params.outfile && !outFilePath) return; // associated errors are printed in checkOutFile
 
   if (!validateFilenames(otherArgs.slice(1), server, stdIO)) return;
-  if (outFilePath) server.writeToContentFile(outFilePath, ""); // create or empty it once
+
+  let pattern: string | RegExp;
+  try {
+    pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
+  } catch (error) {
+    return Terminal.fatal(`grep processing error: ${error}`, stdIO);
+  }
 
   const fileContent: DataToSearch[] = options.isSearchAll
     ? getServerFiles(server)
     : getDataToGrep(otherArgs.slice(1), server, ""); // stdin is handled below
-  let pattern: string | RegExp;
+  if (outFilePath) server.writeToContentFile(outFilePath, "");
   try {
-    pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     applyFilters(options, params, pattern, nContext, nLimit, fileContent, outFilePath, server, stdIO);
   } catch (error) {
     console.error(error);

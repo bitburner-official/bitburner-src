@@ -108,6 +108,27 @@ describe("Terminal Pipes", () => {
       expect(stringify(getOutput(Terminal.outputHistory, -1).text, true)).toBe("a | b");
     });
 
+    it("should pipe and redirect when the symbols have no spaces around them", async () => {
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToTextFile("in.txt" as TextFilePath, "x1\ny2");
+
+      await Terminal.executeCommands(
+        "echo 1|grep 1>piped.txt; echo a>out.txt; echo b>>out.txt; cat<in.txt|grep x>in-grep.txt",
+      );
+
+      expect(server.textFiles.get("piped.txt" as TextFilePath)?.text).toBe("1");
+      expect(server.textFiles.get("out.txt" as TextFilePath)?.text).toBe("a\nb");
+      expect(server.textFiles.get("in-grep.txt" as TextFilePath)?.text).toBe("x1");
+      expect(Terminal.outputHistory).toEqual([]);
+    });
+
+    it("should keep quoted pipe symbols literal when they have no spaces around them", async () => {
+      await Terminal.executeCommands(`echo "a|b"; echo 'c>d'>quoted.txt`);
+
+      expect(getOutput(Terminal.outputHistory, 0).text).toBe("a|b");
+      expect(GetServer(Player.currentServer)?.textFiles.get("quoted.txt" as TextFilePath)?.text).toBe("c>d");
+    });
+
     it("should not overwrite a file passed after a quoted > argument", async () => {
       const fileName = "notes.txt" as TextFilePath;
       const server = GetServerOrThrow(Player.currentServer);

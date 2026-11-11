@@ -244,6 +244,11 @@ describe("getTabCompletionPossibilities", function () {
     },
   );
 
+  it("completes the command after a pipe with no spaces around it", async () => {
+    const options = await getTabCompletionPossibilities("ls|gr", root);
+    expect(options).toContain("grep");
+  });
+
   it("completes file names after a >> redirect", async () => {
     writeFiles();
     const options = await getTabCompletionPossibilities("ls >> ", root);

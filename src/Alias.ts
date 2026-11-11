@@ -2,8 +2,7 @@ import { Terminal } from "./Terminal";
 import { trimQuotes } from "./utils/helpers/string";
 import { StdIO } from "./Terminal/StdIO/StdIO";
 import { Reviver } from "./utils/GenericReviver";
-import { PipeSymbols } from "./Terminal/StdIO/utils";
-import { parseCommand } from "./Terminal/Parser";
+import { parseCommand, PipeSymbols } from "./Terminal/Parser";
 
 export const Aliases = new Map<string, string>();
 export const GlobalAliases = new Map<string, string>();

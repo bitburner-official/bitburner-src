@@ -3,17 +3,10 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { Link, Output, RawOutput } from "../OutputTypes";
 import { ANSI_ESCAPE } from "../../ui/React/ANSIITypography";
 import { PortHandle, PortNumber } from "../../NetscriptPort";
-import { commandArgRegex } from "../Parser";
 import { TTheme } from "../../Themes/ui/Theme";
+import { findUnquotedPipeSymbols, PipeSymbols } from "../Parser";
 
 export type Args = string | number | boolean;
-
-export const PipeSymbols = {
-  Pipe: "|",
-  OutputRedirection: ">",
-  AppendOutputRedirection: ">>",
-  InputRedirection: "<",
-} as const;
 
 export function isPipeSymbol(symbol: string | number | boolean): boolean {
   return Object.values(PipeSymbols).some((pipeSymbol) => pipeSymbol === symbol);
@@ -58,8 +51,8 @@ export function getCommandAfterLastPipe(commandString: string): string {
   // Only the command after the last unquoted ; can be in a pipe
   // See https://regex101.com/r/uAbnpN/1 for a breakdown of this regex
   const lastCommand = commandString.replace(/^(?:'[^']*'|"[^"]*"|[^;"'])*;/, "");
-  const lastPipe = [...lastCommand.matchAll(commandArgRegex)].findLast((match) => isPipeSymbol(match[0]));
-  return lastPipe ? lastCommand.slice(lastPipe.index + lastPipe[0].length) : commandString;
+  const lastPipe = findUnquotedPipeSymbols(lastCommand).at(-1);
+  return lastPipe ? lastCommand.slice(lastPipe.index + lastPipe.symbol.length) : commandString;
 }
 
 function clean(str: string, stripAnsiEscape: boolean) {

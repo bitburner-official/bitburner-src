@@ -80,6 +80,25 @@ describe("grep command", () => {
     expect(stdOut.isClosed).toBe(true);
   });
 
+  it("should leave an existing -O file alone when the pattern is an invalid regular expression", async () => {
+    const server = GetServerOrThrow(Player.currentServer);
+    const outFile = "results.txt" as TextFilePath;
+    server.writeToTextFile(outFile, "IMPORTANT");
+
+    await Terminal.executeCommands(`grep -R -f "(" ${fileName} -O ${outFile}`);
+
+    expect(getOutput(Terminal.outputHistory, -1).text).toContain("Invalid regular expression");
+    expect(server.textFiles.get(outFile)?.text).toBe("IMPORTANT");
+  });
+
+  it("should search an -O file's old contents when it is also an input", async () => {
+    const server = GetServerOrThrow(Player.currentServer);
+
+    await Terminal.executeCommands(`grep -f "line 2" ${fileName} -O ${fileName}`);
+
+    expect(server.textFiles.get(fileName)?.text).toBe("This is line 2 of file 1");
+  });
+
   it("should separate context blocks from different files with --", async () => {
     const server = GetServerOrThrow(Player.currentServer);
     const stdOut = new IOStream();
