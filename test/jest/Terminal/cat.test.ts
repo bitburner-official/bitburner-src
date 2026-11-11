@@ -61,6 +61,21 @@ describe("cat command", () => {
     expect(output).toBe(`${fileContent1}${stdinStuff}${fileContent2}`);
   });
 
+  it("should keep stdin items on separate lines, but not add newlines between files", async () => {
+    const server = GetServerOrThrow(Player.currentServer);
+
+    const stdIn = new IOStream();
+    stdIn.write("stdin line 1");
+    stdIn.write("stdin line 2");
+    stdIn.close();
+    const stdOut = new IOStream();
+    const stdIO = new StdIO(stdIn, stdOut);
+
+    await cat([fileName, "-", fileName2], server, stdIO);
+
+    expect(stdOut.read()).toBe(`${fileContent1}stdin line 1\nstdin line 2${fileContent2}`);
+  });
+
   it("should read from stdin and concat it last when '-' is not provided as an argument", async () => {
     const server = GetServerOrThrow(Player.currentServer);
 

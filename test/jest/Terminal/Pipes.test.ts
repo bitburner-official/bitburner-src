@@ -251,6 +251,20 @@ describe("Terminal Pipes", () => {
       expect(lastOutput.text).toContain(fileContent);
     });
 
+    it("should keep the line breaks of multi-line command output piped into cat", async () => {
+      const server = GetServerOrThrow(Player.currentServer);
+      // Created up front so both listings are the same
+      server.writeToTextFile("direct.txt" as TextFilePath, "");
+      server.writeToTextFile("piped.txt" as TextFilePath, "");
+      Player.getHomeComputer().pushProgram(CompletedProgramName.nuke);
+
+      await Terminal.executeCommands("ls > direct.txt; ls | cat > piped.txt");
+
+      const direct = server.textFiles.get("direct.txt" as TextFilePath)?.text;
+      expect(direct).toContain("\n");
+      expect(server.textFiles.get("piped.txt" as TextFilePath)?.text).toBe(direct);
+    });
+
     it("should pipe cat .lit file contents to specified output", async () => {
       const fileName = "test.txt";
       const server = GetServer(Player.currentServer);

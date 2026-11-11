@@ -40,7 +40,7 @@ export class StdIO {
     return this[Symbol.asyncIterator]();
   }
 
-  getAllCurrentStdin(includeNewlines = true): string {
+  getAllCurrentStdin(trailingNewline = true): string {
     const stdin = this.stdin?.deref();
     if (!stdin) {
       return "";
@@ -53,7 +53,7 @@ export class StdIO {
       }
       inputs.push(stringify(input));
     }
-    return inputs.map((i) => `${i}${includeNewlines ? "\n" : ""}`).join("");
+    return trailingNewline ? inputs.map((i) => `${i}\n`).join("") : inputs.join("\n");
   }
 
   write(data: unknown): unknown {
