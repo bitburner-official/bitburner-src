@@ -114,7 +114,6 @@ export const getMoneyReward = (difficulty: number): InternalCacheReward => {
     1e7 *
     ((200 + Player.skills.charisma) / 200) *
     sf15_3Factor *
-    Player.mults.crime_money *
     Player.mults.dnet_money *
     currentNodeMults.DarknetMoneyMultiplier; // TODO: adjust balance
   Player.gainMoney(reward, "darknet");

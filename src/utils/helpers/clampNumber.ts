@@ -21,3 +21,30 @@ export function clampInteger(value: number, min = -Number.MAX_SAFE_INTEGER, max 
   }
   return Math.round(Math.max(Math.min(value, max), min));
 }
+
+/**
+ * Applies a soft cap to a value
+ * Each additional chunk past softCap is `ratio` as effective as the previous chunk
+ *
+ * @param value - the value to apply the soft cap to
+ * @param ratio - How much less effective each chunk is after the soft cap
+ * @param chunk - The size of each chunk to diminish
+ * @param softCap - The value at which the soft cap starts to take effect
+ */
+export function applySoftCap(
+  value: number,
+  ratio: number,
+  chunk: number ,
+  softCap: number ,
+): number {
+  const sign = Math.sign(value);
+  const magnitude = Math.abs(value);
+
+  if (magnitude <= softCap) {
+    return value;
+  }
+  const excess = magnitude - softCap;
+
+  const diminishedExcess = (ratio * chunk * (1 - Math.pow(ratio, excess / chunk))) / (1 - ratio);
+ return (softCap + diminishedExcess) * sign;
+}
