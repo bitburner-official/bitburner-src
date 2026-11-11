@@ -33,54 +33,56 @@ describe("cat command", () => {
     server.textFiles.set(fileName2, file2);
   });
 
-  it("should retrieve file contents and pass to stdout", () => {
+  it("should retrieve file contents and pass to stdout", async () => {
     const server = GetServerOrThrow(Player.currentServer);
 
     const stdOut = new IOStream();
     const stdIO = new StdIO(null, stdOut);
 
-    cat([fileName, fileName2], server, stdIO);
+    await cat([fileName, fileName2], server, stdIO);
     const output = stdOut.read();
 
     expect(output).toBe(`${fileContent1}${fileContent2}`);
   });
 
-  it("should read from stdin when '-' is provided as an argument", () => {
+  it("should read from stdin when '-' is provided as an argument", async () => {
     const server = GetServerOrThrow(Player.currentServer);
     const stdinStuff = "\nInput from stdin line 1";
 
     const stdIn = new IOStream();
     stdIn.write(stdinStuff);
+    stdIn.close();
     const stdOut = new IOStream();
     const stdIO = new StdIO(stdIn, stdOut);
 
-    cat([fileName, "-", fileName2], server, stdIO);
+    await cat([fileName, "-", fileName2], server, stdIO);
     const output = stdOut.read();
 
     expect(output).toBe(`${fileContent1}${stdinStuff}${fileContent2}`);
   });
 
-  it("should read from stdin and concat it last when '-' is not provided as an argument", () => {
+  it("should read from stdin and concat it last when '-' is not provided as an argument", async () => {
     const server = GetServerOrThrow(Player.currentServer);
 
     const stdIn = new IOStream();
     stdIn.write("Input from stdin line 1");
+    stdIn.close();
     const stdOut = new IOStream();
     const stdIO = new StdIO(stdIn, stdOut);
 
-    cat([fileName, fileName2], server, stdIO);
+    await cat([fileName, fileName2], server, stdIO);
     const output = stdOut.read();
 
     expect(output).toBe(`${fileContent1}${fileContent2}Input from stdin line 1`);
   });
 
-  it("should be able to read .lit files", () => {
+  it("should be able to read .lit files", async () => {
     const server = GetServerOrThrow(Player.currentServer);
 
     const stdOut = new IOStream();
     const stdIO = new StdIO(null, stdOut);
 
-    cat([`${LiteratureName.HackersStartingHandbook}`], server, stdIO);
+    await cat([`${LiteratureName.HackersStartingHandbook}`], server, stdIO);
     const output = stdOut.read();
 
     const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);
@@ -90,13 +92,13 @@ describe("cat command", () => {
     expect(output).toContain("When starting out, hacking is the most profitable way to earn money and progress.");
   });
 
-  it("should be able to read msg files", () => {
+  it("should be able to read msg files", async () => {
     const server = GetServerOrThrow(Player.currentServer);
 
     const stdOut = new IOStream();
     const stdIO = new StdIO(null, stdOut);
 
-    cat([`${MessageFilename.Jumper0}`], server, stdIO);
+    await cat([`${MessageFilename.Jumper0}`], server, stdIO);
     const output = stdOut.read();
 
     const text = Messages[MessageFilename.Jumper0].msg + "\n";
@@ -104,13 +106,13 @@ describe("cat command", () => {
     expect(output).toBe(text);
   });
 
-  it("should be able to concatenate lit and msg files", () => {
+  it("should be able to concatenate lit and msg files", async () => {
     const server = GetServerOrThrow(Player.currentServer);
 
     const stdOut = new IOStream();
     const stdIO = new StdIO(null, stdOut);
 
-    cat([`${LiteratureName.HackersStartingHandbook}`, `${MessageFilename.Jumper0}`], server, stdIO);
+    await cat([`${LiteratureName.HackersStartingHandbook}`, `${MessageFilename.Jumper0}`], server, stdIO);
     const output = stdOut.read();
 
     const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);
@@ -121,15 +123,16 @@ describe("cat command", () => {
     expect(output).toBe(expectedOutput);
   });
 
-  it("should be able to concatenate lit and msg files with stdin", () => {
+  it("should be able to concatenate lit and msg files with stdin", async () => {
     const server = GetServerOrThrow(Player.currentServer);
 
     const stdIn = new IOStream();
     stdIn.write("Input from stdin line 1");
+    stdIn.close();
     const stdOut = new IOStream();
     const stdIO = new StdIO(stdIn, stdOut);
 
-    cat([`${LiteratureName.HackersStartingHandbook}`, "-", `${MessageFilename.Jumper0}`], server, stdIO);
+    await cat([`${LiteratureName.HackersStartingHandbook}`, "-", `${MessageFilename.Jumper0}`], server, stdIO);
     const output = stdOut.read();
 
     const bodyText = stringifyReactElement(Literatures[LiteratureName.HackersStartingHandbook].text);

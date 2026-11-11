@@ -9758,6 +9758,12 @@ export interface NS {
    * If more data is added later (for example, if one script's terminal is piped to another script),
    * then the script can read that data from `ns.getStdin()` as well.
    * `await ns.getStdin().nextWrite()` can be used to wait until new data is available to read.
+   *
+   * If the port is `.empty()` and you do not await `.nextWrite()`, then `read()` will return `"NULL PORT DATA"`.
+   * If the port is closed (when the script is done running), then `read()` will return `null`.
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getStdin(): NetscriptPort | null;
 

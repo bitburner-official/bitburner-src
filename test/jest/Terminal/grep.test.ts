@@ -30,20 +30,20 @@ describe("grep command", () => {
     server.textFiles.set(fileName2, file2);
   });
 
-  it("should retrieve lines matching the pattern from the specified text file", () => {
+  it("should retrieve lines matching the pattern from the specified text file", async () => {
     const server = GetServerOrThrow(Player.currentServer);
 
     const stdOut = new IOStream();
     const stdIO = new StdIO(null, stdOut);
 
-    grep(["line 2", fileName], server, stdIO);
+    await grep(["line 2", fileName], server, stdIO);
     const output = stdOut.read();
 
     expect(Terminal.outputHistory).toEqual([]);
     expect(output).toBe(`This is line 2 of file 1`);
   });
 
-  it("should retrieve lines matching the pattern from the specified script file", () => {
+  it("should retrieve lines matching the pattern from the specified script file", async () => {
     const server = GetServerOrThrow(Player.currentServer);
     const scriptFileName = "script.js" as ScriptFilePath;
     const scriptContent = "console.log('Hello World');\n// This is line 2 of the script";
@@ -52,54 +52,54 @@ describe("grep command", () => {
     const stdOut = new IOStream();
     const stdIO = new StdIO(null, stdOut);
 
-    grep(["line 2", scriptFileName], server, stdIO);
+    await grep(["line 2", scriptFileName], server, stdIO);
     const output = stdOut.read();
 
     expect(Terminal.outputHistory).toEqual([]);
     expect(output).toBe(`// This is line 2 of the script`);
   });
 
-  it("should prefix matches with the filename when searching more than one file", () => {
+  it("should prefix matches with the filename when searching more than one file", async () => {
     const server = GetServerOrThrow(Player.currentServer);
     const stdOut = new IOStream();
     const stdIO = new StdIO(null, stdOut);
 
-    grep(["line 2", fileName, fileName2], server, stdIO);
+    await grep(["line 2", fileName, fileName2], server, stdIO);
 
     expect(stdOut.read()).toBe(`example.txt:This is line 2 of file 1\nexample2.txt:This is line 2 of file 2`);
   });
 
-  it("should error when given a pattern but no file and no stdin", () => {
+  it("should error when given a pattern but no file and no stdin", async () => {
     const server = GetServerOrThrow(Player.currentServer);
     const stdOut = new IOStream();
 
-    grep(["line 2"], server, new StdIO(null, stdOut));
+    await grep(["line 2"], server, new StdIO(null, stdOut));
 
     expect(getOutput(Terminal.outputHistory, -1).text).toContain("At least one FILE argument must be passed");
     expect(stdOut.isClosed).toBe(true);
   });
 
-  it("should separate context blocks from different files with --", () => {
+  it("should separate context blocks from different files with --", async () => {
     const server = GetServerOrThrow(Player.currentServer);
     const stdOut = new IOStream();
     const stdIO = new StdIO(null, stdOut);
 
-    grep(["-A", "1", "line 2", fileName, fileName2], server, stdIO);
+    await grep(["-A", "1", "line 2", fileName, fileName2], server, stdIO);
 
     expect(stdOut.read()).toBe(`example.txt:This is line 2 of file 1\n--\nexample2.txt:This is line 2 of file 2`);
   });
 
-  it("should not print a -- separator without a context flag", () => {
+  it("should not print a -- separator without a context flag", async () => {
     const server = GetServerOrThrow(Player.currentServer);
     const stdOut = new IOStream();
     const stdIO = new StdIO(null, stdOut);
 
-    grep(["line 2", fileName, fileName2], server, stdIO);
+    await grep(["line 2", fileName, fileName2], server, stdIO);
 
     expect(stdOut.read()).not.toContain("--");
   });
 
-  it("should retrieve lines matching the pattern from stdin", () => {
+  it("should retrieve lines matching the pattern from stdin", async () => {
     const server = GetServerOrThrow(Player.currentServer);
 
     const stdIn = new IOStream();
@@ -108,7 +108,7 @@ describe("grep command", () => {
     const stdOut = new IOStream();
     const stdIO = new StdIO(stdIn, stdOut);
 
-    grep(["line 2"], server, stdIO);
+    await grep(["line 2"], server, stdIO);
     const output = stdOut.read();
 
     expect(Terminal.outputHistory).toEqual([]);

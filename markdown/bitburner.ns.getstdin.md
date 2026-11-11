@@ -12,6 +12,8 @@ then `ns.getStdin().read()` inside `myScript.js` would return `"input1"`<!-- -->
 
 If more data is added later (for example, if one script's terminal is piped to another script), then the script can read that data from `ns.getStdin()` as well. `await ns.getStdin().nextWrite()` can be used to wait until new data is available to read.
 
+If the port is `.empty()` and you do not await `.nextWrite()`<!-- -->, then `read()` will return `"NULL PORT DATA"`<!-- -->. If the port is closed (when the script is done running), then `read()` will return `null`<!-- -->.
+
 **Signature:**
 
 ```typescript
@@ -20,4 +22,8 @@ getStdin(): NetscriptPort | null;
 **Returns:**
 
 [NetscriptPort](./bitburner.netscriptport.md) \| null
+
+## Remarks
+
+RAM cost: 0 GB
 

@@ -483,7 +483,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const filename = helpers.string(ctx, "filename", _filename);
       const server = Player.getCurrentServer();
-      cat([filename], server, getTerminalStdIO());
+      // No stdin, so cat finishes synchronously
+      void cat([filename], server, getTerminalStdIO());
     },
     connect: (ctx, _host?) => {
       helpers.checkSingularityAccess(ctx);
