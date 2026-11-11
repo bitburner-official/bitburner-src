@@ -1057,7 +1057,6 @@ import nsDoc_bitburner_ns_getserverrequiredhackinglevel_md from "../../markdown/
 import nsDoc_bitburner_ns_getserversecuritylevel_md from "../../markdown/bitburner.ns.getserversecuritylevel.md?raw";
 import nsDoc_bitburner_ns_getserverusedram_md from "../../markdown/bitburner.ns.getserverusedram.md?raw";
 import nsDoc_bitburner_ns_getsharepower_md from "../../markdown/bitburner.ns.getsharepower.md?raw";
-import nsDoc_bitburner_ns_getstdin_md from "../../markdown/bitburner.ns.getstdin.md?raw";
 import nsDoc_bitburner_ns_gettotalscriptexpgain_md from "../../markdown/bitburner.ns.gettotalscriptexpgain.md?raw";
 import nsDoc_bitburner_ns_gettotalscriptincome_md from "../../markdown/bitburner.ns.gettotalscriptincome.md?raw";
 import nsDoc_bitburner_ns_getweakentime_md from "../../markdown/bitburner.ns.getweakentime.md?raw";
@@ -1187,6 +1186,7 @@ import nsDoc_bitburner_playerbasetask_md from "../../markdown/bitburner.playerba
 import nsDoc_bitburner_playerrequirement_md from "../../markdown/bitburner.playerrequirement.md?raw";
 import nsDoc_bitburner_port_clear_md from "../../markdown/bitburner.port.clear.md?raw";
 import nsDoc_bitburner_port_gethandle_md from "../../markdown/bitburner.port.gethandle.md?raw";
+import nsDoc_bitburner_port_getstdin_md from "../../markdown/bitburner.port.getstdin.md?raw";
 import nsDoc_bitburner_port_isempty_md from "../../markdown/bitburner.port.isempty.md?raw";
 import nsDoc_bitburner_port_isfull_md from "../../markdown/bitburner.port.isfull.md?raw";
 import nsDoc_bitburner_port_md from "../../markdown/bitburner.port.md?raw";
@@ -2706,7 +2706,6 @@ AllPages["nsDoc/bitburner.ns.getserverrequiredhackinglevel.md"] = nsDoc_bitburne
 AllPages["nsDoc/bitburner.ns.getserversecuritylevel.md"] = nsDoc_bitburner_ns_getserversecuritylevel_md;
 AllPages["nsDoc/bitburner.ns.getserverusedram.md"] = nsDoc_bitburner_ns_getserverusedram_md;
 AllPages["nsDoc/bitburner.ns.getsharepower.md"] = nsDoc_bitburner_ns_getsharepower_md;
-AllPages["nsDoc/bitburner.ns.getstdin.md"] = nsDoc_bitburner_ns_getstdin_md;
 AllPages["nsDoc/bitburner.ns.gettotalscriptexpgain.md"] = nsDoc_bitburner_ns_gettotalscriptexpgain_md;
 AllPages["nsDoc/bitburner.ns.gettotalscriptincome.md"] = nsDoc_bitburner_ns_gettotalscriptincome_md;
 AllPages["nsDoc/bitburner.ns.getweakentime.md"] = nsDoc_bitburner_ns_getweakentime_md;
@@ -2836,6 +2835,7 @@ AllPages["nsDoc/bitburner.playerbasetask.md"] = nsDoc_bitburner_playerbasetask_m
 AllPages["nsDoc/bitburner.playerrequirement.md"] = nsDoc_bitburner_playerrequirement_md;
 AllPages["nsDoc/bitburner.port.clear.md"] = nsDoc_bitburner_port_clear_md;
 AllPages["nsDoc/bitburner.port.gethandle.md"] = nsDoc_bitburner_port_gethandle_md;
+AllPages["nsDoc/bitburner.port.getstdin.md"] = nsDoc_bitburner_port_getstdin_md;
 AllPages["nsDoc/bitburner.port.isempty.md"] = nsDoc_bitburner_port_isempty_md;
 AllPages["nsDoc/bitburner.port.isfull.md"] = nsDoc_bitburner_port_isfull_md;
 AllPages["nsDoc/bitburner.port.md"] = nsDoc_bitburner_port_md;

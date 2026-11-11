@@ -152,7 +152,7 @@ describe("RedirectIOTests", () => {
     it("should provide stdin input to a running script", async () => {
       const scriptName = "inputScript.js";
       const scriptContent = `export async function main(ns) {
-          const stdIn = await ns.getStdin();
+          const stdIn = await ns.port.getStdin();
           if (stdIn?.empty()) {
             ns.tprint('No input received yet');
             await stdIn.nextWrite();
@@ -174,7 +174,7 @@ describe("RedirectIOTests", () => {
     it("should provide stdin input from a script to a running script", async () => {
       const scriptName = "inputScript.js";
       const scriptContent = `export async function main(ns) {
-          const stdIn = await ns.getStdin();
+          const stdIn = await ns.port.getStdin();
           if (stdIn?.empty()) {
             ns.tprint('No input received yet');
             await stdIn.nextWrite();

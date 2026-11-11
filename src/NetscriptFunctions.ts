@@ -1487,13 +1487,6 @@ export const ns: InternalAPI<NSFull> = {
     //Script **must** be a script at this point
     return compile(script as Script, server.scripts);
   },
-  getStdin: (ctx) => {
-    const stdin = ctx.workerScript.scriptRef.stdin;
-    if (!stdin) {
-      return null;
-    }
-    return stdin;
-  },
   flags: (ctx, ...args) => Flags(ctx, false)(...args),
   heart: { break: () => Player.karma },
   ...NetscriptExtra(),

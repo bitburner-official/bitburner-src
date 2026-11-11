@@ -177,7 +177,7 @@ describe("grep command", () => {
       GetServerOrThrow(Player.currentServer).writeToScriptFile(
         reader,
         `export async function main(ns) {
-          const stdin = ns.getStdin();
+          const stdin = ns.port.getStdin();
           const received = [];
           while (true) {
             if (stdin.empty()) await stdin.nextWrite();

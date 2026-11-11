@@ -126,13 +126,13 @@ You can also use it with `echo` to capture the PID:
 
 ### Piping into scripts
 
-When a script is part of a pipe chain, it can read any input piped into its `run` command using `ns.getStdin()`. The script receives anything the previous command wrote to its stdout.
+When a script is part of a pipe chain, it can read any input piped into its `run` command using `ns.port.getStdin()`. The script receives anything the previous command wrote to its stdout.
 
 ```
 [home /]> echo "input data" | run myScript.js
 ```
 
-Inside `myScript.js`, call `ns.getStdin()` to access the piped input.
+Inside `myScript.js`, call `ns.port.getStdin()` to access the piped input.
 
 ### Piping out of scripts
 
@@ -144,7 +144,7 @@ When a script is followed by a `|` or `>`, its `ns.tprint()` output is captured 
 
 ### Accessing stdin via script
 
-`ns.getStdin()` returns a port handle that contains any input piped into the script from the terminal, if the script is part of a pipe chain (or null otherwise). When this pipe is closed by an upstream process, a `null` value will be passed through the pipe as a flag indicating the pipe has been closed.
+`ns.port.getStdin()` returns a port handle that contains any input piped into the script from the terminal, if the script is part of a pipe chain (or null otherwise). When this pipe is closed by an upstream process, a `null` value will be passed through the pipe as a flag indicating the pipe has been closed.
 
 ```js
 /**
@@ -152,7 +152,7 @@ When a script is followed by a `|` or `>`, its `ns.tprint()` output is captured 
  * @param {NS} ns
  */
 export async function read(ns) {
-  const stdin = ns.getStdin();
+  const stdin = ns.port.getStdin();
   if (!stdin) {
     return null;
   }
@@ -165,12 +165,12 @@ export async function read(ns) {
 
 ### Creating your own command line utilities
 
-By using `ns.tprint()` as stdout and the read() function above or ns.getStdin() as stdin, custom terminal utilities can be written. For example, the below is a simple implementation of the `cut` Unix command using `read()` from the snippet above.
+By using `ns.tprint()` as stdout and the read() function above or ns.port.getStdin() as stdin, custom terminal utilities can be written. For example, the below is a simple implementation of the `cut` Unix command using `read()` from the snippet above.
 
 ```js
 /** @param {NS} ns */
 export async function main(ns) {
-  if (!ns.getStdin()) {
+  if (!ns.port.getStdin()) {
     ns.tprint("ERROR: No piped input given");
     return;
   }

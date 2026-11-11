@@ -1086,25 +1086,6 @@ Share only boosts faction work. It does not affect your passive reputation gain 
 </td></tr>
 <tr><td>
 
-[getStdin()](./bitburner.ns.getstdin.md)
-
-
-</td><td>
-
-Retrieves the NetscriptPort handle used to get input piped to the script. Examples:
-
-If a script was run with data piped into it via the terminal: `echo input1 | run myScript.js`
-
-then `ns.getStdin().read()` inside `myScript.js` would return `"input1"`<!-- -->.
-
-If more data is added later (for example, if one script's terminal is piped to another script), then the script can read that data from `ns.getStdin()` as well. `await ns.getStdin().nextWrite()` can be used to wait until new data is available to read.
-
-If the port is `.empty()` and you do not await `.nextWrite()`<!-- -->, then `read()` will return `"NULL PORT DATA"`<!-- -->. If the port is closed (when the script is done running), then `read()` will return `null`<!-- -->.
-
-
-</td></tr>
-<tr><td>
-
 [getTotalScriptExpGain()](./bitburner.ns.gettotalscriptexpgain.md)
 
 

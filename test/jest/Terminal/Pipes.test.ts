@@ -157,7 +157,7 @@ describe("Terminal Pipes", () => {
       await Terminal.executeCommands(commandString);
 
       const scriptName = "testScript.js" as ScriptFilePath;
-      const scriptContent = `export async function main(ns) { ns.tprint(ns.getStdin().read()); await ns.sleep(100); ns.tprint(ns.getStdin().read()); }`;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.port.getStdin().read()); await ns.sleep(100); ns.tprint(ns.port.getStdin().read()); }`;
 
       // Add script to server
       await Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
@@ -183,7 +183,7 @@ describe("Terminal Pipes", () => {
       await Terminal.executeCommands(commandString);
 
       const scriptName = "testScript.js" as ScriptFilePath;
-      const scriptContent = `export async function main(ns) { ns.tprint(ns.getStdin().read()); await ns.sleep(100); ns.tprint(ns.getStdin().read()); }`;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.port.getStdin().read()); await ns.sleep(100); ns.tprint(ns.port.getStdin().read()); }`;
 
       // Add script to server
       await Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
@@ -333,7 +333,7 @@ describe("Terminal Pipes", () => {
 
     it("should handle piping to a script file, and passing arguments into a script to run", async () => {
       const scriptName = "testScript2.js" as ScriptFilePath;
-      const scriptContent = `export function main(ns) { ns.tprint('Input received: ', ns.getStdin().peek()); }`;
+      const scriptContent = `export function main(ns) { ns.tprint('Input received: ', ns.port.getStdin().peek()); }`;
 
       // Add script to server
       await Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
@@ -353,7 +353,7 @@ describe("Terminal Pipes", () => {
     it("should piping content out of a script", async () => {
       const outputFileName = "scriptOutput4.txt" as TextFilePath;
       const scriptName = "testScript.js" as ScriptFilePath;
-      const scriptContent = `export async function main(ns) { ns.tprint('Input received: ', ns.getStdin().peek()); }`;
+      const scriptContent = `export async function main(ns) { ns.tprint('Input received: ', ns.port.getStdin().peek()); }`;
 
       // Add script to server
       await Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
@@ -427,8 +427,8 @@ describe("Terminal Pipes", () => {
 
       const scriptName = "testScript.js" as ScriptFilePath;
       const scriptName2 = "testScript2.js" as ScriptFilePath;
-      const scriptContent = `export async function main(ns) { ns.tprint(ns.getStdin().peek()); await ns.sleep(80); ns.tprint(ns.getStdin().peek()); }`;
-      const scriptContent2 = `export async function main(ns) { ns.tprint(ns.getStdin().read()); await ns.sleep(200); ns.tprint(ns.getStdin().read()); ns.tprint(ns.getStdin().read()); }`;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.port.getStdin().peek()); await ns.sleep(80); ns.tprint(ns.port.getStdin().peek()); }`;
+      const scriptContent2 = `export async function main(ns) { ns.tprint(ns.port.getStdin().read()); await ns.sleep(200); ns.tprint(ns.port.getStdin().read()); ns.tprint(ns.port.getStdin().read()); }`;
 
       // Add script to server
       await Terminal.executeCommands(
@@ -456,8 +456,8 @@ describe("Terminal Pipes", () => {
       const scriptName2 = "testScript2.js" as ScriptFilePath;
       const scriptName3 = "testScript3.js" as ScriptFilePath;
       const scriptName4 = "testScript4.js" as ScriptFilePath;
-      const scriptContent = `export async function main(ns) { ns.tprint(ns.getStdin().peek()); await ns.sleep(80); ns.tprint(ns.getStdin().peek()); }`;
-      const scriptContent2 = `export async function main(ns) { ns.tprint(ns.getStdin().read()); await ns.sleep(200); ns.tprint(ns.getStdin().read()); ns.tprint(ns.getStdin().read()); }`;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.port.getStdin().peek()); await ns.sleep(80); ns.tprint(ns.port.getStdin().peek()); }`;
+      const scriptContent2 = `export async function main(ns) { ns.tprint(ns.port.getStdin().read()); await ns.sleep(200); ns.tprint(ns.port.getStdin().read()); ns.tprint(ns.port.getStdin().read()); }`;
 
       // Add script to server
       await Terminal.executeCommands(
@@ -629,7 +629,7 @@ describe("Terminal Pipes", () => {
     it("should write both tprint chunks to a script file across a single > redirect when the file does not yet exist", async () => {
       const scriptName = "testScript.js" as ScriptFilePath;
       const outputScriptName = "freshOutput.js" as ScriptFilePath;
-      const scriptContent = `export async function main(ns) { ns.tprint(ns.getStdin().read()); await ns.sleep(100); ns.tprint(ns.getStdin().read()); }`;
+      const scriptContent = `export async function main(ns) { ns.tprint(ns.port.getStdin().read()); await ns.sleep(100); ns.tprint(ns.port.getStdin().read()); }`;
       await Terminal.executeCommands(`echo '${scriptContent}' > ${scriptName}`);
 
       // Confirm the output file does not exist before the run.
@@ -644,7 +644,7 @@ describe("Terminal Pipes", () => {
 
     describe("closing stdout so a downstream script sees end of input", () => {
       const readerScript = `export async function main(ns) {
-        const stdin = ns.getStdin();
+        const stdin = ns.port.getStdin();
         const received = [];
         while (true) {
           if (stdin.empty()) await stdin.nextWrite();

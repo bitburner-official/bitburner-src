@@ -237,6 +237,7 @@ const cloud = {
 // Port API
 const port = {
   getHandle: 0,
+  getStdin: 0,
   isEmpty: 0,
   isFull: 0,
   peek: 0,
@@ -690,7 +691,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   tprintRaw: 0,
   printRaw: 0,
   dynamicImport: 0,
-  getStdin: 0,
 
   formulas: {
     mockServer: 0,

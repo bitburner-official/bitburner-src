@@ -8,6 +8,7 @@ export function NetscriptPort(): InternalAPI<IPort> {
       const portHandle = helpers.portHandle(ctx, _portNumber);
       return portHandle;
     },
+    getStdin: (ctx) => ctx.workerScript.scriptRef.stdin,
     isEmpty: (ctx, _portNumber) => {
       const portHandle = helpers.portHandle(ctx, _portNumber);
       return portHandle.empty();
