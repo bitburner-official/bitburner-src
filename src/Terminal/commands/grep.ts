@@ -373,8 +373,7 @@ function grabTerminal(): string[] {
 }
 
 export function grep(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): Promise<void> | undefined {
-  const stdin = stdIO.stdin?.deref();
-  const noStdinProvided = !stdin || (stdin.isClosed && stdin.empty());
+  const noStdinProvided = stdIO.isExhausted();
   if (!args.length && noStdinProvided) return Terminal.fatal(ERR.noArgs, stdIO);
 
   const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();
@@ -405,15 +404,16 @@ export function grep(args: (string | number | boolean)[], server: BaseServer, st
   const fileContent: DataToSearch[] = options.isSearchAll
     ? getServerFiles(server)
     : getDataToGrep(otherArgs.slice(1), server, ""); // stdin is handled below
+  let pattern: string | RegExp;
   try {
-    applyFilters(options, params, otherArgs, fileContent, outFilePath, server, stdIO);
+    pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
+    applyFilters(options, params, pattern, nContext, nLimit, fileContent, outFilePath, server, stdIO);
   } catch (error) {
     console.error(error);
     return Terminal.fatal(`grep processing error: ${error}`, stdIO);
   }
 
   // Stdin can arrive in chunks while a script runs, so line numbers, the -m count and context lines carry over
-  const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
   let lineOffset = 0;
   let matchCount = 0;
   let carry: ParsedLine[] = [];
@@ -438,23 +438,16 @@ export function grep(args: (string | number | boolean)[], server: BaseServer, st
 function applyFilters(
   options: Options,
   params: Parameters,
-  otherArgs: string[],
+  pattern: string | RegExp,
+  nContext: number,
+  nLimit: number,
   fileContent: DataToSearch[],
   outFilePath: ContentFilePath | null,
   server: BaseServer,
   stdIO: StdIO,
 ) {
-  const nContext = Math.max(Number(params.preContext), Number(params.context), Number(params.postContext));
-  const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
   const results = new Results(getContentToMatch(pattern, options, fileContent), options, params);
-  writeResults(
-    results.capMatches(Number(params.maxMatches)).addContext(nContext),
-    fileContent,
-    pattern,
-    outFilePath,
-    server,
-    stdIO,
-  );
+  writeResults(results.capMatches(nLimit).addContext(nContext), fileContent, pattern, outFilePath, server, stdIO);
 }
 
 function writeResults(

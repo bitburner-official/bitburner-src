@@ -6,7 +6,7 @@ import {
   parseRedirectedCommands,
 } from "../../../src/Terminal/StdIO/RedirectIO";
 import { Terminal } from "../../../src/Terminal";
-import { fixDoImportIssue, initGameEnvironment } from "../Utilities";
+import { fixDoImportIssue, initGameEnvironment, waitForScripts } from "../Utilities";
 import { GetServer, prestigeAllServers } from "../../../src/Server/AllServers";
 import { Player } from "@player";
 import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
@@ -17,8 +17,6 @@ import { Directory, root } from "../../../src/Paths/Directory";
 import { Output } from "../../../src/Terminal/OutputTypes";
 import { ANSI_ESCAPE } from "../../../src/ui/React/ANSIITypography";
 import { getOutput } from "./Pipes.test";
-
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 fixDoImportIssue();
 initGameEnvironment();
@@ -32,11 +30,10 @@ describe("RedirectIOTests", () => {
     GetServer(Player.currentServer)?.scripts.clear();
   });
 
-  it("should redirect output to the terminal correctly from a terminal StdIO", async () => {
+  it("should redirect output to the terminal correctly from a terminal StdIO", () => {
     const data = "Hello, Terminal!";
     const terminalIO = getTerminalStdIO();
     terminalIO.write(data);
-    await sleep(50);
 
     expect(Terminal.outputHistory.length).toBe(1);
     expect(getOutput(Terminal.outputHistory, 0).text).toContain(data);
@@ -59,7 +56,6 @@ describe("RedirectIOTests", () => {
       const commandString = "echo Hello, World";
       const stdIO = new StdIO(null);
       await handleCommand(stdIO, commandString.split(" "));
-      await sleep(50);
 
       expect(stdIO.stdout?.empty()).toBe(false);
       const output = stdIO.stdout?.read();
@@ -71,11 +67,14 @@ describe("RedirectIOTests", () => {
       const commandString = `> ${filename}`;
       const stdin = new IOStream();
       const stdIO = new StdIO(stdin);
-      void handleCommand(stdIO, commandString.split(" "));
+      const stage = handleCommand(stdIO, commandString.split(" "));
       stdin.write("File content line 1");
       stdin.write("File content line 2");
+      stdin.close();
 
-      await sleep(50);
+      await (
+        await stage
+      ).done;
       const server = GetServer(Player.currentServer);
       const file = server?.textFiles.get(filename as TextFilePath);
       expect(file).toBeDefined();
@@ -140,7 +139,7 @@ describe("RedirectIOTests", () => {
       expect(script?.content).toBe(scriptContent);
 
       await Terminal.executeCommands(`run ${scriptName} >> ${filename}`);
-      await sleep(50);
+      await waitForScripts();
 
       const server = GetServer(Player.currentServer);
       const file = server?.textFiles.get(filename as TextFilePath);
@@ -164,7 +163,7 @@ describe("RedirectIOTests", () => {
 
       const inputData = "Hello from stdin!";
       await Terminal.executeCommands(`echo "${inputData}" | run ${scriptName}`);
-      await sleep(50);
+      await waitForScripts();
 
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
       const outputText: Output | undefined = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));
@@ -186,7 +185,7 @@ describe("RedirectIOTests", () => {
 
       const inputData = "Hello from stdin!";
       await Terminal.executeCommands(`echo "${inputData}" | ${scriptName} | run ${scriptName}`);
-      await sleep(50);
+      await waitForScripts();
 
       const outputLog: Output[] = Terminal.outputHistory.filter(isOutput);
       const outputText: Output | undefined = outputLog.find((entry: Output) => entry.text?.includes("Received input:"));

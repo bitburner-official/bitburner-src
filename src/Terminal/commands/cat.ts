@@ -14,8 +14,7 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO): Promise<void> | undefined {
   const initialStdIn = stdIO.getAllCurrentStdin(false);
-  const stdin = stdIO.stdin?.deref();
-  const stdinIsClosed = !stdin || (stdin.isClosed && stdin.empty());
+  const stdinIsClosed = stdIO.isExhausted();
   const hasStdOut = !!stdIO.stdout;
 
   if (args.length === 0 && initialStdIn.length === 0 && stdinIsClosed) {
@@ -44,7 +43,7 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
   }
 }
 
-export function concatenateFileContents(
+function concatenateFileContents(
   filenames: (string | number | boolean)[],
   server: BaseServer,
   initialStdin: string,

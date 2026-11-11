@@ -1,4 +1,4 @@
-## Introduction to Terminal Pipes and Redirects
+# Terminal Pipes and Redirects
 
 ### What is a pipe?
 
@@ -92,13 +92,13 @@ Pipes can be chained across multiple commands:
 
 ### Input redirect: `<`
 
-Reads a file and provides its contents as stdin to a command. This can only be used as the **first** command in a pipe chain.
+Reads a file and provides its contents as stdin to a command. This can only be used right after **first** command in a pipe chain.
 
 ```
 [home /]> grep "error" < myfile.txt
 ```
 
-If you try to use `<` anywhere other than the first position, you will get an error.
+If you try to use `<` anywhere other than right after the first command, you will get an error.
 
 ### Semicolons: `;`
 
@@ -176,7 +176,7 @@ export async function main(ns) {
   }
 
   // The '-c' flag expects a range of characters like 2-4
-  // Other flags, such as '-b' bytes and '-d' delimeter, are left as an excercise for the reader
+  // Other flags, such as '-b' bytes and '-d' delimiter, are left as an exercise for the reader
   const flags = ns.flags([["c", "0"]]);
   const charCountRange = flags.c.split("-");
   const startCharCount = Number(charCountRange[0]?.trim());
@@ -207,6 +207,7 @@ Bitburner's terminal supports a useful subset of Unix pipes and redirects, but i
 
 The following common Unix features are **not supported**:
 
+- **stderr** - Errors are written to the terminal (stdout), there is no separate error data stream.
 - **Multi-line command processing** — Unlike Unix, commands in Bitburner do not support commands wrapping multiple lines.
 - **Here-documents (`<< EOF`)** — There is no way to provide multi-line string literals as stdin inline in the terminal.
 - **Here-strings (`<<<`)** — The `<<<` operator for passing a single string directly to stdin is not supported.

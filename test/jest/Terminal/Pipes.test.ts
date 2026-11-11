@@ -1,11 +1,12 @@
 import { Terminal } from "../../../src/Terminal";
+import { TerminalCommands } from "../../../src/Terminal/Terminal";
 import { AddToAllServers, GetServer, GetServerOrThrow, prestigeAllServers } from "../../../src/Server/AllServers";
 import { Server } from "../../../src/Server/Server";
 import { Player } from "@player";
 import { type TextFilePath } from "../../../src/Paths/TextFilePath";
 import { type ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { CompletedProgramName, LiteratureName, MessageFilename } from "@enums";
-import { fixDoImportIssue, initGameEnvironment } from "../Utilities";
+import { fixDoImportIssue, initGameEnvironment, waitForScripts } from "../Utilities";
 import { runScript } from "../../../src/Terminal/commands/runScript";
 import { getTerminalStdIO } from "../../../src/Terminal/StdIO/RedirectIO";
 import { StdIO } from "../../../src/Terminal/StdIO/StdIO";
@@ -14,8 +15,13 @@ import { stringify } from "../../../src/Terminal/StdIO/utils";
 import { ITutorial, iTutorialSteps } from "../../../src/InteractiveTutorial";
 import { Link, Output, RawOutput } from "../../../src/Terminal/OutputTypes";
 import { PromptEvent } from "../../../src/ui/React/PromptManager";
+import { TerminalEvents } from "../../../src/Terminal/TerminalEvents";
+import { workerScripts } from "../../../src/Netscript/WorkerScripts";
+import type { TerminalAction } from "../../../src/Terminal/TerminalAction";
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+function findRunningScript(filename: string) {
+  return [...workerScripts.values()].find((ws) => ws.name === filename)?.scriptRef;
+}
 
 fixDoImportIssue();
 initGameEnvironment();
@@ -139,7 +145,7 @@ describe("Terminal Pipes", () => {
       // Pass arguments to script via pipe
       const command = `run ${scriptName} test1 > ${outputFileName}`;
       await Terminal.executeCommands(command);
-      await sleep(200);
+      await waitForScripts();
 
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
@@ -165,7 +171,7 @@ describe("Terminal Pipes", () => {
       // Pass arguments to script via pipe
       const command = `echo test1 test2 | ${scriptName} > ${outputFileName}`;
       await Terminal.executeCommands(command);
-      await sleep(200);
+      await waitForScripts();
 
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
@@ -191,7 +197,7 @@ describe("Terminal Pipes", () => {
       // Pass arguments to script via pipe
       const command = `echo test1 test2 | ${scriptName} > ${outputFileName}`;
       await Terminal.executeCommands(command);
-      await sleep(200);
+      await waitForScripts();
 
       const server = GetServer(Player.currentServer);
       const fileContent = server?.scripts?.get(outputFileName)?.content;
@@ -223,7 +229,6 @@ describe("Terminal Pipes", () => {
       await Terminal.executeCommands("echo 1337 > file1.txt");
       const command = "cat file1.txt > file2.txt";
       await Terminal.executeCommands(command);
-      await sleep(100);
 
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get("file2.txt" as TextFilePath)?.text;
@@ -284,7 +289,7 @@ describe("Terminal Pipes", () => {
       server.writeToScriptFile(scriptName, `export function main(ns) { ns.tprint(JSON.stringify(ns.args)); }`);
 
       await Terminal.executeCommands(`./${scriptName} a 1`);
-      await sleep(100);
+      await waitForScripts();
 
       expect(getOutput(Terminal.outputHistory, -1).text).toBe(`${scriptName}: ["a",1]`);
     });
@@ -298,7 +303,7 @@ describe("Terminal Pipes", () => {
         server.writeToScriptFile(scriptName, `export function main(ns) { ns.tprint(JSON.stringify(ns.args)); }`);
 
         await Terminal.executeCommands(`${scriptPath} a 1 > ${fileName}`);
-        await sleep(100);
+        await waitForScripts();
 
         expect(server.textFiles.get(fileName)?.text).toBe(`${scriptName}: ["a",1]`);
       },
@@ -311,7 +316,7 @@ describe("Terminal Pipes", () => {
       server.writeToScriptFile(scriptName, `export function main(ns) { ns.tprint("found it"); ns.tprint("skip"); }`);
 
       await Terminal.executeCommands(`./${scriptName} | grep found > ${fileName}`);
-      await sleep(100);
+      await waitForScripts();
 
       expect(server.textFiles.get(fileName)?.text).toBe(`${scriptName}: found it`);
     });
@@ -326,7 +331,7 @@ describe("Terminal Pipes", () => {
       );
 
       await Terminal.executeCommands(`run ${scriptName} "007" true 'say "hi" now' | grep x`);
-      await sleep(100);
+      await waitForScripts();
 
       expect(JSON.parse(server.textFiles.get(argsFile)?.text ?? "null")).toEqual(["007", true, 'say "hi" now']);
     });
@@ -344,7 +349,7 @@ describe("Terminal Pipes", () => {
       // Pass arguments to script via pipe
       const command = `echo 'data' | run ${scriptName}`;
       await Terminal.executeCommands(command);
-      await sleep(100);
+      await waitForScripts();
 
       expect(getOutput(Terminal.outputHistory, 0)?.text).toContain(`Running script with 1 thread`);
       expect(getOutput(Terminal.outputHistory, 1)?.text).toEqual(`${scriptName}: Input received: data`);
@@ -364,7 +369,7 @@ describe("Terminal Pipes", () => {
       // Pass arguments to script via pipe
       const command = `echo 'data' | ${scriptName} > ${outputFileName}`;
       await Terminal.executeCommands(command);
-      await sleep(200);
+      await waitForScripts();
 
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
@@ -387,7 +392,7 @@ describe("Terminal Pipes", () => {
       // Pass arguments to script via pipe
       const command = `run ${scriptName} test1 arguments > ${outputFileName}`;
       await Terminal.executeCommands(command);
-      await sleep(200);
+      await waitForScripts();
 
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
@@ -410,7 +415,7 @@ describe("Terminal Pipes", () => {
       // Pass arguments to script via pipe
       const command = `run ${scriptName} test1 test2 > ${outputFileName}; run ${scriptName} test3 test4 > ${outputFileName2}`;
       await Terminal.executeCommands(command);
-      await sleep(300);
+      await waitForScripts();
 
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
@@ -438,7 +443,7 @@ describe("Terminal Pipes", () => {
       // Pass arguments to script via pipe
       const command = `echo 1 | ${scriptName} | ${scriptName2} > ${outputFileName}`;
       await Terminal.executeCommands(command);
-      await sleep(300);
+      await waitForScripts();
 
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
@@ -468,7 +473,7 @@ describe("Terminal Pipes", () => {
       // Pass arguments to script via pipe
       const command = `echo 1 | ${scriptName} | ${scriptName2} > ${outputFileName}; echo 2 | ${scriptName3} | ${scriptName4} > ${outputFileName2}`;
       await Terminal.executeCommands(command);
-      await sleep(300);
+      await waitForScripts();
 
       const server = GetServer(Player.currentServer);
       const fileContent = server?.textFiles?.get(outputFileName)?.text;
@@ -519,7 +524,6 @@ describe("Terminal Pipes", () => {
     const testContent = "This is a test.";
     const commandString = `echo "${testContent}" | cat`;
     await Terminal.executeCommands(commandString);
-    await sleep(50);
 
     expect(Terminal.outputHistory.length).toBe(1);
     expect(getOutput(Terminal.outputHistory, 0).text).toContain(testContent);
@@ -532,16 +536,14 @@ describe("Terminal Pipes", () => {
 
     // Add script to server
     await Terminal.executeCommands(`echo "${scriptContent}" > ${scriptName}`);
-    await sleep(50);
 
     // Run the script to set PipeState.pidOfLastScriptRun
     const runningScript = runScript(scriptName, [], server, getTerminalStdIO());
     const expectedPid = runningScript?.pid;
-    await sleep(200);
+    await waitForScripts();
 
     const command = `echo $! > pidOutput.txt`;
     await Terminal.executeCommands(command);
-    await sleep(50);
     const fileContent = server?.textFiles?.get("pidOutput.txt" as TextFilePath)?.text;
 
     expect(Number(fileContent)).toBe(expectedPid);
@@ -559,7 +561,7 @@ describe("Terminal Pipes", () => {
     expect(fileContent).toBe(scriptContent);
 
     await Terminal.executeCommands(`run ${scriptName}; tail $! > ${tailOutputFileName}`);
-    await sleep(200);
+    await waitForScripts();
 
     const outputFileContent = GetServer(Player.currentServer)?.textFiles?.get(tailOutputFileName)?.text;
     expect(outputFileContent).toContain("foo\nsleep: Sleeping for 0.050 seconds.\ntest2");
@@ -577,7 +579,7 @@ describe("Terminal Pipes", () => {
     expect(fileContent).toBe(scriptContent);
 
     await Terminal.executeCommands(`run ${scriptName}; tail ${scriptName} > ${tailOutputFileName}`);
-    await sleep(200);
+    await waitForScripts();
 
     const outputFileContent = GetServer(Player.currentServer)?.textFiles?.get(tailOutputFileName)?.text;
     expect(outputFileContent).toContain("foo\nsleep: Sleeping for 0.050 seconds.\ntest2");
@@ -587,7 +589,6 @@ describe("Terminal Pipes", () => {
     it("should create an empty file when grep finds no matches in piped input", async () => {
       const fileName = "noMatch.txt" as TextFilePath;
       await Terminal.executeCommands(`echo 'hello world' | grep 'missing' > ${fileName}`);
-      await sleep(100);
 
       const file = GetServer(Player.currentServer)?.textFiles?.get(fileName);
       expect(file).toBeDefined();
@@ -597,7 +598,6 @@ describe("Terminal Pipes", () => {
     it("should drain the pipeline and continue past a grep with no matches", async () => {
       const fileName = "afterGrep.txt" as TextFilePath;
       await Terminal.executeCommands(`echo 'hello world' | grep 'missing'; echo 'after' > ${fileName}`);
-      await sleep(100);
 
       const file = GetServer(Player.currentServer)?.textFiles?.get(fileName);
       expect(file?.text).toBe("after");
@@ -636,7 +636,7 @@ describe("Terminal Pipes", () => {
       expect(GetServer(Player.currentServer)?.scripts?.get(outputScriptName)).toBeUndefined();
 
       await Terminal.executeCommands(`echo first second | ${scriptName} > ${outputScriptName}`);
-      await sleep(200);
+      await waitForScripts();
 
       const fileContent = GetServer(Player.currentServer)?.scripts?.get(outputScriptName)?.content;
       expect(fileContent).toContain(`${scriptName}: first second\n${scriptName}: null`);
@@ -671,9 +671,7 @@ describe("Terminal Pipes", () => {
       ])("%s", async (command, expected) => {
         const server = GetServerOrThrow(Player.currentServer);
         await Terminal.executeCommands(command);
-        for (let i = 0; i < 50 && !server.textFiles.get("eof.txt" as TextFilePath); i++) {
-          await sleep(20);
-        }
+        await waitForScripts();
 
         expect(JSON.parse(server.textFiles.get("eof.txt" as TextFilePath)?.text ?? "null")).toEqual(expected);
       });
@@ -682,30 +680,30 @@ describe("Terminal Pipes", () => {
         const server = GetServerOrThrow(Player.currentServer);
         server.writeToScriptFile(
           "long.js" as ScriptFilePath,
-          `export async function main(ns) { ns.print("first"); await ns.sleep(10000); }`,
+          `export async function main(ns) { await ns.sleep(10000); }`,
         );
 
         await Terminal.executeCommands("run long.js; tail long.js | run reader.js");
-        await sleep(50);
-        expect(server.textFiles.get("eof.txt" as TextFilePath)).toBeUndefined();
+        const readerStdin = findRunningScript("reader.js")?.stdin;
+        expect(readerStdin?.isClosed).toBe(false);
+        // Logged directly, so it reaches the first tail regardless of when long.js starts running
+        findRunningScript("long.js")?.log("first");
 
         await Terminal.executeCommands("tail long.js > second.txt");
-        for (let i = 0; i < 50 && !server.textFiles.get("eof.txt" as TextFilePath); i++) {
-          await sleep(20);
-        }
+        expect(readerStdin?.isClosed).toBe(true);
+        await waitForScripts("reader.js");
         await Terminal.executeCommands("kill long.js");
 
         expect(JSON.parse(server.textFiles.get("eof.txt" as TextFilePath)?.text ?? "null")).toContain("first");
       });
 
       describe("rm with a confirmation prompt", () => {
-        let answerPrompt: ((value: boolean) => void) | undefined;
+        let promptShown: Promise<(value: boolean) => void>;
         let unsubscribe: () => void;
 
         beforeEach(() => {
-          answerPrompt = undefined;
-          unsubscribe = PromptEvent.subscribe((prompt) => {
-            answerPrompt = prompt.resolve;
+          promptShown = new Promise((resolve) => {
+            unsubscribe = PromptEvent.subscribe((prompt) => resolve(prompt.resolve));
           });
           const server = GetServerOrThrow(Player.currentServer);
           server.writeToTextFile("a.txt" as TextFilePath, "a");
@@ -717,12 +715,11 @@ describe("Terminal Pipes", () => {
         it("should write its result to the pipe once the prompt is confirmed", async () => {
           const server = GetServerOrThrow(Player.currentServer);
           const commands = Terminal.executeCommands("rm a.txt b.txt | grep Deleted > rm.txt; echo after > after.txt");
-          await sleep(20);
-          expect(answerPrompt).toBeDefined();
+          const answerPrompt = await promptShown;
           // The rest of the ; chain waits for the prompt
           expect(server.textFiles.get("after.txt" as TextFilePath)).toBeUndefined();
 
-          answerPrompt?.(true);
+          answerPrompt(true);
           await commands;
 
           expect(server.textFiles.get("after.txt" as TextFilePath)?.text).toBe("after");
@@ -733,13 +730,9 @@ describe("Terminal Pipes", () => {
         it("should close the pipe without deleting anything when the prompt is declined", async () => {
           const server = GetServerOrThrow(Player.currentServer);
           const commands = Terminal.executeCommands("rm a.txt b.txt | run reader.js");
-          await sleep(20);
-
-          answerPrompt?.(false);
+          (await promptShown)(false);
           await commands;
-          for (let i = 0; i < 50 && !server.textFiles.get("eof.txt" as TextFilePath); i++) {
-            await sleep(20);
-          }
+          await waitForScripts();
 
           expect(server.textFiles.has("a.txt" as TextFilePath)).toBe(true);
           expect(JSON.parse(server.textFiles.get("eof.txt" as TextFilePath)?.text ?? "null")).toEqual([]);
@@ -838,6 +831,42 @@ describe("Terminal Pipes", () => {
   });
 
   describe("cancellation", () => {
+    it("an action that ignores Ctrl-C does not clear the next action when it finishes", async () => {
+      // Like upload, whose cancel() does nothing
+      const startAction = (name: string, onCancel: () => void) => {
+        let finish = () => {};
+        const finished = new Promise<void>((resolve) => (finish = resolve));
+        let action: TerminalAction | undefined;
+        TerminalCommands[name] = (_args, _server, stdIO) =>
+          (action = { cancel: onCancel, finished, getProgressText: () => "", stdIO });
+        const commands = Terminal.executeCommands(name);
+        return { commands, finish, action: () => action };
+      };
+      let secondCancelled = false;
+      try {
+        const first = startAction("ignorescancel", () => {});
+        expect(Terminal.action).toBe(first.action());
+        Terminal.cancelAction();
+        expect(Terminal.action).toBeNull();
+
+        const second = startAction("secondaction", () => (secondCancelled = true));
+        expect(Terminal.action).toBe(second.action());
+
+        first.finish();
+        await first.commands;
+
+        expect(Terminal.action).toBe(second.action());
+        expect(secondCancelled).toBe(false);
+
+        second.finish();
+        await second.commands;
+        expect(Terminal.action).toBeNull();
+      } finally {
+        delete TerminalCommands.ignorescancel;
+        delete TerminalCommands.secondaction;
+      }
+    });
+
     it("cancelAction closes the running action's stdIO", () => {
       const stdin = new IOStream();
       const stdIO = new StdIO(stdin);
@@ -895,10 +924,15 @@ describe("Terminal Pipes", () => {
       "Ctrl-C during '%s' stops the rest of the ; chain",
       async (command) => {
         const fileName = "afterCancel.txt" as TextFilePath;
+        const actionStarted = new Promise<void>((resolve) => {
+          const unsubscribe = TerminalEvents.subscribe(() => {
+            if (!Terminal.action) return;
+            unsubscribe();
+            resolve();
+          });
+        });
         const commands = Terminal.executeCommands(`${command}; echo after > ${fileName}`);
-        for (let i = 0; i < 50 && !Terminal.action; i++) {
-          await sleep(10);
-        }
+        await actionStarted;
         expect(Terminal.action).not.toBeNull();
 
         Terminal.cancelAction();

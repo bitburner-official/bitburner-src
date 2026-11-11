@@ -10,6 +10,7 @@ import { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { Script } from "../../../src/Script/Script";
 import { stringify } from "../../../src/Terminal/StdIO/utils";
 import { getOutput } from "./Pipes.test";
+import { waitForScripts } from "../Utilities";
 
 const fileName = "example.txt" as TextFilePath;
 const fileName2 = "example2.txt" as TextFilePath;
@@ -125,7 +126,6 @@ describe("grep command", () => {
   });
 
   describe("on stdin that arrives line by line from a running script", () => {
-    const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
     const logger = "logger.js" as ScriptFilePath;
     const outFile = "out.txt" as TextFilePath;
     const loggerContent = `export async function main(ns) {
@@ -140,9 +140,9 @@ describe("grep command", () => {
       GetServerOrThrow(Player.currentServer).writeToScriptFile(logger, loggerContent);
     });
 
-    async function runAndReadOutFile(command: string): Promise<string | undefined> {
+    async function runAndReadOutFile(command: string, waitFor?: ScriptFilePath): Promise<string | undefined> {
       await Terminal.executeCommands(command);
-      await sleep(300);
+      await waitForScripts(waitFor);
       return GetServerOrThrow(Player.currentServer).textFiles.get(outFile)?.text;
     }
 
@@ -190,7 +190,10 @@ describe("grep command", () => {
       );
 
       // The logger keeps running for 5 seconds after its last line, so the reader only finishes if grep closes
-      expect(await runAndReadOutFile(`run ${logger} 5000 | grep -m 1 err | run ${reader}`)).toBe("logger.js: err one");
+      expect(await runAndReadOutFile(`run ${logger} 5000 | grep -m 1 err | run ${reader}`, reader)).toBe(
+        "logger.js: err one",
+      );
+      await Terminal.executeCommands(`kill ${logger}`);
     });
   });
 });

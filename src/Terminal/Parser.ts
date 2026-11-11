@@ -41,7 +41,7 @@ export function parseCommand(command: string, parseArgs = true): (string | numbe
 
 export function applyLastPidVariables(
   command: (string | number | boolean)[],
-  pid: number | null,
+  pid: number,
 ): (string | number | boolean)[] {
-  return command.map((c) => (c === "$!" ? pid ?? -1 : c));
+  return command.map((c) => (c === "$!" ? pid : c));
 }

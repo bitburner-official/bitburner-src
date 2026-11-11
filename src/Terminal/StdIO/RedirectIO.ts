@@ -70,7 +70,7 @@ export function closeWhenSettled(stdIO: StdIO, work: Promise<void> | undefined):
     .finally(() => stdIO.close());
 }
 
-export function buildStdIOChain(length: number, initialStdIO: StdIO | null = null): StdIO[] {
+function buildStdIOChain(length: number, initialStdIO: StdIO | null = null): StdIO[] {
   const stdIOs: StdIO[] = [];
   let priorStdIO = initialStdIO;
 
@@ -172,8 +172,7 @@ function writeToContentFile(filename: string, pipeType: string, stdIO: StdIO): P
 /** Calls back with each item read from stdin, resolving once stdin ends. Closing stdout is left to the caller. */
 export async function callOnRead(stdIO: StdIO, callback: (data: unknown, stdIO: StdIO) => Promise<void> | void) {
   for await (const data of stdIO.read()) {
-    const streamIsCleared = stdIO.stdin?.deref()?.isClosed && stdIO.stdin?.deref()?.empty();
-    if (data === null || streamIsCleared) {
+    if (data === null || stdIO.isExhausted()) {
       return;
     }
     await callback(data, stdIO);

@@ -19,15 +19,20 @@ export class StdIO {
   // Async iterator to read from stdin
   async *[Symbol.asyncIterator]() {
     const stdin = this.stdin?.deref();
-    if (!stdin || (stdin.isClosed && stdin.empty())) {
+    if (!stdin) {
       return;
     }
-    while (!stdin.isClosed || !stdin.empty()) {
-      if (stdin.empty() && !stdin.isClosed) {
+    while (!stdin.isExhausted) {
+      if (stdin.empty()) {
         await stdin.nextWrite();
       }
       yield stdin.read();
     }
+  }
+
+  /** True when there is no stdin, or it has closed and everything written to it has been read */
+  isExhausted(): boolean {
+    return this.stdin?.deref()?.isExhausted ?? true;
   }
 
   // Read from stdin via the async iterator

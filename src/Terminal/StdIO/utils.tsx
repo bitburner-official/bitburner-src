@@ -16,7 +16,7 @@ export const PipeSymbols = {
 } as const;
 
 export function isPipeSymbol(symbol: string | number | boolean): boolean {
-  return Object.keys(PipeSymbols).some((key) => PipeSymbols[key as keyof typeof PipeSymbols] === symbol);
+  return Object.values(PipeSymbols).some((pipeSymbol) => pipeSymbol === symbol);
 }
 
 export function stringify(s: unknown, stripAnsiEscape = false): string {
@@ -67,7 +67,7 @@ function clean(str: string, stripAnsiEscape: boolean) {
 }
 
 let nextStdinPort = -1;
-export function getNextStdinHandle(): PortHandle {
+export function allocateStdInHandle(): PortHandle {
   // port numbers for pipes are negative numbers to avoid collisions with standard player ns ports
   return new PortHandle(nextStdinPort-- as PortNumber);
 }

@@ -75,9 +75,7 @@ function handleTail(script: RunningScript, stdIO: StdIO): RunningScript | undefi
 
   script.tailStdOut?.close();
   script.tailStdOut = stdIO;
-  script.logs.forEach((log) => {
-    script.tailStdOut?.write?.(log);
-  });
+  for (const log of script.logs) stdIO.write(log);
   return script;
 }
 

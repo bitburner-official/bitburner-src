@@ -329,7 +329,7 @@ export class Terminal {
 
   cancelAction(): void {
     this.action?.cancel();
-    this.action?.stdIO?.close();
+    this.action?.stdIO.close();
     this.action = null;
   }
 
@@ -351,15 +351,15 @@ export class Terminal {
       this.fatal(`Cannot execute command (${command}) while an action is in progress`, stdIO);
       return { done: Promise.resolve(), ownedByScript: false };
     }
+    let action: TerminalAction | null = null;
     try {
       const result = this.startCommand(command, stdIO);
       if (result instanceof RunningScript) return { done: Promise.resolve(), ownedByScript: true };
       if (result instanceof Promise) return { done: closeWhenSettled(stdIO, result), ownedByScript: false };
       if (result) {
-        this.action = result;
+        action = this.action = result;
         TerminalEvents.emit();
         await result.finished;
-        this.action = null;
       }
       stdIO.close();
       return { done: Promise.resolve(), ownedByScript: false };
@@ -367,7 +367,8 @@ export class Terminal {
       stdIO.close();
       throw ex;
     } finally {
-      this.cancelAction();
+      // Ctrl-C frees the terminal before an action that ignores cancellation finishes, so only clear our own action
+      if (action && this.action === action) this.cancelAction();
       TerminalEvents.emit();
     }
   }

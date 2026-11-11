@@ -4290,23 +4290,37 @@ export interface Port {
   getHandle(portNumber: number): NetscriptPort;
 
   /**
-   * Retrieves the NetscriptPort handle used to get input piped to the script.
-   * Examples:
-   *
-   * If a script was run with data piped into it via the terminal:
-   * `echo input1 | run myScript.js`
-   *
-   * then `ns.port.getStdin().read()` inside `myScript.js` would return `"input1"`.
-   *
-   * If more data is added later (for example, if one script's terminal is piped to another script),
-   * then the script can read that data from `ns.port.getStdin()` as well.
-   * `await ns.port.getStdin().nextWrite()` can be used to wait until new data is available to read.
-   *
-   * If the port is `.empty()` and you do not await `.nextWrite()`, then `read()` will return `"NULL PORT DATA"`.
-   * If the port is closed (when the script is done running), then `read()` will return `null`.
-   *
+   * Get the input piped into this script.
    * @remarks
    * RAM cost: 0 GB
+   *
+   * Returns a handle to this script's stdin, which holds anything piped into it from the terminal. For example, if the
+   * script was started with `echo input1 | run myScript.js`, then `ns.port.getStdin().read()` inside `myScript.js`
+   * returns `"input1"`. Returns null if nothing was piped into the script.
+   *
+   * Data can keep arriving while the script runs, for example when another script's output is piped into it. Use
+   * `await stdin.nextWrite()` to wait for more data.
+   *
+   * When the command piping into this script finishes, the stream is closed and `read()` returns `null` once. After
+   * that, `nextWrite()` resolves immediately, so stop reading when you get `null`. If the stream is empty but not
+   * closed, `read()` returns `"NULL PORT DATA"`, as with any other port.
+   *
+   * @example
+   * ```js
+   * // echo "a b c" | run myScript.js
+   * const stdin = ns.port.getStdin();
+   * if (stdin === null) {
+   *   ns.tprint("Nothing was piped into this script.");
+   *   return;
+   * }
+   * while (true) {
+   *   if (stdin.empty()) await stdin.nextWrite();
+   *   const data = stdin.read();
+   *   if (data === null) break; // The input has ended
+   *   ns.tprint(data);
+   * }
+   * ```
+   * @returns The script's stdin, or null if nothing was piped into it.
    */
   getStdin(): NetscriptPort | null;
 

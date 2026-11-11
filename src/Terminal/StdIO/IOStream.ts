@@ -1,18 +1,23 @@
 import { NetscriptPort } from "@nsdefs";
 import { getPort, NetscriptPorts, PortHandle, PortNumber } from "../../NetscriptPort";
-import { getNextStdinHandle } from "./utils";
+import { allocateStdInHandle } from "./utils";
 
 const MAX_PIPE_SIZE = 1000;
 
 export class IOStream implements NetscriptPort {
   constructor(portNumber: PortNumber | null = null) {
-    this.#handle = portNumber ? new PortHandle(portNumber) : getNextStdinHandle();
+    this.#handle = portNumber ? new PortHandle(portNumber) : allocateStdInHandle();
   }
   #handle: PortHandle;
 
   #isClosed: boolean = false;
   get isClosed(): boolean {
     return this.#isClosed;
+  }
+
+  /** True once the stream is closed and everything written to it has been read */
+  get isExhausted(): boolean {
+    return this.#isClosed && this.empty();
   }
 
   close(): void {
