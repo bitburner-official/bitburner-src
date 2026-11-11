@@ -120,6 +120,7 @@ import { Literatures } from "./Literature/Literatures";
 import { Messages } from "./Message/MessageHelpers";
 import { deprecationWarning, setDeprecatedProperties } from "./utils/DeprecationHelper";
 import { NetscriptPort } from "./NetscriptFunctions/Port";
+import { getTerminalStdIO } from "./Terminal/StdIO/RedirectIO";
 
 export const enums: NSEnums = {
   CityName,
@@ -418,7 +419,8 @@ export const ns: InternalAPI<NSFull> = {
       throw helpers.errorMessage(ctx, "Takes at least 1 argument.");
     }
     const str = helpers.argsToString(args);
-    const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
+    const scriptOut = ctx.workerScript.scriptRef.terminalStdOut;
+    const stdOut = scriptOut.stdout?.isClosed ? getTerminalStdIO() : scriptOut;
     const color = helpers.getTextColor(str);
     switch (color) {
       case "error":
@@ -437,7 +439,8 @@ export const ns: InternalAPI<NSFull> = {
   tprintf: (ctx, _format, ...args) => {
     const format = helpers.string(ctx, "format", _format);
     const str = vsprintf(format, args);
-    const stdOut = ctx.workerScript.scriptRef.terminalStdOut;
+    const scriptOut = ctx.workerScript.scriptRef.terminalStdOut;
+    const stdOut = scriptOut.stdout?.isClosed ? getTerminalStdIO() : scriptOut;
     const color = helpers.getTextColor(str);
     switch (color) {
       case "error":

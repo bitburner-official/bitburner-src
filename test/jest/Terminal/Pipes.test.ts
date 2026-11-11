@@ -844,6 +844,123 @@ describe("Terminal Pipes", () => {
     });
   });
 
+  describe("re-review regressions", () => {
+    it("keeps every line of a large burst of script output piped into a file", async () => {
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToScriptFile(
+        "burst.js" as ScriptFilePath,
+        `export function main(ns) { for (let i = 0; i < 1500; i++) ns.tprintf("L%d", i); }`,
+      );
+
+      await Terminal.executeCommands("run burst.js > burst.txt");
+      await waitForScripts();
+
+      const lines = server.textFiles.get("burst.txt" as TextFilePath)?.text.split("\n");
+      expect(lines?.length).toBe(1500);
+      expect(lines?.[0]).toBe("L0");
+      expect(lines?.[1499]).toBe("L1499");
+    });
+
+    it("shows a script's output on the terminal after the command reading it stops", async () => {
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToScriptFile(
+        "producer.js" as ScriptFilePath,
+        `export async function main(ns) { ns.tprintf("started"); await ns.sleep(50); ns.tprintf("later output"); }`,
+      );
+
+      await Terminal.executeCommands("run producer.js | grep -m 1 started");
+      await waitForScripts();
+
+      const texts = Terminal.outputHistory.map((line) => stringify(line));
+      // grep highlights the match, so only check the line is there
+      expect(texts.some((text) => text.includes("started"))).toBe(true);
+      expect(texts).toContain("later output");
+    });
+
+    it.each([
+      ["run logger.js > log.txt", true],
+      ["run logger.js | grep x", true],
+      ["echo hi | run logger.js", true],
+      ["run logger.js", false],
+    ])("'%s' makes the script temporary: %s", async (command, temporary) => {
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToScriptFile(
+        "logger.js" as ScriptFilePath,
+        `export async function main(ns) { await ns.sleep(10000); }`,
+      );
+
+      await Terminal.executeCommands(command);
+      const script = findRunningScript("logger.js");
+      await Terminal.executeCommands("kill logger.js");
+
+      expect(script?.temporary).toBe(temporary);
+    });
+
+    it("lets a script read its stdin again, and after clear(), without freezing", async () => {
+      const server = GetServerOrThrow(Player.currentServer);
+      server.writeToScriptFile(
+        "rereader.js" as ScriptFilePath,
+        `export async function main(ns) {
+          const stdin = ns.port.getStdin();
+          const readAll = async () => {
+            const received = [];
+            for (let i = 0; i < 100; i++) {
+              if (stdin.empty()) await stdin.nextWrite();
+              const data = stdin.read();
+              if (data === null) return received;
+              received.push(data);
+            }
+            return "never ended";
+          };
+          const first = await readAll();
+          const second = await readAll();
+          stdin.clear();
+          const third = await readAll();
+          ns.write("reads.txt", JSON.stringify([first, second, third]), "w");
+        }`,
+      );
+
+      await Terminal.executeCommands("echo hi | run rereader.js");
+      await waitForScripts();
+
+      expect(JSON.parse(server.textFiles.get("reads.txt" as TextFilePath)?.text ?? "null")).toEqual([["hi"], [], []]);
+    });
+
+    describe("cat with stdin that has no data", () => {
+      it.each(["echo hi | grep zzz | cat > out.txt", "cat < empty.txt > out.txt"])(
+        "'%s' writes an empty file without an error",
+        async (command) => {
+          const server = GetServerOrThrow(Player.currentServer);
+          server.writeToTextFile("empty.txt" as TextFilePath, "");
+
+          await Terminal.executeCommands(command);
+
+          expect(Terminal.outputHistory.map((line) => stringify(line))).toEqual([]);
+          expect(server.textFiles.get("out.txt" as TextFilePath)?.text).toBe("");
+        },
+      );
+
+      it("still errors when there are no files and nothing is piped in", async () => {
+        await Terminal.executeCommands("cat");
+
+        expect(getOutput(Terminal.outputHistory, -1).text).toContain("No files specified, and no stdin provided");
+      });
+
+      it("does not add a blank first line while a script's output is still streaming in", async () => {
+        const server = GetServerOrThrow(Player.currentServer);
+        server.writeToScriptFile(
+          "slow.js" as ScriptFilePath,
+          `export async function main(ns) { await ns.sleep(20); ns.tprintf("a"); ns.tprintf("b"); }`,
+        );
+
+        await Terminal.executeCommands("run slow.js | cat | grep -n b > lines.txt");
+        await waitForScripts();
+
+        expect(server.textFiles.get("lines.txt" as TextFilePath)?.text).toBe("2:b");
+      });
+    });
+  });
+
   describe("cancellation", () => {
     it("an action that ignores Ctrl-C does not clear the next action when it finishes", async () => {
       // Like upload, whose cancel() does nothing

@@ -17,7 +17,8 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
   const stdinIsClosed = stdIO.isExhausted();
   const hasStdOut = !!stdIO.stdout;
 
-  if (args.length === 0 && initialStdIn.length === 0 && stdinIsClosed) {
+  // An upstream command that finished without output still counts as stdin
+  if (args.length === 0 && !stdIO.stdin) {
     return Terminal.fatal(
       `Incorrect use of cat command: No files specified, and no stdin provided. Try "cat [filename]"`,
       stdIO,
@@ -34,7 +35,10 @@ export function cat(args: (string | number | boolean)[], server: BaseServer, std
 
   const output = concatenateFileContents(args, server, initialStdIn);
 
-  stdIO.write(output);
+  // While stdin is still streaming, an empty first chunk would become a blank line
+  if (output !== "" || stdinIsClosed) {
+    stdIO.write(output);
+  }
 
   if (!stdinIsClosed) {
     return callOnRead(stdIO, (data: unknown, stdInOut) => {

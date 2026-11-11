@@ -4301,7 +4301,7 @@ export interface Port {
    * Data can keep arriving while the script runs, for example when another script's output is piped into it. Use
    * `await stdin.nextWrite()` to wait for more data.
    *
-   * When the command piping into this script finishes, the stream is closed and `read()` returns `null` once. After
+   * When the command piping into this script finishes, the stream is closed and `read()` returns `null`. After
    * that, `nextWrite()` resolves immediately, so stop reading when you get `null`. If the stream is empty but not
    * closed, `read()` returns `"NULL PORT DATA"`, as with any other port.
    *

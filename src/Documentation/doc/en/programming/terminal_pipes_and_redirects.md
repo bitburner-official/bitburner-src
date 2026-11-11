@@ -142,6 +142,8 @@ When a script is followed by a `|` or `>`, its `ns.tprint()` output is captured 
 [home /]> run myScript.js > output.txt
 ```
 
+Note that `ns.tprint()` prefixes every line with the name of the script. To avoid that, use `ns.tprintf("%s", outputToPrint)`.
+
 ### Accessing stdin via script
 
 `ns.port.getStdin()` returns a port handle that contains any input piped into the script from the terminal, if the script is part of a pipe chain (or null otherwise). When this pipe is closed by an upstream process, a `null` value will be passed through the pipe as a flag indicating the pipe has been closed.
@@ -185,7 +187,7 @@ export async function main(ns) {
   let data = await read(ns);
   while (data != null) {
     // slice the characters from the input data to specified range, and print them (aka send to stdout)
-    // tprintf is used to avoid printing the script's filename and line number before the message
+    // tprintf is used to avoid printing the script's filename before the message
     ns.tprintf("%s", data.slice(startCharCount - 1, endCharCount));
     data = await read(ns);
   }
@@ -207,7 +209,7 @@ Bitburner's terminal supports a useful subset of Unix pipes and redirects, but i
 
 The following common Unix features are **not supported**:
 
-- **stderr** - Errors are written to the terminal (stdout), there is no separate error data stream.
+- **stderr** - Errors bypass pipes and are written to the terminal. There is no separate error data stream.
 - **Multi-line command processing** — Unlike Unix, commands in Bitburner do not support commands wrapping multiple lines.
 - **Here-documents (`<< EOF`)** — There is no way to provide multi-line string literals as stdin inline in the terminal.
 - **Here-strings (`<<<`)** — The `<<<` operator for passing a single string directly to stdin is not supported.

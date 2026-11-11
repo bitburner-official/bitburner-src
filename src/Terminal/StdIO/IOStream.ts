@@ -1,8 +1,6 @@
 import { NetscriptPort } from "@nsdefs";
-import { getPort, NetscriptPorts, PortHandle, PortNumber } from "../../NetscriptPort";
+import { getPort, PortHandle, PortNumber } from "../../NetscriptPort";
 import { allocateStdInHandle } from "./utils";
-
-const MAX_PIPE_SIZE = 1000;
 
 export class IOStream implements NetscriptPort {
   constructor(portNumber: PortNumber | null = null) {
@@ -33,12 +31,11 @@ export class IOStream implements NetscriptPort {
     }
     const port = getPort(this.#handle.n);
     port.add(value);
-    if (port.data.length > MAX_PIPE_SIZE) return port.data.shift();
     return null;
   }
 
   tryWrite(value: any): boolean {
-    if (this.#isClosed || this.full()) {
+    if (this.#isClosed) {
       return false;
     }
     return this.write(value) === null;
@@ -53,9 +50,7 @@ export class IOStream implements NetscriptPort {
   }
 
   full(): boolean {
-    const port = NetscriptPorts.get(this.#handle.n);
-    if (!port) return false;
-    return port.data.length >= MAX_PIPE_SIZE;
+    return false;
   }
 
   nextWrite(): Promise<void> {
@@ -66,10 +61,16 @@ export class IOStream implements NetscriptPort {
   }
 
   peek(): unknown {
+    if (this.isExhausted) {
+      return null;
+    }
     return this.#handle.peek();
   }
 
   read(): unknown {
+    if (this.isExhausted) {
+      return null;
+    }
     return this.#handle.read();
   }
 }

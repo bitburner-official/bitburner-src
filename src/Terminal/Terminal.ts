@@ -214,7 +214,7 @@ export class Terminal {
       } finally {
         this.printAndBypassPipes(cancelled ? progress() : progress(1));
         if (cancelled) {
-          this.print(`Cancelled ${name}`, stdIO);
+          this.printAndBypassPipes(`Cancelled ${name}`);
         }
       }
       onDone();
