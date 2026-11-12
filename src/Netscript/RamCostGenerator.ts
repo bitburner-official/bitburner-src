@@ -237,6 +237,8 @@ const cloud = {
 // Port API
 const port = {
   getHandle: 0,
+  getStdin: 0,
+  stdoutIsTty: 0,
   isEmpty: 0,
   isFull: 0,
   peek: 0,

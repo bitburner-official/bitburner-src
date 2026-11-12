@@ -34,6 +34,8 @@ import { UIEventEmitter, UIEventType } from "./ui/UIEventEmitter";
 import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { DarknetServer } from "./Server/DarknetServer";
+import { getTerminalStdIO } from "./Terminal/StdIO/RedirectIO";
+import { resetStdinHandleCounter } from "./Terminal/StdIO/utils";
 
 export function prestigeWorkerScripts(): void {
   for (const ws of workerScripts.values()) {
@@ -41,6 +43,7 @@ export function prestigeWorkerScripts(): void {
   }
 
   NetscriptPorts.clear();
+  resetStdinHandleCounter();
 }
 
 async function startNetscript2Script(workerScript: WorkerScript): Promise<void> {
@@ -143,17 +146,17 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
     // Once the code finishes (either resolved or rejected, doesn't matter), set its
     // running status to false
     .then(function () {
-      killWorkerScript(workerScript);
       workerScript.log("", () => "Script finished running");
+      killWorkerScript(workerScript);
     })
     .catch(function (error) {
       handleUnknownError(error, workerScript);
-      killWorkerScript(workerScript);
       workerScript.log("", () =>
         error instanceof ScriptDeath
           ? "main() terminated."
           : getErrorMessageWithStackAndCause(error, "Script crashed due to an error: "),
       );
+      killWorkerScript(workerScript);
     })
     .finally(() => {
       // The earnings are transferred to the parent if it still exists.
@@ -233,7 +236,7 @@ export function loadAllRunningScripts(): void {
      */
     const skipScriptLoad = window.location.href.toLowerCase().includes("?noscript");
     if (skipScriptLoad) {
-      Terminal.warn("Skipped loading player scripts during startup");
+      Terminal.warn("Skipped loading player scripts during startup", getTerminalStdIO());
       console.info("Skipping the load of any scripts during startup");
     }
     for (const server of GetAllServers(true)) {

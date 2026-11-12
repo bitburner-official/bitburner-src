@@ -144,7 +144,7 @@ export const clearDarknet = () => {
 export const movePlayerIfNeeded = (server?: DarknetServer) => {
   const connectedServer = Player.getCurrentServer();
   if ((!server && connectedServer instanceof DarknetServer) || server?.hostname === connectedServer.hostname) {
-    Terminal.print(`Something seems to have happened to '${connectedServer.hostname}'...`);
+    Terminal.printAndBypassPipes(`Something seems to have happened to '${connectedServer.hostname}'...`);
     Terminal.connectToServer(SpecialServers.Home);
   }
 };

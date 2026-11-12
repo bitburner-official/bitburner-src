@@ -1,8 +1,9 @@
-import { Output, Link, RawOutput } from "./OutputTypes";
+import { Output, Link, RawOutput, withTimestamp } from "./OutputTypes";
 import { Player } from "@player";
 import type { BaseServer } from "../Server/BaseServer";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
-import { type TerminalAction, Cancellation } from "./TerminalAction";
+import { type CommandResult, type StageResult, type TerminalAction, Cancellation } from "./TerminalAction";
+import { RunningScript } from "../Script/RunningScript";
 
 import { TextFile } from "../TextFile";
 import { Script } from "../Script/Script";
@@ -12,7 +13,7 @@ import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { parseCommand, parseCommands } from "./Parser";
+import { applyLastPidVariables, parseCommand, parseCommands } from "./Parser";
 import { Settings } from "../Settings/Settings";
 import { createProgressBarText } from "../utils/helpers/createProgressBarText";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
@@ -30,6 +31,7 @@ import { check } from "./commands/check";
 import { connect } from "./commands/connect";
 import { cp } from "./commands/cp";
 import { download } from "./commands/download";
+import { echo } from "./commands/echo";
 import { upload } from "./commands/upload";
 import { expr } from "./commands/expr";
 import { free } from "./commands/free";
@@ -65,11 +67,13 @@ import { commitHash } from "../utils/helpers/commitHash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
+import { StdIO } from "./StdIO/StdIO";
+import { closeWhenSettled, parseRedirectedCommands } from "./StdIO/RedirectIO";
 import { mkdir } from "./commands/mkdir";
 
 export const TerminalCommands: Record<
   string,
-  (args: (string | number | boolean)[], server: BaseServer) => undefined | TerminalAction
+  (args: (string | number | boolean)[], server: BaseServer, stdIO: StdIO) => CommandResult
 > = {
   "scan-analyze": scananalyze,
   alias: alias,
@@ -85,6 +89,7 @@ export const TerminalCommands: Record<
   connect: connect,
   cp: cp,
   download: download,
+  echo: echo,
   expr: expr,
   free: free,
   grep: grep,
@@ -141,39 +146,53 @@ export class Terminal {
   // Path of current directory
   currDir = "" as Directory;
 
-  append(item: Output | Link | RawOutput): void {
-    this.outputHistory.push(item);
+  // PID of the script run as part of the last executed command, if any
+  pidOfLastScriptRun: number = -1;
+
+  terminalOutput(item: Output | Link | RawOutput): void {
+    this.outputHistory.push(withTimestamp(item));
     if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
       this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
     }
     TerminalEvents.emit();
   }
 
-  print(s: string): undefined {
-    this.append(new Output(s, "primary"));
+  print(s: string, stdIO: StdIO): undefined {
+    stdIO.write(s);
   }
 
-  printRaw(node: React.ReactNode): undefined {
-    this.append(new RawOutput(node));
+  printRaw(node: React.ReactNode, stdIO: StdIO): undefined {
+    stdIO.write(node);
   }
 
-  error(s: string): undefined {
-    this.append(new Output(s, "error"));
+  printAndBypassPipes(s: string, color: "primary" | "error" | "success" | "info" | "warn" = "primary"): undefined {
+    this.terminalOutput(new Output(s, color));
   }
 
-  success(s: string): undefined {
-    this.append(new Output(s, "success"));
+  // Used for logging when a process is ending with an error. Prints directly to terminal so
+  // the error isn't lost due to redirects. Closes the stdIO, if provided
+  fatal(s: string, stdIO: StdIO | null): undefined {
+    stdIO?.close();
+    this.terminalOutput(new Output(s, "error"));
   }
 
-  info(s: string): undefined {
-    this.append(new Output(s, "info"));
+  error(s: string, stdIO: StdIO): undefined {
+    stdIO.write(new Output(s, "error"));
   }
 
-  warn(s: string): undefined {
-    this.append(new Output(s, "warn"));
+  success(s: string, stdIO: StdIO): undefined {
+    stdIO.write(new Output(s, "success"));
   }
 
-  timedAction(durationSec: number, name: string, onDone: () => void): TerminalAction {
+  info(s: string, stdIO: StdIO): undefined {
+    stdIO.write(new Output(s, "info"));
+  }
+
+  warn(s: string, stdIO: StdIO): undefined {
+    stdIO.write(new Output(s, "warn"));
+  }
+
+  timedAction(durationSec: number, name: string, onDone: () => void, stdIO: StdIO): TerminalAction {
     const start = performance.now();
     const progress = (p = (performance.now() - start) / (durationSec * 1000)) =>
       createProgressBarText({
@@ -193,9 +212,9 @@ export class Terminal {
           };
         });
       } finally {
-        this.print(cancelled ? progress() : progress(1));
+        this.printAndBypassPipes(cancelled ? progress() : progress(1));
         if (cancelled) {
-          this.print(`Cancelled ${name}`);
+          this.printAndBypassPipes(`Cancelled ${name}`);
         }
       }
       onDone();
@@ -205,6 +224,7 @@ export class Terminal {
       cancel: cancel,
       finished: p,
       getProgressText: progress,
+      stdIO,
     };
   }
 
@@ -270,7 +290,7 @@ export class Terminal {
   connectToServer(hostname: string, singularity = false): void {
     const server = GetServer(hostname);
     if (server === null) {
-      this.error("Invalid server. Connection failed.");
+      this.printAndBypassPipes("Invalid server. Connection failed.", "error");
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
@@ -278,7 +298,7 @@ export class Terminal {
     server.isConnectedTo = true;
     this.setcwd(root);
     if (!singularity) {
-      this.print("Connected to " + `${isIPAddress(hostname) ? server.ip : server.hostname}`);
+      this.printAndBypassPipes("Connected to " + `${isIPAddress(hostname) ? server.ip : server.hostname}`);
       if (Player.getCurrentServer().hostname === "darkweb") {
         checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
       }
@@ -298,45 +318,65 @@ export class Terminal {
     const allCommands = parseCommands(commands);
     try {
       for (const command of allCommands) {
-        const result = this.executeCommand(command);
-        if (result) {
-          this.action = result;
-          TerminalEvents.emit();
-          await result.finished;
-          this.action = null;
-          TerminalEvents.emit();
-        }
+        await parseRedirectedCommands(command);
       }
     } catch (ex) {
       if (!(ex instanceof Cancellation)) {
         throw ex;
       }
-    } finally {
-      // If we throw for any reason, abort the current action.
-      this.action?.cancel();
-      this.action = null;
-      TerminalEvents.emit();
     }
   }
 
+  cancelAction(): void {
+    this.action?.cancel();
+    this.action?.stdIO.close();
+    this.action = null;
+  }
+
   clear(): void {
-    this.outputHistory = [new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary")];
+    this.outputHistory = [
+      withTimestamp(new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary")),
+    ];
     TerminalEvents.emit();
     TerminalClearEvents.emit();
   }
 
   prestige(): void {
-    this.action?.cancel();
-    this.action = null;
+    this.pidOfLastScriptRun = -1;
+    this.cancelAction();
     this.clear();
   }
 
-  executeCommand(command: string): undefined | TerminalAction {
+  /** Runs one command, and closes its output once the command is done with it */
+  async executeCommand(command: string, stdIO: StdIO): Promise<StageResult> {
     if (this.action !== null) {
-      throw new Error(`Cannot execute command (${command}) while an action is in progress`);
+      this.fatal(`Cannot execute command (${command}) while an action is in progress`, stdIO);
+      return { done: Promise.resolve(), ownedByScript: false };
     }
+    let action: TerminalAction | null = null;
+    try {
+      const result = this.startCommand(command, stdIO);
+      if (result instanceof RunningScript) return { done: Promise.resolve(), ownedByScript: true };
+      if (result instanceof Promise) return { done: closeWhenSettled(stdIO, result), ownedByScript: false };
+      if (result) {
+        action = this.action = result;
+        TerminalEvents.emit();
+        await result.finished;
+      }
+      stdIO.close();
+      return { done: Promise.resolve(), ownedByScript: false };
+    } catch (ex) {
+      stdIO.close();
+      throw ex;
+    } finally {
+      // Ctrl-C frees the terminal before an action that ignores cancellation finishes, so only clear our own action
+      if (action && this.action === action) this.cancelAction();
+      TerminalEvents.emit();
+    }
+  }
 
-    const commandArray = parseCommand(command);
+  private startCommand(command: string, stdIO: StdIO): CommandResult {
+    const commandArray = applyLastPidVariables(parseCommand(command), this.pidOfLastScriptRun);
     if (!commandArray.length) return;
 
     const currentServer = Player.getCurrentServer();
@@ -353,43 +393,37 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "help") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalLs:
           if (commandArray.length === 1 && commandArray[0] === "ls") {
             iTutorialNextStep();
           } else if (commandArray[0] === "1s") {
-            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
-            return;
+            return this.fatal("Command '1s' not found. Did you mean 'ls' with a lowercase L?", stdIO);
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalScan:
           if (commandArray.length === 1 && commandArray[0] === "scan") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalScanAnalyze:
           if (commandArray.length === 1 && commandArray[0] === "scan-analyze") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalScanAnalyze2:
           if (commandArray.length === 2 && commandArray[0] === "scan-analyze" && commandArray[1] === 2) {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalConnect:
@@ -400,108 +434,97 @@ export class Terminal {
             ) {
               iTutorialNextStep();
             } else {
-              this.error("Wrong command! Try again!");
-              return;
+              return this.fatal("Wrong command! Try again!", stdIO);
             }
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalAnalyze:
           if (commandArray.length === 1 && commandArray[0] === "analyze") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalNuke:
           if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalManualHack:
           if (commandArray.length === 1 && commandArray[0] === "hack") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalHackWeakenGrowMechanics:
           if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalHome:
           if (commandArray.length === 1 && commandArray[0] === "home") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalNano:
           if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalFree:
           if (commandArray.length === 1 && commandArray[0] === "free") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalRun:
           if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         case iTutorialSteps.TerminalTail:
           if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error(errorMessageForBadCommand);
-            return;
+            return this.fatal(errorMessageForBadCommand, stdIO);
           }
           break;
         default:
-          this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
-          return;
+          return this.fatal("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it", stdIO);
       }
     }
     /****************** END INTERACTIVE TUTORIAL ******************/
     /* Command parser */
 
     const commandName = commandArray[0];
-    if (typeof commandName !== "string") return this.error(`${commandName} is not a valid command.`);
-    // run by path command
-    if (isBasicFilePath(commandName)) return run(commandArray, currentServer);
+    if (typeof commandName !== "string") return this.fatal(`${commandName} is not a valid command.`, stdIO);
+    const isRunByPath = isBasicFilePath(commandName);
 
     // Aside from the run-by-path command, we don't need the first entry once we've stored it in commandName.
-    commandArray.shift();
+    if (!isRunByPath) {
+      commandArray.shift();
+    }
 
-    const f = TerminalCommands[commandName.toLowerCase()];
+    const f = isRunByPath ? run : TerminalCommands[commandName.toLowerCase()];
     if (!f) {
       const similarCommands = findSimilarCommands(commandName);
       const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
-      return this.error(`Command ${commandName} not found.${didYouMeanString}`);
+      return this.fatal(`Command ${commandName} not found.${didYouMeanString}`, stdIO);
     }
 
-    return f(commandArray, currentServer);
+    return f(commandArray, currentServer, stdIO);
   }
 
   getProgressText(): string {

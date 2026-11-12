@@ -229,6 +229,32 @@ describe("getTabCompletionPossibilities", function () {
     expect(options.sort()).toEqual(cattableFilePaths);
   });
 
+  it.each(["ls | cat ", 'ls | cat "a|b" ', "echo 'x | y' | cat ", "ls; echo hi | cat ", "ls | cat; cat "])(
+    "completes the cat command's arguments after a pipe in '%s'",
+    async (command) => {
+      writeFiles();
+      const cattableFilePaths = [
+        ...scriptFilePaths,
+        ...textFilePaths,
+        MessageFilename.TruthGazer,
+        LiteratureName.AGreenTomorrow,
+      ].sort();
+      const options = await getTabCompletionPossibilities(command, root);
+      expect(options.sort()).toEqual(cattableFilePaths);
+    },
+  );
+
+  it("completes the command after a pipe with no spaces around it", async () => {
+    const options = await getTabCompletionPossibilities("ls|gr", root);
+    expect(options).toContain("grep");
+  });
+
+  it("completes file names after a >> redirect", async () => {
+    writeFiles();
+    const options = await getTabCompletionPossibilities("ls >> ", root);
+    expect(options).toEqual(expect.arrayContaining(textFilePaths));
+  });
+
   it("completes the download and mv commands", async () => {
     writeFiles();
     writeFiles();

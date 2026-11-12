@@ -4290,6 +4290,50 @@ export interface Port {
   getHandle(portNumber: number): NetscriptPort;
 
   /**
+   * Get the input piped into this script.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Returns a handle to this script's stdin, which holds anything piped into it from the terminal. For example, if the
+   * script was started with `echo input1 | run myScript.js`, then `ns.port.getStdin().read()` inside `myScript.js`
+   * returns `"input1"`. Returns null if nothing was piped into the script.
+   *
+   * Data can keep arriving while the script runs, for example when another script's output is piped into it. Use
+   * `await stdin.nextWrite()` to wait for more data.
+   *
+   * When the command piping into this script finishes, the stream is closed and `read()` returns `null`. After
+   * that, `nextWrite()` resolves immediately, so stop reading when you get `null`. If the stream is empty but not
+   * closed, `read()` returns `"NULL PORT DATA"`, as with any other port.
+   *
+   * @example
+   * ```js
+   * // echo "a b c" | run myScript.js
+   * const stdin = ns.port.getStdin();
+   * if (stdin === null) {
+   *   ns.tprint("Nothing was piped into this script.");
+   *   return;
+   * }
+   * while (true) {
+   *   if (stdin.empty()) await stdin.nextWrite();
+   *   const data = stdin.read();
+   *   if (data === null) break; // The input has ended
+   *   ns.tprint(data);
+   * }
+   * ```
+   * @returns The script's stdin, or null if nothing was piped into it.
+   */
+  getStdin(): NetscriptPort | null;
+
+  /**
+   * Checks if the tprint, tprintf, and tprintRaw script output is sent to the terminal.
+   * If false, the output is being piped to another script or command.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  stdoutIsTty(): boolean;
+
+  /**
    * Check if a port is full.
    * @remarks
    * RAM cost: 0 GB

@@ -4,6 +4,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 import { validateConnections } from "../../Server/ServerHelpers";
+import { getTerminalStdIO } from "../StdIO/RedirectIO";
 
 interface IConnectLinkProps {
   path: string[];
@@ -14,7 +15,7 @@ export function ConnectLink({ path, text }: IConnectLinkProps): React.ReactEleme
   const onClick = useCallback(() => {
     const result = validateConnections(Player.getCurrentServer(), path);
     if (!result.success) {
-      Terminal.error(result.message);
+      Terminal.error(result.message, getTerminalStdIO());
       return;
     }
     Terminal.connectToServer(result.destination);
