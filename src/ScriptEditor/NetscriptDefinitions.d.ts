@@ -114,6 +114,7 @@ interface MoneySource {
   codingcontract: number;
   corporation: number;
   crime: number;
+  darknet: number;
   gang: number;
   gang_expenses: number;
   hacking: number;
