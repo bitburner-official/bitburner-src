@@ -1474,7 +1474,9 @@ export const ns: InternalAPI<NSFull> = {
     return getRamCost(name.split("."), true);
   },
   tprintRaw: (ctx, value) => {
-    Terminal.printRaw(wrapUserNode(value), ctx.workerScript.scriptRef.terminalStdOut);
+    const scriptOut = ctx.workerScript.scriptRef.terminalStdOut;
+    const stdOut = scriptOut.stdout?.isClosed ? getTerminalStdIO() : scriptOut;
+    Terminal.printRaw(wrapUserNode(value), stdOut);
   },
   printRaw: (ctx, value) => {
     ctx.workerScript.print(wrapUserNode(value));

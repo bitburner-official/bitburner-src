@@ -4325,6 +4325,15 @@ export interface Port {
   getStdin(): NetscriptPort | null;
 
   /**
+   * Checks if the tprint, tprintf, and tprintRaw script output is sent to the terminal.
+   * If false, the output is being piped to another script or command.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  stdoutIsTty(): boolean;
+
+  /**
    * Check if a port is full.
    * @remarks
    * RAM cost: 0 GB
