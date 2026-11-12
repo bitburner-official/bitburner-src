@@ -155,6 +155,23 @@ number
 </td></tr>
 <tr><td>
 
+[darknet](./bitburner.moneysource.darknet.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [gang\_expenses](./bitburner.moneysource.gang_expenses.md)
 
 
