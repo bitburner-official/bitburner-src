@@ -115,6 +115,17 @@ Read data from a port.
 </td></tr>
 <tr><td>
 
+[stdoutIsTty()](./bitburner.port.stdoutistty.md)
+
+
+</td><td>
+
+Checks if the tprint, tprintf, and tprintRaw script output is sent to the terminal. If false, the output is being piped to another script or command.
+
+
+</td></tr>
+<tr><td>
+
 [tryWrite(portNumber, data)](./bitburner.port.trywrite.md)
 
 
