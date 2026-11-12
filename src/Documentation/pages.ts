@@ -924,6 +924,7 @@ import nsDoc_bitburner_moneysource_class_md from "../../markdown/bitburner.money
 import nsDoc_bitburner_moneysource_codingcontract_md from "../../markdown/bitburner.moneysource.codingcontract.md?raw";
 import nsDoc_bitburner_moneysource_corporation_md from "../../markdown/bitburner.moneysource.corporation.md?raw";
 import nsDoc_bitburner_moneysource_crime_md from "../../markdown/bitburner.moneysource.crime.md?raw";
+import nsDoc_bitburner_moneysource_darknet_md from "../../markdown/bitburner.moneysource.darknet.md?raw";
 import nsDoc_bitburner_moneysource_gang_expenses_md from "../../markdown/bitburner.moneysource.gang_expenses.md?raw";
 import nsDoc_bitburner_moneysource_gang_md from "../../markdown/bitburner.moneysource.gang.md?raw";
 import nsDoc_bitburner_moneysource_hacking_md from "../../markdown/bitburner.moneysource.hacking.md?raw";
@@ -2571,6 +2572,7 @@ AllPages["nsDoc/bitburner.moneysource.class.md"] = nsDoc_bitburner_moneysource_c
 AllPages["nsDoc/bitburner.moneysource.codingcontract.md"] = nsDoc_bitburner_moneysource_codingcontract_md;
 AllPages["nsDoc/bitburner.moneysource.corporation.md"] = nsDoc_bitburner_moneysource_corporation_md;
 AllPages["nsDoc/bitburner.moneysource.crime.md"] = nsDoc_bitburner_moneysource_crime_md;
+AllPages["nsDoc/bitburner.moneysource.darknet.md"] = nsDoc_bitburner_moneysource_darknet_md;
 AllPages["nsDoc/bitburner.moneysource.gang_expenses.md"] = nsDoc_bitburner_moneysource_gang_expenses_md;
 AllPages["nsDoc/bitburner.moneysource.gang.md"] = nsDoc_bitburner_moneysource_gang_md;
 AllPages["nsDoc/bitburner.moneysource.hacking.md"] = nsDoc_bitburner_moneysource_hacking_md;
