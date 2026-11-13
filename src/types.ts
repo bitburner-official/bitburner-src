@@ -50,3 +50,24 @@ export interface IMinMaxRange {
 
 // Type of save data. The base64 format is string, the binary format is Uint8Array.
 export type SaveData = string | Uint8Array<ArrayBuffer>;
+
+export type DataShape<T> = {
+  [K in keyof T as T[K] extends (...args: any[]) => any ? never : K]: T[K];
+};
+
+export type Prettify<T> = {
+  [K in keyof T]: T[K];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
+
+export type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false;
+
+export type AssertTrue<T extends true> = T;
+
+/**
+ * Ensure there are no type mismatches between internal types and public NS types.
+ */
+export type AssertDataShape<
+  Internal,
+  Public extends Equal<DataShape<Internal>, Prettify<Public>> extends true ? unknown : never,
+> = true;
