@@ -36,7 +36,6 @@ import { InfiltrationState } from "./Infiltration/formulas/game";
 import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
 import { loadSettings } from "./Settings/SettingsUtils";
 import { getBitNodeLevel } from "./BitNode/BitNodeUtils";
-import { hasDevQueryParam } from "./utils/Utility";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -541,7 +540,7 @@ export async function loadGame(saveData: SaveData): Promise<boolean> {
         throw new Error(`Invalid VersionSave: ${saveObj.VersionSave}`);
       }
       await evaluateVersionCompatibility(ver);
-      if (CONSTANTS.isDevBranch && !hasDevQueryParam()) {
+      if (CONSTANTS.isDevBranch && !Settings.SuppressLoadPopups) {
         // Beta branch, always show changes
         createBetaUpdateText();
       } else if (ver !== CONSTANTS.VersionNumber) {

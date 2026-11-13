@@ -58,7 +58,6 @@ import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
 import { initForeignServers } from "./Server/ServerHelpers";
 import { apr1 } from "./Terminal/commands/apr1";
 import { LastExportBonus } from "./ExportBonus";
-import { hasDevQueryParam } from "./utils/Utility";
 
 declare global {
   // This property is only available in the dev build
@@ -279,7 +278,7 @@ const Engine = {
 
       // Process offline progress
       if (Player.currentWork !== null) {
-        Player.focus = !hasDevQueryParam();
+        Player.focus = !Settings.SuppressLoadPopups;
         Player.processWork(numCyclesOffline);
       } else if (Player.bitNodeN !== 2) {
         for (let i = 0; i < Player.factions.length; i++) {
@@ -354,7 +353,7 @@ const Engine = {
       Player.lastUpdate = Engine._lastUpdate;
       Engine.start(); // Run main game loop and Scripts loop
       const timeOfflineString = convertTimeMsToTimeElapsedString(time);
-      if (!hasDevQueryParam()) {
+      if (!Settings.SuppressLoadPopups) {
         setTimeout(
           () =>
             AlertEvents.emit(
