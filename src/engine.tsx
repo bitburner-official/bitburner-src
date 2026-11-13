@@ -278,7 +278,7 @@ const Engine = {
 
       // Process offline progress
       if (Player.currentWork !== null) {
-        Player.focus = true;
+        Player.focus = !Settings.SuppressLoadPopups;
         Player.processWork(numCyclesOffline);
       } else if (Player.bitNodeN !== 2) {
         for (let i = 0; i < Player.factions.length; i++) {
@@ -353,30 +353,32 @@ const Engine = {
       Player.lastUpdate = Engine._lastUpdate;
       Engine.start(); // Run main game loop and Scripts loop
       const timeOfflineString = convertTimeMsToTimeElapsedString(time);
-      setTimeout(
-        () =>
-          AlertEvents.emit(
-            <>
-              <Typography>Offline for {timeOfflineString}. While you were offline:</Typography>
-              <ul>
-                <li>
-                  <Typography>
-                    Your scripts generated <Money money={offlineHackingIncome} />
-                  </Typography>
-                </li>
-                <li>
-                  <Typography>Your Hacknet Nodes generated {hacknetProdInfo}</Typography>
-                </li>
-                <li>
-                  <Typography>
-                    You gained <Reputation reputation={offlineReputation} /> reputation divided amongst your factions
-                  </Typography>
-                </li>
-              </ul>
-            </>,
-          ),
-        250,
-      );
+      if (!Settings.SuppressLoadPopups) {
+        setTimeout(
+          () =>
+            AlertEvents.emit(
+              <>
+                <Typography>Offline for {timeOfflineString}. While you were offline:</Typography>
+                <ul>
+                  <li>
+                    <Typography>
+                      Your scripts generated <Money money={offlineHackingIncome} />
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography>Your Hacknet Nodes generated {hacknetProdInfo}</Typography>
+                  </li>
+                  <li>
+                    <Typography>
+                      You gained <Reputation reputation={offlineReputation} /> reputation divided amongst your factions
+                    </Typography>
+                  </li>
+                </ul>
+              </>,
+            ),
+          250,
+        );
+      }
     } else {
       // No save found, start new game
       FormatsNeedToChange.emit();

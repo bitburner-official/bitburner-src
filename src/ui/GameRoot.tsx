@@ -79,6 +79,7 @@ import { ErrorModal } from "../ErrorHandling/ErrorModal";
 import { DWRoot } from "../DarkNet/DWRoot";
 import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
 import { CustomPage } from "./CustomPage";
+import { Settings } from "../Settings/Settings";
 
 const htmlLocation = location;
 
@@ -114,7 +115,7 @@ function determineStartPage(): PageWithContext {
     ActivateRecoveryMode(error);
     return { page: Page.Recovery };
   }
-  if (Player.currentWork !== null) {
+  if (Player.currentWork !== null && !Settings.SuppressLoadPopups) {
     return { page: Page.Work };
   }
   return { page: Page.Terminal };
