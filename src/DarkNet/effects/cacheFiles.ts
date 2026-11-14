@@ -114,7 +114,7 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): Interna
 export const getMoneyReward = (difficulty: number): InternalCacheReward => {
   const sf15_3Factor = Player.activeSourceFileLvl(15) >= 3 ? 1.5 : 1;
   const msSinceLastMoneyCache = new Date().getTime() - DarknetState.lastMoneyCacheTime.getTime();
-  const recencyDebuff = clampNumber(0.2 + (0.8 * msSinceLastMoneyCache) / RECOVERY_MS, 0.2, 11);
+  const recencyDebuff = clampNumber(0.2 + (0.8 * msSinceLastMoneyCache) / RECOVERY_MS, 0.2, 1);
   const reward =
     1.2 ** difficulty *
     4e5 *
