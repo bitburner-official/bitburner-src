@@ -16,6 +16,7 @@ import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 import { pluralize } from "../../utils/I18nUtils";
 import { DarknetState } from "../models/DarknetState";
 import { clampNumber } from "../../utils/helpers/clampNumber";
+import { RECOVERY_MS } from "../Constants";
 
 export const generateCacheFilename = (isPhishingCache: boolean, prefix?: string) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
@@ -113,7 +114,7 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): Interna
 export const getMoneyReward = (difficulty: number): InternalCacheReward => {
   const sf15_3Factor = Player.activeSourceFileLvl(15) >= 3 ? 1.5 : 1;
   const msSinceLastMoneyCache = new Date().getTime() - DarknetState.lastMoneyCacheTime.getTime();
-  const recencyDebuff = clampNumber(1 / (1000 * 60 - msSinceLastMoneyCache), 0.2, 1);
+  const recencyDebuff = clampNumber(0.2 + (0.8 * msSinceLastMoneyCache) / RECOVERY_MS, 0.2, 11);
   const reward =
     1.2 ** difficulty *
     4e5 *
