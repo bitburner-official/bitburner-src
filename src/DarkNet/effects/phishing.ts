@@ -36,7 +36,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
     const bonusTimeFactor = hasDarknetBonusTime() ? 1.3 : 1;
     const depthFactor = 0.1 + server.depth * 0.05;
     const moneyReward =
-      500 *
+      2000 *
       Player.mults.dnet_money *
       depthFactor *
       threads *
@@ -44,7 +44,7 @@ export const handlePhishingAttack = (ctx: NetscriptContext, server: DarknetServe
       bonusTimeFactor *
       randomFactor *
       currentNodeMults.DarknetMoneyMultiplier;
-    const cappedReward = applySoftCap(moneyReward, 0.9, 5000, 5000);
+    const cappedReward = applySoftCap(moneyReward, 0.95, 5000, 5000);
     Player.gainMoney(cappedReward, "darknet");
     Player.gainCharismaExp(xpReward);
     const result = `Phishing attack succeeded! ${formatMoney(cappedReward)} retrieved. (Gained ${formatNumber(

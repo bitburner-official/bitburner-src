@@ -14,6 +14,8 @@ import type { CacheResult, CacheReward } from "@nsdefs";
 import { addClue, cctCooldownReached } from "./effects";
 import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 import { pluralize } from "../../utils/I18nUtils";
+import { DarknetState } from "../models/DarknetState";
+import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export const generateCacheFilename = (isPhishingCache: boolean, prefix?: string) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
@@ -109,13 +111,16 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): Interna
 
 export const getMoneyReward = (difficulty: number): InternalCacheReward => {
   const sf15_3Factor = Player.activeSourceFileLvl(15) >= 3 ? 1.5 : 1;
+  const msSinceLastMoneyCache = new Date().getTime() - DarknetState.lastMoneyCacheTime.getTime();
+  const recencyDebuff = clampNumber(1 / (1000 * 60 - msSinceLastMoneyCache), 0.1, 1);
   const reward =
     1.2 ** difficulty *
-    1e7 *
+    2e5 *
+    recencyDebuff *
     ((200 + Player.skills.charisma) / 200) *
     sf15_3Factor *
     Player.mults.dnet_money *
-    currentNodeMults.DarknetMoneyMultiplier; // TODO: adjust balance
+    currentNodeMults.DarknetMoneyMultiplier;
   Player.gainMoney(reward, "darknet");
   return { message: `You have discovered a cache with ${formatMoney(reward)}.`, money: reward };
 };
