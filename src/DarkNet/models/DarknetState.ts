@@ -48,6 +48,7 @@ export const DarknetState = {
   labLocations: {} as Record<number, [number, number] | undefined>,
 
   lastPhishingCacheTime: new Date(),
+  lastMoneyCacheTime: new Date(),
   lastCctRewardTime: new Date(),
   lastStormTime: new Date(),
 
