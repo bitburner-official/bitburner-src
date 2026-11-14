@@ -122,6 +122,7 @@ export const getMoneyReward = (difficulty: number): InternalCacheReward => {
     Player.mults.dnet_money *
     currentNodeMults.DarknetMoneyMultiplier;
   Player.gainMoney(reward, "darknet");
+  DarknetState.lastMoneyCacheTime = new Date();
   return { message: `You have discovered a cache with ${formatMoney(reward)}.`, money: reward };
 };
 
