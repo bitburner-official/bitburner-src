@@ -175,8 +175,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
         All of that excitement and optimism quickly turned to fear, panic, and dread in 2070, when a terrorist group
         called Ascendis Totalis hacked into {FactionName.OmniTekIncorporated} and uploaded a rogue AI into several of
         their Synthoid manufacturing facilities. This hack went undetected and for months{" "}
-        {FactionName.OmniTekIncorporated} unknowingly churned out legions of Synthoids embedded with this rogue AI. 
-        Then, on December 24th, 2070, Omnica activated dormant protocols in the rogue AI, causing all of the infected 
+        {FactionName.OmniTekIncorporated} unknowingly churned out legions of Synthoids embedded with this rogue AI.
+        Then, on December 24th, 2070, Omnica activated dormant protocols in the rogue AI, causing all of the infected
         Synthoids to immediately launch a military campaign to seek and destroy all of humanity.
         <br />
         <br />
