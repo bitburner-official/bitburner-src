@@ -39,7 +39,6 @@ import {
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer } from "./Server/AllServers";
 import {
-  getServerOnNetwork,
   numCycleForGrowth,
   numCycleForGrowthCorrected,
   processSingleServerGrowth,
@@ -188,10 +187,20 @@ export const ns: InternalAPI<NSFull> = {
     if (!server) {
       return out;
     }
-    for (let i = 0; i < server.serversOnNetwork.length; i++) {
-      const s = getServerOnNetwork(server, i);
-      if (s === null || s instanceof DarknetServer) continue;
-      const entry = helpers.returnServerID(s, returnOpts);
+    for (const neighborHostname of server.serversOnNetwork) {
+      const neighborServer = GetServer(neighborHostname);
+      if (neighborServer === null) {
+        const error = `ERROR: ${neighborHostname} is on the network of ${server.hostname}, but we cannot find its data`;
+        // Log to both console and script tail so players are more likely to notice and report the issue.
+        console.error(error);
+        // Use ctx.workerScript.print directly instead of helpers.log. helpers.log, which calls ctx.workerScript.log,
+        // can be suppressed by ns.disableLog. We want this log to always be printed. When using ctx.workerScript.print,
+        // the "ERROR" prefix of the error message also causes the message to be printed in red, which is more noticeable.
+        ctx.workerScript.print(error);
+        continue;
+      }
+      if (neighborServer instanceof DarknetServer) continue;
+      const entry = helpers.returnServerID(neighborServer, returnOpts);
       if (entry === null) continue;
       out.push(entry);
     }

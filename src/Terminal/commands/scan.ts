@@ -1,20 +1,26 @@
 import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
-import { getServerOnNetwork } from "../../Server/ServerHelpers";
-import { IPAddress } from "../../Types/strings";
+import type { BaseServer } from "../../Server/BaseServer";
+import { GetServer } from "../../Server/AllServers";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 export function scan(args: (string | number | boolean)[], currServ: BaseServer): undefined {
   if (args.length !== 0) {
     Terminal.error("Incorrect usage of scan command. Usage: scan");
     return;
   }
-  // Displays available network connections using TCP
-  const servers = currServ.serversOnNetwork.map((_, i) => {
-    const server = getServerOnNetwork(currServ, i);
-    if (server === null) throw new Error("Server should not be null");
+  const servers = currServ.serversOnNetwork.map((hostname) => {
+    const server = GetServer(hostname);
+    if (server === null) {
+      exceptionAlert(new Error(`${hostname} is on the network of ${currServ.hostname}, but we cannot find its data`));
+      return {
+        hostname,
+        ip: "unknown",
+        hasRoot: "unknown",
+      };
+    }
     return {
       hostname: server.hostname,
-      ip: server.ip as IPAddress | "IP",
+      ip: server.ip,
       hasRoot: server.hasAdminRights ? "Y" : "N",
     };
   });

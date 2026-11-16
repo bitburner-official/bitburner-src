@@ -284,18 +284,6 @@ export function validateConnections(start: BaseServer, path: string[]): Result<{
   return { success: true, destination: current.hostname };
 }
 
-// Returns the i-th server on the specified server's network
-// A Server's serverOnNetwork property holds only the IPs. This function returns
-// the actual Server object
-export function getServerOnNetwork(server: BaseServer, i: number): BaseServer | null {
-  if (i > server.serversOnNetwork.length) {
-    console.error("Tried to get server on network that was out of range");
-    return null;
-  }
-
-  return GetServer(server.serversOnNetwork[i]);
-}
-
 export function isBackdoorInstalled(server: BaseServer): boolean {
   if (server instanceof Server) {
     return server.backdoorInstalled;
