@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@player": ["src/Player"],
-      "@enums": ["src/Enums"],
-      "@nsdefs": ["src/ScriptEditor/NetscriptDefinitions"]
+      "@player": ["./src/Player"],
+      "@enums": ["./src/Enums"],
+      "@nsdefs": ["./src/ScriptEditor/NetscriptDefinitions"]
     },
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react",
-    "module": "commonjs",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
