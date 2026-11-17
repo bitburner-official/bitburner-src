@@ -11,7 +11,7 @@ import {
   recalculateNumberOfOwnedSleeves,
 } from "../../PersonObjects/Sleeve/SleeveCovenantPurchases";
 import { validBitNodes } from "../../BitNode/Constants";
-import { DeleteServer, GetAllServers } from "../../Server/AllServers";
+import { DeleteServer, disconnectServers, GetAllServers } from "../../Server/AllServers";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 import { getDarkscapeNavigator } from "../../DarkNet/effects/effects";
@@ -45,6 +45,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
             if (!(server instanceof HacknetServer)) {
               continue;
             }
+            disconnectServers(server, Player.getHomeComputer());
             DeleteServer(server.hostname);
           }
         } else {
