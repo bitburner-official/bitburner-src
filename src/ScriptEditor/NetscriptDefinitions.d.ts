@@ -2877,9 +2877,12 @@ export interface Singularity {
    * @remarks
    * RAM cost: 2 GB * 16/4/1
    *
+   * Run the "connect HOSTNAME/IP" command in the terminal.
    *
-   * Run the connect HOSTNAME/IP command in the terminal. Can only connect to neighbors.
+   * Can only connect to neighbor servers, servers with an installed backdoor, and your owned servers
+   * ({@link Server.purchasedByPlayer | purchasedByPlayer} is true).
    *
+   * @param host - Hostname/IP of the target server.
    * @returns True if the connect command was successful, false otherwise.
    */
   connect(host: string): boolean;
