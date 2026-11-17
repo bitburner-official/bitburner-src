@@ -8,27 +8,27 @@ export function scan(args: (string | number | boolean)[], currServ: BaseServer):
     Terminal.error("Incorrect usage of scan command. Usage: scan");
     return;
   }
-  const servers = currServ.serversOnNetwork.map((hostname) => {
-    const server = GetServer(hostname);
-    if (server === null) {
-      exceptionAlert(new Error(`${hostname} is on the network of ${currServ.hostname}, but we cannot find its data`));
-      return {
-        hostname,
-        ip: "unknown",
-        hasRoot: "unknown",
-      };
+  const servers = [
+    {
+      hostname: "Hostname",
+      ip: "IP",
+      hasRoot: "Root Access",
+    },
+  ];
+  for (const neighborHostname of currServ.serversOnNetwork) {
+    const neighborServer = GetServer(neighborHostname);
+    if (neighborServer === null) {
+      exceptionAlert(
+        new Error(`${neighborHostname} is on the network of ${currServ.hostname}, but we cannot find its data`),
+      );
+      continue;
     }
-    return {
-      hostname: server.hostname,
-      ip: server.ip,
-      hasRoot: server.hasAdminRights ? "Y" : "N",
-    };
-  });
-  servers.unshift({
-    hostname: "Hostname",
-    ip: "IP",
-    hasRoot: "Root Access",
-  });
+    servers.push({
+      hostname: neighborServer.hostname,
+      ip: neighborServer.ip,
+      hasRoot: neighborServer.hasAdminRights ? "Y" : "N",
+    });
+  }
   const maxHostname = Math.max(...servers.map((s) => s.hostname.length));
   const maxIP = Math.max(...servers.map((s) => s.ip.length));
   for (const server of servers) {
