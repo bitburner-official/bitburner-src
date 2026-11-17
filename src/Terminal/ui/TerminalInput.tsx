@@ -235,7 +235,9 @@ export function TerminalInput(): React.ReactElement {
     return () => document.removeEventListener("keydown", keyDown);
   }, []);
 
-  async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> {
+  async function handleTerminalInputKeyDown(
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ): Promise<void> {
     const ref = terminalInput.current;
 
     // Run command or insert newline
@@ -460,9 +462,9 @@ export function TerminalInput(): React.ReactElement {
             resetSearch();
           },
           onKeyDown: (event) => {
-            onKeyDown(event).catch((error) => {
-              console.error(error);
-            });
+            // Intentionally unawaited and without a catch handler. Errors and promise rejections are handled by the
+            // global unhandledrejection handler.
+            void handleTerminalInputKeyDown(event);
           },
         }}
       ></TextField>
