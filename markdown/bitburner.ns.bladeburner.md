@@ -4,10 +4,15 @@
 
 ## NS.bladeburner property
 
-Namespace for [Bladeburner](./bitburner.bladeburner.md) functions. Contains spoilers.
+Namespace for [Bladeburner](./bitburner.bladeburner.md) functions. This namespace contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly bladeburner: Bladeburner;
 ```
+
+## Remarks
+
+This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
+

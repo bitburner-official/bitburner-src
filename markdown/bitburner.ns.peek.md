@@ -4,6 +4,11 @@
 
 ## NS.peek() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [Port.peek](./bitburner.port.peek.md) instead
+> 
+
 Get a copy of the data from a port without popping it.
 
 **Signature:**

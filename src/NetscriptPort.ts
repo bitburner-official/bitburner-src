@@ -1,6 +1,7 @@
 import { Settings } from "./Settings/Settings";
-import { NetscriptPort } from "@nsdefs";
-import { PositiveInteger } from "./types";
+import type { NetscriptPort } from "@nsdefs";
+import type { PositiveInteger } from "./types";
+import { deprecationWarning } from "./utils/DeprecationHelper";
 
 type Resolver = () => void;
 const emptyPortData = "NULL PORT DATA";
@@ -93,12 +94,22 @@ export class PortHandle implements NetscriptPort {
   }
 
   full(): boolean {
+    deprecationWarning("portHandle.full", "Use portHandle.isFull instead.");
+    return this.isFull();
+  }
+
+  isFull(): boolean {
     const port = NetscriptPorts.get(this.n);
     if (!port) return false;
     return port.data.length >= Settings.MaxPortCapacity;
   }
 
   empty(): boolean {
+    deprecationWarning("portHandle.empty", "Use portHandle.isEmpty instead.");
+    return this.isEmpty();
+  }
+
+  isEmpty(): boolean {
     const port = NetscriptPorts.get(this.n);
     if (!port) return true;
     return port.data.length === 0;

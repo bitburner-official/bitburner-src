@@ -4,6 +4,11 @@
 
 ## NS.isEmptyPort() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [Port.isEmpty](./bitburner.port.isempty.md) instead
+> 
+
 Check if a port is empty.
 
 **Signature:**

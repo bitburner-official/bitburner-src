@@ -668,7 +668,7 @@ Tools to analyze the IPvGO subnet.
 
 </td><td>
 
-Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Source-File 14.2 to use.
+Illicit and dangerous IPvGO tools. Not for the faint of heart.
 
 
 </td></tr>
@@ -1135,6 +1135,17 @@ Player must have killed at least this many people.
 </td><td>
 
 Base interface of all player tasks.
+
+
+</td></tr>
+<tr><td>
+
+[Port](./bitburner.port.md)
+
+
+</td><td>
+
+Port API
 
 
 </td></tr>
@@ -2181,6 +2192,16 @@ Locations of gym
 <tr><td>
 
 [HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[HacknetServerHashUpgradeEnumType](./bitburner.hacknetserverhashupgradeenumtype.md)
 
 
 </td><td>

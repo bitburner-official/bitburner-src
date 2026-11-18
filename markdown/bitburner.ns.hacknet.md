@@ -4,10 +4,15 @@
 
 ## NS.hacknet property
 
-Namespace for [hacknet](./bitburner.hacknet.md) functions. Some of this API contains spoilers.
+Namespace for [hacknet](./bitburner.hacknet.md) functions. Some of this namespace contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly hacknet: Hacknet;
 ```
+
+## Remarks
+
+Some parts of this API are locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
+

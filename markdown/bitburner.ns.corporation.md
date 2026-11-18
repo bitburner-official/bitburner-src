@@ -4,10 +4,15 @@
 
 ## NS.corporation property
 
-Namespace for [corporation](./bitburner.corporation.md) functions. Contains spoilers.
+Namespace for [corporation](./bitburner.corporation.md) functions. This namespace contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly corporation: Corporation;
 ```
+
+## Remarks
+
+This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
+

@@ -4,10 +4,15 @@
 
 ## NS.singularity property
 
-Namespace for [singularity](./bitburner.singularity.md) functions. Contains spoilers.
+Namespace for [singularity](./bitburner.singularity.md) functions. This namespace contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly singularity: Singularity;
 ```
+
+## Remarks
+
+This API is locked until you have access to a certain Source-File upgrade, which can be obtained later in the game. It will be very obvious when and how you can obtain this upgrade.
+

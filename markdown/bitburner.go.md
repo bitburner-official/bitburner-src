@@ -179,7 +179,7 @@ Returns the name of the opponent faction in the current subnet.
 
 </td><td>
 
-Make a move on the IPvGO subnet game board, and await the opponent's response. x:0 y:0 represents the bottom-left corner of the board in the UI.
+Make a move on the IPvGO subnet game board, and await the opponent's response. {<!-- -->"x":0,"y":0<!-- -->} represents the bottom-left corner of the board in the UI.
 
 
 </td></tr>
@@ -190,7 +190,7 @@ Make a move on the IPvGO subnet game board, and await the opponent's response. x
 
 </td><td>
 
-Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable. x:0 y:0 represents the bottom-left corner of the board in the UI.
+Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable. {<!-- -->"x":0,"y":0<!-- -->} represents the bottom-left corner of the board in the UI.
 
 
 </td></tr>

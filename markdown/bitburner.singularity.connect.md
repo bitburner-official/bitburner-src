@@ -42,6 +42,8 @@ string
 
 </td><td>
 
+Hostname/IP of the target server.
+
 
 </td></tr>
 </tbody></table>
@@ -56,5 +58,7 @@ True if the connect command was successful, false otherwise.
 
 RAM cost: 2 GB \* 16/4/1
 
-Run the connect HOSTNAME/IP command in the terminal. Can only connect to neighbors.
+Run the "connect HOSTNAME/IP" command in the terminal.
+
+Can only connect to neighbor servers, servers with an installed backdoor, and your owned servers ([purchasedByPlayer](./bitburner.server.purchasedbyplayer.md) is true).
 

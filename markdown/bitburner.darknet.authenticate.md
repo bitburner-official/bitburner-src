@@ -90,7 +90,7 @@ _(Optional)_ Optional. The number of additional milliseconds to add to the run t
 
 Promise&lt;[DarknetResult](./bitburner.darknetresult.md) &amp; { data?: any }&gt;
 
-A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object. The resolved object may contain an optional property. The type of this property is intentionaly undocumented. You are supposed to experiment and discover the content of this property.
+A promise that resolves to a [DarknetResult](./bitburner.darknetresult.md) object. The resolved object may contain an optional property. The type of this property is intentionally undocumented. You are supposed to experiment and discover the content of this property. This property only exists when authenticating with some very special servers. For interactive feedback after attempting authentication, in most cases, use [heartbleed()](./bitburner.darknet.heartbleed.md)<!-- -->.
 
 ## Remarks
 

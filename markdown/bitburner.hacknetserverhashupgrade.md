@@ -8,16 +8,7 @@
 **Signature:**
 
 ```typescript
-type HacknetServerHashUpgrade =
-  | "Sell for Money"
-  | "Sell for Corporation Funds"
-  | "Reduce Minimum Security"
-  | "Increase Maximum Money"
-  | "Improve Studying"
-  | "Improve Gym Training"
-  | "Exchange for Corporation Research"
-  | "Exchange for Bladeburner Rank"
-  | "Exchange for Bladeburner SP"
-  | "Generate Coding Contract"
-  | "Company Favor";
+type HacknetServerHashUpgrade = _ValueOf<HacknetServerHashUpgradeEnumType>;
 ```
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [HacknetServerHashUpgradeEnumType](./bitburner.hacknetserverhashupgradeenumtype.md)
+

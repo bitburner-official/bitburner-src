@@ -88,7 +88,7 @@ void
 
 RAM cost: 32 GB \* 16/4/1
 
-You must have the special augment installed and the required hacking level OR Completed the final black op.
+You must have the special augment installed and the required hacking level OR completed the final black op.
 
 If you do not want to move on to the next BN and instead stay on the BitVerse screen, you can set nextBN to undefined. Note that with the hacking route, using [installBackdoor](./bitburner.singularity.installbackdoor.md) is a cheaper way to do this.
 

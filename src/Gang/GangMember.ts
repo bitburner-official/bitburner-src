@@ -16,12 +16,13 @@ import {
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
 import { calculateSkill } from "../PersonObjects/formulas/skill";
-import type { GangMemberExpGain, GangMemberUpgradeName } from "@nsdefs";
+import type { GangMemberExpGain, GangMemberUpgradeName, GangTaskName } from "@nsdefs";
 import {
   convertV2GangEquipmentNames,
   type RenamedV2GangEquipmentName,
   RenamedV2GangEquipmentNames,
 } from "../utils/APIBreaks/3.0.0";
+import { GangTaskNameEnum } from "./Enums";
 
 interface IMults {
   hack: number;
@@ -34,7 +35,7 @@ interface IMults {
 
 export class GangMember {
   name: string;
-  task = "Unassigned";
+  task: GangTaskName = GangTaskNameEnum.Unassigned;
 
   earnedRespect = 0;
 
@@ -90,9 +91,9 @@ export class GangMember {
     return (this.hack + this.str + this.def + this.dex + this.agi + this.cha) / 95;
   }
 
-  assignToTask(taskName: string): boolean {
+  assignToTask(taskName: GangTaskName): boolean {
     if (!Object.hasOwn(GangMemberTasks, taskName)) {
-      this.task = "Unassigned";
+      this.task = GangTaskNameEnum.Unassigned;
       return false;
     }
     this.task = taskName;
@@ -100,7 +101,7 @@ export class GangMember {
   }
 
   unassignFromTask(): void {
-    this.task = "Unassigned";
+    this.task = GangTaskNameEnum.Unassigned;
   }
 
   getTask(): GangMemberTask {

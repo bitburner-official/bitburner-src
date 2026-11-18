@@ -68,6 +68,18 @@ export const GameplayPage = (): React.ReactElement => {
           </>
         }
       />
+      <OptionSwitch
+        checked={Settings.SuppressLoadPopups}
+        onChange={(newValue) => (Settings.SuppressLoadPopups = newValue)}
+        text="Suppress pop-ups on game start"
+        tooltip={
+          <>
+            If this is set, the offline progress summary will not be shown when the game loads, and work in progress
+            will continue unfocused instead of opening the work page. This also hides the dev branch info pop-up for
+            those using a beta build, as well as several pop-ups that only occur deep in endgame.
+          </>
+        }
+      />
       {Player.bladeburner && (
         <OptionSwitch
           checked={Settings.SuppressBladeburnerPopup}

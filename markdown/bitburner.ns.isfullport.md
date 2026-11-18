@@ -4,6 +4,11 @@
 
 ## NS.isFullPort() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [Port.isFull](./bitburner.port.isfull.md) instead
+> 
+
 Check if a port is full.
 
 **Signature:**

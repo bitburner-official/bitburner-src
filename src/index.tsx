@@ -51,7 +51,9 @@ function rerender(): void {
 })();
 
 (function () {
-  if (process.env.NODE_ENV === "development" || location.href.startsWith("file://")) return;
+  if (process.env.NODE_ENV === "development") {
+    return;
+  }
   window.onbeforeunload = function () {
     return "Your work will be lost.";
   };
