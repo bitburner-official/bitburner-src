@@ -1,7 +1,10 @@
+import type { GangMemberUpgradeName } from "@nsdefs";
 import { gangMemberUpgradesMetadata } from "./data/upgrades";
 import { GangMemberUpgrade } from "./GangMemberUpgrade";
 
-export const GangMemberUpgrades: Record<string, GangMemberUpgrade> = {};
+// This assertion is safe because this map is populated with data from gangMemberUpgradesMetadata, which contains all
+// GangMemberUpgradeName entries.
+export const GangMemberUpgrades = {} as Record<GangMemberUpgradeName, GangMemberUpgrade>;
 
 (function () {
   gangMemberUpgradesMetadata.forEach((e) => {

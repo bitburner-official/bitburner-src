@@ -9,7 +9,7 @@ Get cost of equipment.
 **Signature:**
 
 ```typescript
-getEquipmentCost(equipName: string): number;
+getEquipmentCost(equipName: GangMemberUpgradeName): number;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ equipName
 
 </td><td>
 
-string
+[GangMemberUpgradeName](./bitburner.gangmemberupgradename.md)
 
 
 </td><td>

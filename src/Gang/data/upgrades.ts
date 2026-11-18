@@ -1,3 +1,4 @@
+import type { GangMemberUpgradeName } from "@nsdefs";
 import { GangMemberUpgradeNameEnum } from "../Enums";
 
 export interface IMults {
@@ -25,7 +26,7 @@ export enum UpgradeType {
 interface IGangMemberUpgradeMetadata {
   cost: number;
   mults: IMults;
-  name: string;
+  name: GangMemberUpgradeName;
   upgType: UpgradeType;
 }
 

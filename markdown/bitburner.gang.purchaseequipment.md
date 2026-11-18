@@ -9,7 +9,7 @@ Purchase an equipment for a gang member.
 **Signature:**
 
 ```typescript
-purchaseEquipment(memberName: string, equipName: string): boolean;
+purchaseEquipment(memberName: string, equipName: GangMemberUpgradeName): boolean;
 ```
 
 ## Parameters
@@ -53,7 +53,7 @@ equipName
 
 </td><td>
 
-string
+[GangMemberUpgradeName](./bitburner.gangmemberupgradename.md)
 
 
 </td><td>

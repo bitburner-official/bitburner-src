@@ -5328,7 +5328,7 @@ export interface Gang {
    *
    * @returns Names of all Equipments/Augmentations.
    */
-  getEquipmentNames(): string[];
+  getEquipmentNames(): GangMemberUpgradeName[];
 
   /**
    * Get cost of equipment.
@@ -5343,7 +5343,7 @@ export interface Gang {
    * @param equipName - Name of equipment.
    * @returns Cost to purchase the specified Equipment/Augmentation (number). Infinity for invalid arguments
    */
-  getEquipmentCost(equipName: string): number;
+  getEquipmentCost(equipName: GangMemberUpgradeName): number;
 
   /**
    * Get type of an equipment.
@@ -5355,7 +5355,7 @@ export interface Gang {
    * @param equipName - Name of equipment.
    * @returns Type of the equipment.
    */
-  getEquipmentType(equipName: string): string;
+  getEquipmentType(equipName: GangMemberUpgradeName): string;
 
   /**
    * Get stats of an equipment.
@@ -5367,7 +5367,7 @@ export interface Gang {
    * @param equipName - Name of equipment.
    * @returns A dictionary containing the stats of the equipment.
    */
-  getEquipmentStats(equipName: string): EquipmentStats;
+  getEquipmentStats(equipName: GangMemberUpgradeName): EquipmentStats;
 
   /**
    * Purchase an equipment for a gang member.
@@ -5380,7 +5380,7 @@ export interface Gang {
    * @param equipName - Name of Equipment/Augmentation to purchase.
    * @returns True if the equipment was successfully purchased. False otherwise
    */
-  purchaseEquipment(memberName: string, equipName: string): boolean;
+  purchaseEquipment(memberName: string, equipName: GangMemberUpgradeName): boolean;
 
   /**
    * Ascend a gang member.
