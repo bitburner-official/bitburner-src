@@ -34,6 +34,7 @@ import { getDarkscapeNavigator } from "./DarkNet/effects/effects";
 import { CodingContractEventEmitter } from "./CodingContract/CodingContractEventEmitter";
 import { showLiterature } from "./Literature/LiteratureHelpers";
 import { prestigeDarknetState } from "./DarkNet/models/DarknetState";
+import { Settings } from "./Settings/Settings";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
@@ -307,7 +308,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // BitNode 12: The Recursion
-  if (Player.bitNodeN === 12 && Player.sourceFileLvl(12) > 100) {
+  if (Player.bitNodeN === 12 && Player.sourceFileLvl(12) > 100 && !Settings.SuppressLoadPopups) {
     delayedDialog("Saynt_Garmo is watching you");
   }
 

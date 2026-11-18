@@ -540,7 +540,7 @@ export async function loadGame(saveData: SaveData): Promise<boolean> {
         throw new Error(`Invalid VersionSave: ${saveObj.VersionSave}`);
       }
       await evaluateVersionCompatibility(ver);
-      if (CONSTANTS.isDevBranch) {
+      if (CONSTANTS.isDevBranch && !Settings.SuppressLoadPopups) {
         // Beta branch, always show changes
         createBetaUpdateText();
       } else if (ver !== CONSTANTS.VersionNumber) {

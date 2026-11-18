@@ -67,6 +67,8 @@ export const Settings = {
   SuppressTIXPopup: false,
   /** Whether to hide the toast alert when the game is saved. */
   SuppressSavedGameToast: false,
+  /** Whether to skip the pop-ups shown on load (offline summary, beta changelog, focused work page). */
+  SuppressLoadPopups: false,
   /** Whether to hide the toast warning when the autosave is disabled. */
   SuppressAutosaveDisabledWarnings: false,
   /** Whether to enable the save data backup reminder. */

@@ -12,6 +12,7 @@ import { prestigeWorkerScripts } from "./NetscriptWorker";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { ActivateRecoveryMode } from "./ui/React/RecoveryRoot";
 import { validBitNodes } from "./BitNode/Constants";
+import { Settings } from "./Settings/Settings";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -32,7 +33,9 @@ function giveSourceFile(bitNodeNumber: number): void {
     } else {
       lvl++;
       Player.sourceFiles.set(bitNodeNumber, lvl);
-      dialogBoxCreate(`${sourceFile.name} was upgraded to level ${lvl} for destroying its corresponding BitNode!`);
+      if (lvl <= 50 || !Settings.SuppressLoadPopups) {
+        dialogBoxCreate(`${sourceFile.name} was upgraded to level ${lvl} for destroying its corresponding BitNode!`);
+      }
     }
   } else {
     Player.sourceFiles.set(bitNodeNumber, 1);
