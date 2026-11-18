@@ -1,4 +1,5 @@
-import type { TypedKeys } from "../types";
+import type { MoneySource as NSMoneySource } from "@nsdefs";
+import type { AssertDataShape, TypedKeys } from "../types";
 
 import { makeSerializable } from "./GenericReviver";
 
@@ -44,3 +45,5 @@ export class MoneySourceTracker {
 
   static includedKeys = makeSerializable("MoneySourceTracker", MoneySourceTracker);
 }
+
+type __CheckNSMoneySource = AssertDataShape<MoneySourceTracker, NSMoneySource>;
