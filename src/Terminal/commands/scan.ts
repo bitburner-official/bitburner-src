@@ -1,28 +1,34 @@
 import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
-import { getServerOnNetwork } from "../../Server/ServerHelpers";
-import { IPAddress } from "../../Types/strings";
+import type { BaseServer } from "../../Server/BaseServer";
+import { GetServer } from "../../Server/AllServers";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 export function scan(args: (string | number | boolean)[], currServ: BaseServer): undefined {
   if (args.length !== 0) {
     Terminal.error("Incorrect usage of scan command. Usage: scan");
     return;
   }
-  // Displays available network connections using TCP
-  const servers = currServ.serversOnNetwork.map((_, i) => {
-    const server = getServerOnNetwork(currServ, i);
-    if (server === null) throw new Error("Server should not be null");
-    return {
-      hostname: server.hostname,
-      ip: server.ip as IPAddress | "IP",
-      hasRoot: server.hasAdminRights ? "Y" : "N",
-    };
-  });
-  servers.unshift({
-    hostname: "Hostname",
-    ip: "IP",
-    hasRoot: "Root Access",
-  });
+  const servers = [
+    {
+      hostname: "Hostname",
+      ip: "IP",
+      hasRoot: "Root Access",
+    },
+  ];
+  for (const neighborHostname of currServ.serversOnNetwork) {
+    const neighborServer = GetServer(neighborHostname);
+    if (neighborServer === null) {
+      exceptionAlert(
+        new Error(`${neighborHostname} is on the network of ${currServ.hostname}, but we cannot find its data`),
+      );
+      continue;
+    }
+    servers.push({
+      hostname: neighborServer.hostname,
+      ip: neighborServer.ip,
+      hasRoot: neighborServer.hasAdminRights ? "Y" : "N",
+    });
+  }
   const maxHostname = Math.max(...servers.map((s) => s.hostname.length));
   const maxIP = Math.max(...servers.map((s) => s.ip.length));
   for (const server of servers) {
