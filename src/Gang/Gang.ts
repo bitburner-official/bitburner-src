@@ -24,9 +24,11 @@ import { GangMember } from "./GangMember";
 import { WorkerScript } from "../Netscript/WorkerScript";
 import { Player } from "@player";
 import { PowerMultiplier } from "./data/power";
-import { FactionName } from "@enums";
+import { FactionName, GangTaskNameEnum } from "@enums";
 import { CONSTANTS } from "../Constants";
 import { calculateReputationGain } from "./formulas/formulas";
+import type { GangTaskName } from "@nsdefs";
+import { getRecordKeys } from "../Types/Record";
 
 export enum RecruitmentResult {
   Success = "Success",
@@ -295,7 +297,7 @@ export class Gang {
       const member = this.members[i];
 
       // Only members assigned to Territory Warfare can die
-      if (member.task !== "Territory Warfare") continue;
+      if (member.task !== GangTaskNameEnum.TerritoryWarfare) continue;
 
       // Chance to die is decreased based on defense
       const modifiedDeathChance = baseDeathChance / Math.pow(member.def, 0.6);
@@ -365,7 +367,7 @@ export class Gang {
   calculatePower(): number {
     let memberTotal = 0;
     for (let i = 0; i < this.members.length; ++i) {
-      if (this.members[i].task !== "Territory Warfare") continue;
+      if (this.members[i].task !== GangTaskNameEnum.TerritoryWarfare) continue;
       memberTotal += this.members[i].calculatePower();
     }
     return 0.015 * Math.max(0.002, this.getTerritory()) * memberTotal;
@@ -419,11 +421,10 @@ export class Gang {
   }
 
   /** Returns only valid tasks for this gang. Excludes 'Unassigned' */
-  getAllTaskNames(): string[] {
-    return Object.keys(GangMemberTasks).filter((taskName: string) => {
+  getAllTaskNames(): GangTaskName[] {
+    return getRecordKeys(GangMemberTasks).filter((taskName) => {
       const task = GangMemberTasks[taskName];
-      if (task == null) return false;
-      if (task.name === "Unassigned") return false;
+      if (task === null) return false;
       // yes you need both checks
       return this.isHackingGang === task.isHacking || !this.isHackingGang === task.isCombat;
     });
