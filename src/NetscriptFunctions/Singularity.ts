@@ -62,6 +62,7 @@ import { Crimes } from "../Crime/Crimes";
 import { DarknetServer } from "../Server/DarknetServer";
 import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
 import { deprecationWarning } from "../utils/DeprecationHelper";
+import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -72,11 +73,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     if (!script) return;
     const ramUsage = script.getRamUsage(home.scripts);
     if (!ramUsage) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but could not calculate ram usage.`);
+      return Terminal.printAndBypassPipes(
+        `Attempted to launch ${cbScript} after reset but could not calculate ram usage.`,
+        "error",
+      );
     }
     const ramAvailable = home.maxRam - home.ramUsed;
     if (ramUsage > ramAvailable + 0.001) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but there was not enough ram.`);
+      return Terminal.printAndBypassPipes(
+        `Attempted to launch ${cbScript} after reset but there was not enough ram.`,
+        "error",
+      );
     }
     // Start script with no args and 1 thread (default).
     const runningScriptObj = new RunningScript(script, ramUsage, []);
@@ -476,7 +483,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const filename = helpers.string(ctx, "filename", _filename);
       const server = Player.getCurrentServer();
-      cat([filename], server);
+      // No stdin, so cat finishes synchronously
+      void cat([filename], server, getTerminalStdIO());
     },
     connect: (ctx, _host?) => {
       helpers.checkSingularityAccess(ctx);

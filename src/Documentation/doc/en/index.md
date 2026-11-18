@@ -24,6 +24,7 @@
 - [World](basic/world.md)
 - [Coding contracts](basic/codingcontracts.md)
 - [Autocomplete](basic/autocomplete.md)
+- [Terminal Pipes and Redirects](programming/terminal_pipes_and_redirects.md)
 
 ## Advanced Mechanics
 

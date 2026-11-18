@@ -8,6 +8,7 @@ import { resolveTextFilePath } from "../../Paths/TextFilePath";
 import { dialogBoxCreate as dialogBoxCreateOriginal } from "../../ui/React/DialogBox";
 import { Terminal } from "../../Terminal";
 import { pluralize } from "../I18nUtils";
+import { getTerminalStdIO } from "../../Terminal/StdIO/RedirectIO";
 
 // Temporary until fixing alerts manager to store alerts outside of react scope
 const dialogBoxCreate = (text: string) =>
@@ -171,8 +172,12 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
     textFileName,
     `API BREAK INFO FOR ${version}\n\n${details.map((detail) => detail.text).join("\n\n\n\n")}`,
   );
-  Terminal.warn(`AN API BREAK FROM VERSION ${version} MAY HAVE AFFECTED SOME OF YOUR SCRIPTS.`);
-  Terminal.warn(`INFORMATION ABOUT THIS POTENTIAL IMPACT HAS BEEN LOGGED IN ${textFileName} ON YOUR HOME COMPUTER.`);
+  const stdIO = getTerminalStdIO();
+  Terminal.warn(`AN API BREAK FROM VERSION ${version} MAY HAVE AFFECTED SOME OF YOUR SCRIPTS.`, stdIO);
+  Terminal.warn(
+    `INFORMATION ABOUT THIS POTENTIAL IMPACT HAS BEEN LOGGED IN ${textFileName} ON YOUR HOME COMPUTER.`,
+    stdIO,
+  );
   dialogBoxCreate(
     `SOME OF YOUR SCRIPTS HAVE POTENTIALLY BEEN IMPACTED BY AN API BREAK, DUE TO CHANGES IN VERSION ${version}\n\n` +
       "The following dialog boxes will provide details of the potential impact to your scripts.\n" +
@@ -197,7 +202,9 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
         (detail.apiBreakInfo.brokenAPIs.length > 0
           ? `\n\nWe found ${pluralize(detail.totalDetectedLines, "affected line")}.`
           : ""),
+      stdIO,
     );
     ++warningIndex;
   }
+  stdIO.close();
 }

@@ -58,6 +58,16 @@ export function initGameEnvironment() {
   initSourceFiles();
 }
 
+/** Resolves once the running scripts (optionally only those named filename) have exited, and the pipe stages reading their output are done */
+export async function waitForScripts(filename?: string): Promise<void> {
+  const exits = [...workerScripts.values()]
+    .filter((ws) => !filename || ws.name === filename)
+    .map((ws) => new Promise<void>((resolve) => (ws.atExit ??= new Map()).set("waitForScripts", resolve)));
+  await Promise.all(exits);
+  // A script's stdout is closed right after its atExit callbacks run, so let the stages reading it finish
+  await new Promise((resolve) => setTimeout(resolve, 0));
+}
+
 export function setupBasicTestingEnvironment(
   { purchaseCloudServer, purchaseHacknetServer } = { purchaseCloudServer: false, purchaseHacknetServer: false },
 ): void {

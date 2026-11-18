@@ -15,6 +15,7 @@ import { Factions } from "../../src/Faction/Factions";
 import type { ScriptFilePath } from "../../src/Paths/ScriptFilePath";
 import type { TextFilePath } from "../../src/Paths/TextFilePath";
 import { StockMarket } from "../../src/StockMarket/StockMarket";
+import { StdIO } from "../../src/Terminal/StdIO/StdIO";
 import { Go } from "../../src/Go/Go";
 import { Companies } from "../../src/Company/Companies";
 import { Aliases, GlobalAliases } from "../../src/Alias";
@@ -209,6 +210,31 @@ test("load/saveAllServers pruning RunningScripts", () => {
   Settings.ExcludeRunningScriptsFromSave = true;
   const result = saveAllServers();
   expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
+});
+
+test("RunningScript pipe state is not saved, and is reset on load", () => {
+  loadStandardServers();
+  const runningScripts = [...GetServerOrThrow("home").runningScriptMap.values()].flatMap((byPid) => [
+    ...byPid.values(),
+  ]);
+  expect(runningScripts.length).toBeGreaterThan(0);
+  for (const runningScript of runningScripts) {
+    expect(runningScript.stdin).toBeNull();
+    expect(runningScript.tailStdOut).toBeNull();
+    // A fresh StdIO with no stdout writes to the terminal
+    expect(runningScript.terminalStdOut).toBeInstanceOf(StdIO);
+    expect(runningScript.terminalStdOut.stdout).toBeNull();
+  }
+
+  Settings.ExcludeRunningScriptsFromSave = false;
+  const servers = JSON.parse(saveAllServers()) as Record<string, { data: { runningScripts: { data: object }[] } }>;
+  const savedScripts = servers.home.data.runningScripts;
+  expect(savedScripts.length).toBeGreaterThan(0);
+  for (const saved of savedScripts) {
+    expect(Object.keys(saved.data)).not.toContain("stdin");
+    expect(Object.keys(saved.data)).not.toContain("tailStdOut");
+    expect(Object.keys(saved.data)).not.toContain("terminalStdOut");
+  }
 });
 
 // This function interacts with most of the game mechanics in some way to create a state that will exercise most of our

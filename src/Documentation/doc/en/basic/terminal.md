@@ -121,6 +121,16 @@ $ run foo.js; tail foo.js
 
 Chained commands do **not** wait for functions like `hack` or `wget` to finish executing, and so may not always work as expected.
 
+## Pipes and Redirects
+
+A command's output can be passed to another command or a script with a pipe (`|`), or written to a file with `>` (overwrite) or `>>` (append). For example:
+
+```text
+$ cat log.txt | grep error > errors.txt
+```
+
+See [Terminal Pipes and Redirects](../programming/terminal_pipes_and_redirects.md) for more details.
+
 ## Quirks
 
 When your scripts render a text box (e.g., `<input>`, `<textarea>`) with the `autoFocus` attribute in the terminal or

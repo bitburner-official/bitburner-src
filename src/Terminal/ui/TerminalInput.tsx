@@ -213,7 +213,7 @@ export function TerminalInput(): React.ReactElement {
         return;
       }
       if (Terminal.action !== null && event.key === KEY.C && event.ctrlKey) {
-        Terminal.action.cancel();
+        Terminal.cancelAction();
         return;
       }
       const ref = terminalInput.current;
@@ -244,7 +244,7 @@ export function TerminalInput(): React.ReactElement {
     if (event.key === KEY.ENTER) {
       event.preventDefault();
       const command = searchResults.length ? searchResults[searchResultsIndex] : value;
-      Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${command}`);
+      Terminal.printAndBypassPipes(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${command}`);
       if (command) {
         void Terminal.executeCommands(command); // Async function, errors will hit the uncaught handler
         saveValue("");
@@ -374,7 +374,7 @@ export function TerminalInput(): React.ReactElement {
     if (Settings.EnableBashHotkeys) {
       if (event.key === KEY.C && event.ctrlKey && ref && ref.selectionStart === ref.selectionEnd) {
         event.preventDefault();
-        Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
+        Terminal.printAndBypassPipes(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
         modifyInput("clearall");
       }
 

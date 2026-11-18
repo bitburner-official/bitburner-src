@@ -1,5 +1,6 @@
 import { Terminal } from "../../../src/Terminal";
 import { Output } from "../../../src/Terminal/OutputTypes";
+import { getTerminalStdIO } from "../../../src/Terminal/StdIO/RedirectIO";
 
 describe("Terminal timedAction", () => {
   beforeEach(() => {
@@ -12,7 +13,7 @@ describe("Terminal timedAction", () => {
 
   test("prints 100% completed progress bar when onDone is called", async () => {
     const onDone = jest.fn();
-    const action = Terminal.timedAction(1, "hack", onDone);
+    const action = Terminal.timedAction(1, "hack", onDone, getTerminalStdIO());
 
     jest.advanceTimersByTime(1000);
     await action.finished;
@@ -25,7 +26,7 @@ describe("Terminal timedAction", () => {
 
   test("prints 100% completed progress bar when onDone is called even with timer jitter", async () => {
     const onDone = jest.fn();
-    const action = Terminal.timedAction(1, "hack", onDone);
+    const action = Terminal.timedAction(1, "hack", onDone, getTerminalStdIO());
 
     jest.spyOn(performance, "now").mockReturnValueOnce(999);
     jest.advanceTimersByTime(1000);
@@ -37,7 +38,7 @@ describe("Terminal timedAction", () => {
 
   test("does not run onDone and reports cancellation when cancelled", async () => {
     const onDone = jest.fn();
-    const action = Terminal.timedAction(10, "hack", onDone);
+    const action = Terminal.timedAction(10, "hack", onDone, getTerminalStdIO());
 
     jest.advanceTimersByTime(5000);
     action.cancel();

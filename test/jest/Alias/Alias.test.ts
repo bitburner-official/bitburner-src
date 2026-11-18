@@ -1,4 +1,7 @@
 import { Aliases, GlobalAliases, substituteAliases, parseAliasDeclaration } from "../../../src/Alias";
+import { parseCommand, parseCommands } from "../../../src/Terminal/Parser";
+
+const parseTokens = (command: string) => parseCommands(command).map((c) => parseCommand(c, false));
 describe("substituteAliases Tests", () => {
   beforeEach(() => {
     Aliases.clear();
@@ -65,5 +68,45 @@ describe("substituteAliases Tests", () => {
 
     const result = substituteAliases("a");
     expect(result).toEqual("e");
+  });
+
+  describe("with pipes and redirects", () => {
+    beforeEach(() => {
+      parseAliasDeclaration('g="grep foo"');
+    });
+
+    it("Should apply local aliases to the command after a pipe", () => {
+      expect(substituteAliases("ls | g")).toEqual("ls | grep foo");
+    });
+
+    it.each(["ls > g", "ls >> g", "cat < g"])("Should not apply local aliases to the file in '%s'", (command) => {
+      expect(substituteAliases(command)).toEqual(command);
+    });
+
+    it("Should apply local aliases next to a pipe with no spaces around it", () => {
+      parseAliasDeclaration('l="ls -l"');
+      expect(parseTokens("l|g")).toEqual([["ls", "-l", "|", "grep", "foo"]]);
+    });
+
+    it("Should split an alias value's own pipe with no spaces around it", () => {
+      parseAliasDeclaration('lg="ls|grep x"');
+      expect(parseTokens("lg")).toEqual([["ls", "|", "grep", "x"]]);
+    });
+
+    it("Should not apply local aliases after a quoted pipe", () => {
+      expect(substituteAliases('echo "a | g b"')).toEqual('echo "a | g b"');
+    });
+
+    it("Should keep quoted arguments in an alias value whole", () => {
+      parseAliasDeclaration(`q="grep 'a | g'"`);
+      expect(substituteAliases("ls | q")).toEqual("ls | grep 'a | g'");
+    });
+
+    it("Should not expand an alias twice when another alias's value contains it after a pipe", () => {
+      parseAliasDeclaration('c="cat | ls"');
+      parseAliasDeclaration('ls="ls -l"');
+      expect(substituteAliases("c")).toEqual("cat | ls -l");
+      expect(substituteAliases("echo x | c")).toEqual("echo x | cat | ls -l");
+    });
   });
 });

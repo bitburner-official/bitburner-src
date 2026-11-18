@@ -49,6 +49,17 @@ Get all data on a port.
 </td></tr>
 <tr><td>
 
+[getStdin()](./bitburner.port.getstdin.md)
+
+
+</td><td>
+
+Get the input piped into this script.
+
+
+</td></tr>
+<tr><td>
+
 [isEmpty(portNumber)](./bitburner.port.isempty.md)
 
 
@@ -99,6 +110,17 @@ Get a copy of the data from a port without popping it.
 </td><td>
 
 Read data from a port.
+
+
+</td></tr>
+<tr><td>
+
+[stdoutIsTty()](./bitburner.port.stdoutistty.md)
+
+
+</td><td>
+
+Checks if the tprint, tprintf, and tprintRaw script output is sent to the terminal. If false, the output is being piped to another script or command.
 
 
 </td></tr>

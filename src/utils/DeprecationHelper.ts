@@ -1,4 +1,5 @@
 import { Terminal } from "../Terminal";
+import { getTerminalStdIO } from "../Terminal/StdIO/RedirectIO";
 
 const deprecatedWarningsGiven = new Set();
 export function setDeprecatedProperties(
@@ -19,10 +20,11 @@ export function setDeprecatedProperties(
 export function deprecationWarning(identifier: string, message: string) {
   if (!deprecatedWarningsGiven.has(identifier)) {
     deprecatedWarningsGiven.add(identifier);
-    Terminal.warn(`Accessed deprecated function or property: ${identifier}`);
-    Terminal.warn(`This is no longer supported usage and will be removed in a later version.`);
-    Terminal.warn(message);
-    Terminal.info(`This message can also appear for object properties when the object's values are iterated.`);
-    Terminal.info(`This message will only be shown once per game session for each deprecated item accessed.`);
+    const stdio = getTerminalStdIO();
+    Terminal.warn(`Accessed deprecated function or property: ${identifier}`, stdio);
+    Terminal.warn(`This is no longer supported usage and will be removed in a later version.`, stdio);
+    Terminal.warn(message, stdio);
+    Terminal.info(`This message can also appear for object properties when the object's values are iterated.`, stdio);
+    Terminal.info(`This message will only be shown once per game session for each deprecated item accessed.`, stdio);
   }
 }

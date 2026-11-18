@@ -1,6 +1,8 @@
 import { Terminal } from "./Terminal";
 import { trimQuotes } from "./utils/helpers/string";
+import { StdIO } from "./Terminal/StdIO/StdIO";
 import { Reviver } from "./utils/GenericReviver";
+import { parseCommand, PipeSymbols } from "./Terminal/Parser";
 
 export const Aliases = new Map<string, string>();
 export const GlobalAliases = new Map<string, string>();
@@ -24,9 +26,9 @@ export function loadGlobalAliases(saveString: string): void {
 }
 
 // Prints all aliases to terminal
-export function printAliases(): void {
-  for (const [name, alias] of Aliases) Terminal.print("alias " + name + "=" + alias);
-  for (const [name, alias] of GlobalAliases) Terminal.print("global alias " + name + "=" + alias);
+export function printAliases(stdIO: StdIO): void {
+  for (const [name, alias] of Aliases) Terminal.print("alias " + name + "=" + alias, stdIO);
+  for (const [name, alias] of GlobalAliases) Terminal.print("global alias " + name + "=" + alias, stdIO);
 }
 
 export const aliasRegex = /[\w|!%,@-]+/;
@@ -74,6 +76,11 @@ export function substituteAliases(origCommand: string): string {
   return applyAliases(origCommand);
 }
 
+/** Split a command the same way the terminal does, so quoted strings (including quoted pipes) stay whole */
+function tokenize(command: string): string[] {
+  return parseCommand(command, false).map(String);
+}
+
 /**
  * Recursively evaluates aliases and applies them to the command string,
  * unless there are any reference loops or the reference chain is too deep
@@ -86,19 +93,24 @@ function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases
   if (!origCommand) {
     return origCommand;
   }
-  const commandArray = origCommand.split(" ");
+  const commandArray = tokenize(origCommand);
 
   // Do not apply aliases when defining a new alias
   if (commandArray[0] === "unalias" || commandArray[0] === "alias") {
-    return commandArray.join(" ");
+    return origCommand;
   }
 
-  // First get non-global aliases, and recursively apply them
-  // (unless there are any reference loops or the reference chain is too deep)
-  const localAlias = Aliases.get(commandArray[0]);
-  if (localAlias && !currentlyProcessingAliases.includes(commandArray[0])) {
-    const appliedAlias = applyAliases(localAlias, depth + 1, [commandArray[0], ...currentlyProcessingAliases]);
-    commandArray.splice(0, 1, ...appliedAlias.split(" "));
+  // Apply non-global aliases to the first command, and commands following a pipe symbol, and recursively apply them
+  for (let i = 0; i < commandArray.length; i++) {
+    if (i === 0 || commandArray[i - 1] === PipeSymbols.Pipe) {
+      const localAlias = Aliases.get(commandArray[i]);
+      if (localAlias && !currentlyProcessingAliases.includes(commandArray[i])) {
+        const appliedAlias = applyAliases(localAlias, depth + 1, [commandArray[i], ...currentlyProcessingAliases]);
+        const expanded = tokenize(appliedAlias);
+        commandArray.splice(i, 1, ...expanded);
+        i += expanded.length - 1; // skip past the newly expanded alias commands
+      }
+    }
   }
 
   // Once local aliasing is complete (or if none are present) handle any global aliases
