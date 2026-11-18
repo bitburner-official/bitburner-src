@@ -23,7 +23,6 @@ async function createWindow(killall) {
   const window = new BrowserWindow({
     icon,
     show: false,
-    backgroundThrottling: false,
     backgroundColor: "#000000",
     title: "Bitburner",
     autoHideMenuBar: storage.isMenuHideEnabled(),
@@ -34,6 +33,7 @@ async function createWindow(killall) {
     minWidth: 600,
     minHeight: 400,
     webPreferences: {
+      backgroundThrottling: false,
       nativeWindowOpen: true,
       preload: path.join(__dirname, "preload.js"),
     },
@@ -59,8 +59,6 @@ async function createWindow(killall) {
     if (url.startsWith("http://") || url.startsWith("https://")) shell.openExternal(url);
     return { action: "deny" };
   });
-
-  window.webContents.backgroundThrottling = false;
 
   let isWindowClosing = false;
   window.on("close", () => {
