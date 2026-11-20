@@ -6,6 +6,7 @@ const menu = require("./menu");
 const path = require("path");
 const { windowTracker } = require("./windowTracker");
 const storage = require("./storage");
+const { attachFindInPage } = require("./findInPage");
 
 const openDevtools = process.argv.includes("--dev");
 
@@ -38,6 +39,7 @@ async function createWindow(killall) {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+  attachFindInPage(window);
 
   setTimeout(() => tracker.track(window), 1000);
   if (tracker.state.isMaximized) window.maximize();

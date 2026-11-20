@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 4px;
+        overflow: hidden;
+      }
+
+      .container {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: white;
+        border: 1px solid gray;
+        border-radius: 8px;
+        padding: 4px 8px;
+        height: 35px;
+      }
+
+      input {
+        border: none;
+        outline: none;
+        flex: 1;
+        font-size: 14px;
+        min-width: 100px;
+      }
+
+      .count {
+        font-size: 12px;
+        white-space: nowrap;
+        padding: 0 4px;
+      }
+
+      button {
+        background: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+
+      button:hover {
+        background: #f3f4f6;
+      }
+
+      button.active {
+        background: #dbeafe;
+        color: #155dfc;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <input id="search-input" type="text" placeholder="Find in page..." autofocus />
+      <span id="count" class="count"></span>
+      <button id="match-case" title="Match Case">Aa</button>
+      <button id="prev" title="Previous (Shift+Enter)">▲</button>
+      <button id="next" title="Next (Enter)">▼</button>
+      <button id="close" title="Close (Esc)">✕</button>
+    </div>
+
+    <script>
+      const input = document.getElementById("search-input");
+      const count = document.getElementById("count");
+      const matchCaseBtn = document.getElementById("match-case");
+      let matchCase = false;
+
+      const triggerSearch = (forward, findNext) => {
+        window.searchAPI.find(input.value, { forward, findNext, matchCase });
+      };
+
+      input.addEventListener("input", () => triggerSearch(true, false));
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          triggerSearch(!e.shiftKey, true);
+        }
+      });
+
+      matchCaseBtn.addEventListener("click", () => {
+        matchCase = !matchCase;
+        matchCaseBtn.classList.toggle("active", matchCase);
+        triggerSearch(true, false);
+      });
+
+      document.getElementById("next").addEventListener("click", () => triggerSearch(true, true));
+      document.getElementById("prev").addEventListener("click", () => triggerSearch(false, true));
+      document.getElementById("close").addEventListener("click", () => window.searchAPI.close());
+
+      window.searchAPI?.onResults(({ active, total }) => {
+        count.textContent = input.value ? `${active}/${total}` : "";
+      });
+
+      window.searchAPI?.onFocus(() => {
+        input.focus();
+        input.select();
+      });
+
+      window.searchAPI?.onSearchCurrentText(() => {
+        triggerSearch(true, false);
+      });
+    </script>
+  </body>
+</html>

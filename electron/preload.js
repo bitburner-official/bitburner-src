@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld("electronBridge", {
       "push-import-result",
       "push-disable-restore",
       "activate-achievements",
+      "monaco-editor-focus-changed",
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
@@ -31,4 +32,9 @@ contextBridge.exposeInMainWorld("electronBridge", {
       ipcRenderer.on(channel, (event, ...args) => func(...args));
     }
   },
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  const observer = new ResizeObserver(() => ipcRenderer.send("viewport-resized"));
+  observer.observe(document.documentElement);
 });

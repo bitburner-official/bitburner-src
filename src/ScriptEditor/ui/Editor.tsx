@@ -16,6 +16,7 @@ import { scriptEditor } from "../ScriptEditor";
 import { Settings } from "../../Settings/Settings";
 import { openScripts } from "../EditorData";
 import { isUnsavedFile, saveScript } from "./utils";
+import { setMonacoEditorFocused } from "../../Electron";
 
 interface EditorProps {
   /** Function to be ran after mounting editor */
@@ -66,7 +67,11 @@ export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
     subscription.current = editorRef.current.onDidChangeModelContent(() => {
       onChange(editorRef.current?.getValue());
     });
+    editorRef.current.onDidFocusEditorWidget(() => {
+      setMonacoEditorFocused(true);
+    });
     editorRef.current.onDidBlurEditorWidget(() => {
+      setMonacoEditorFocused(false);
       if (!Settings.MonacoAutoSaveOnFocusChange) {
         return;
       }
