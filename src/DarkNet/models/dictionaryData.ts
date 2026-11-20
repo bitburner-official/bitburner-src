@@ -356,7 +356,7 @@ export const packetSniffPhrases = [
   "Look at them, they come to this place when they know they are not pure.",
   "My brothers, did I not tell of this day? Did I not prophesize this moment? Now, I will stop them. Now I am changed, forever bound to the Void.",
   "A new casino opened in Aevum recently. However the house is rumored to cheat. If only we could give them a taste of their own medicine...",
-  "Begone you filth! My gift must be the first modification that your body should have!",
+  "Begone you filth! My gift must be the first modification to touch your body!",
   "Welcome child, I see your body is pure. Are you ready to ascend beyond our human form? If you are, accept my gift.",
   "For this reason, Synthoids are virtually identical to humans in form, composition, and appearance.",
   "Synthoids were first designed and manufactured by OmniTek Incorporated sometime around the middle of the century.",
