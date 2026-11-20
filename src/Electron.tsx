@@ -221,3 +221,11 @@ export function activateSteamAchievements(achievements: string[]): void {
   }
   bridge.send("activate-achievements", { achievements });
 }
+
+export function setMonacoEditorFocused(focus: boolean): void {
+  const bridge = window.electronBridge;
+  if (!bridge) {
+    return;
+  }
+  bridge.send("monaco-editor-focus-changed", focus);
+}

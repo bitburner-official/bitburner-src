@@ -1,5 +1,7 @@
 /** @import { BrowserWindow } from "electron" */
 /* eslint-disable @typescript-eslint/no-var-requires */
+const { existsSync, readFileSync } = require("node:fs");
+const { join } = require("node:path");
 const { app, dialog } = require("electron");
 const log = require("electron-log");
 const Store = require("electron-store");
@@ -153,6 +155,42 @@ function initializeLogLevelConfig() {
   }
 }
 
+/**
+ * Reads the DevTools dock state from the Preferences file.
+ *
+ * When the player changes the dock mode through DevTools UI, Electron/Chromium updates the file asynchronously, so this
+ * function may temporarily return the previous value.
+ *
+ * @returns {"left" | "right" | "bottom" | "undocked"}
+ */
+function getDevToolsDockState() {
+  const preferencesPath = join(app.getPath("userData"), "Preferences");
+  try {
+    if (!existsSync(preferencesPath)) {
+      // Electron's default when no Preferences file exists.
+      return "right";
+    }
+
+    const rawData = readFileSync(preferencesPath, "utf8");
+    const preferences = JSON.parse(rawData);
+    const dockState = preferences?.electron?.devtools?.preferences?.currentDockState;
+    if (!dockState) {
+      // Electron's default when the preference is missing.
+      return "right";
+    }
+
+    // The value is a JSON-encoded string (e.g., "currentDockState":"\"left\""), so JSON.parse removes the extra quotes.
+    const parsedDockState = JSON.parse(dockState);
+    if (["left", "right", "bottom", "undocked"].includes(parsedDockState)) {
+      return parsedDockState;
+    }
+  } catch (error) {
+    log.error(`Failed to read DevTools dock state from Preferences. Path: ${preferencesPath}`, error);
+  }
+  // Fall back to the default if the dock state cannot be read or the value is invalid.
+  return "right";
+}
+
 module.exports = {
   reloadAndKill,
   showErrorBox,
@@ -163,4 +201,5 @@ module.exports = {
   getZoomFactor,
   setZoomFactor,
   initializeLogLevelConfig,
+  getDevToolsDockState,
 };
