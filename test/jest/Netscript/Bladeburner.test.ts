@@ -4,6 +4,7 @@ import { BladeburnerSkillName } from "../../../src/Enums";
 import { PositiveInteger, isPositiveInteger, isPositiveNumber } from "../../../src/types";
 import { randomInRange } from "../../../src/utils/helpers/randomInRange";
 import { getRandomIntInclusive } from "../../../src/utils/helpers/getRandomIntInclusive";
+import { Skills } from "../../../src/Bladeburner/data/Skills";
 
 const skill = new Skill({
   name: BladeburnerSkillName.Hyperdrive,
@@ -11,6 +12,51 @@ const skill = new Skill({
   baseCost: 1,
   costInc: 1,
   mults: {},
+});
+
+describe("Bladeburner Skill Costs", () => {
+  const range = (from: number, to: number) =>
+    Array.from(Array(Math.abs(to - from + 1)).keys(), (x) => (x + from) as PositiveInteger);
+
+  describe("Cost is always positive", () => {
+    describe("Scenario: Early-mid game", () => {
+      it.each(range(1, 5))("Cost of 1 skill at 10^%d level is positive", (levelMagnitude) => {
+        expect(Skills.Hyperdrive.calculateCost(10 ** levelMagnitude)).toBeGreaterThan(0);
+      });
+    });
+
+    describe("Scenario: Int farming", () => {
+      /** ~ 1bil -> 1e35 is a reasonable Hyperdrive skill level for an int farmer as of 2.6.2 */
+      it.each(range(6, 35))("Cost of 1 skill at 10^%d level is positive", (levelMagnitude) => {
+        expect(Skills.Hyperdrive.calculateCost(10 ** levelMagnitude)).toBeGreaterThan(0);
+      });
+
+      it.each(range(2, 50))("Cost of %d skills at 10^25 level is positive", (count: PositiveInteger) => {
+        expect(Skills.Hyperdrive.calculateCost(10 ** 25, count)).toBeGreaterThan(0);
+      });
+    });
+  });
+
+  describe("Max Upgrade Count is always greater than 1 when (available points > cost of 1 upgrade)", () => {
+    it.each(range(1, 4))("Buying for +10^%d points at level 1", (skillMagnitude) => {
+      const costOf1 = Skills.Hyperdrive.calculateCost(1);
+      expect(Skills.Hyperdrive.calculateMaxUpgradeCount(1, costOf1 + 10 ** skillMagnitude)).toBeGreaterThan(0);
+    });
+
+    it.each(range(1, 6))("Buying for +10^%d points at level 35000", (skillMagnitude) => {
+      const costOf1 = Skills.Hyperdrive.calculateCost(35000);
+      expect(Skills.Hyperdrive.calculateMaxUpgradeCount(35000, costOf1 + 10 ** skillMagnitude)).toBeGreaterThan(0);
+    });
+
+    it.each(range(50, 60))("Buying for +10^%d points at level 1e25", (skillMagnitude) => {
+      const costOf1 = Skills.Hyperdrive.calculateCost(1e25);
+      expect(Skills.Hyperdrive.calculateMaxUpgradeCount(1e25, costOf1 + 10 ** skillMagnitude)).toBeGreaterThan(0);
+    });
+
+    it.each(range(25, 35))("Buying for endless budget at level 10^%d", (levelMagnitude) => {
+      expect(Skills.Hyperdrive.calculateMaxUpgradeCount(10 ** levelMagnitude, Number.MAX_VALUE - 1)).toBeGreaterThan(0);
+    });
+  });
 });
 
 describe("Test calculateMaxUpgradeCount", function () {
