@@ -72,6 +72,436 @@ function getNumericCost(cost: number | (() => number)): number {
   return typeof cost === "function" ? cost() : cost;
 }
 
+/** Skip over `(...)` and `?.` wrappers to reach the actual expression. */
+function unwrapExpression(node: acorn.Expression | acorn.Super): acorn.Expression | acorn.Super {
+  let n: acorn.Node = node as acorn.Node;
+  for (;;) {
+    if (n.type === "ParenthesizedExpression") {
+      n = (n as acorn.ParenthesizedExpression).expression;
+      continue;
+    }
+    if (n.type === "ChainExpression") {
+      n = (n as acorn.ChainExpression).expression;
+      continue;
+    }
+    return n as acorn.Expression | acorn.Super;
+  }
+}
+
+/**
+ * Collects `a.b.c` from a non-computed member chain whose root is an Identifier, ThisExpression,
+ * or Super. Returns null for dynamic roots (e.g. call results) or computed access we can't
+ * statically resolve.
+ */
+function collectStaticMemberPath(node: acorn.MemberExpression): string[] | null {
+  const parts: string[] = [];
+  let current: acorn.MemberExpression = node;
+  for (;;) {
+    if (current.computed) return null;
+    const prop = current.property;
+    if (prop.type === "Identifier") parts.unshift(prop.name);
+    else if (prop.type === "PrivateIdentifier") parts.unshift("#" + prop.name);
+    else return null;
+    const obj = unwrapExpression(current.object as acorn.Expression);
+    if (obj.type === "Identifier") {
+      parts.unshift(obj.name);
+      return parts;
+    }
+    if (obj.type === "ThisExpression") {
+      parts.unshift("this");
+      return parts;
+    }
+    if (obj.type === "Super") {
+      parts.unshift("super");
+      return parts;
+    }
+    if (obj.type === "MemberExpression") {
+      current = obj;
+      continue;
+    }
+    return null;
+  }
+}
+
+/**
+ * A lexical scope frame used to decide whether an identifier root in a static member chain
+ * (e.g. the `X` in `X.hack`) is a function parameter visible at that point — and thus a plausible
+ * alias for `ns` — or is shadowed by a local declaration in the same scope.
+ */
+interface ScopeFrame {
+  /** Identifier names bound as parameters when entering this function. */
+  params: Set<string>;
+  /** Identifier names declared in this scope (var/let/const, function decls, class decls, imports). */
+  locals: Set<string>;
+}
+
+/** Collects every binding name introduced by a destructuring / param / catch pattern. */
+function collectPatternNames(p: acorn.Pattern | null | undefined, out: Set<string>): void {
+  if (!p) return;
+  switch (p.type) {
+    case "Identifier":
+      out.add(p.name);
+      return;
+    case "AssignmentPattern":
+      collectPatternNames(p.left, out);
+      return;
+    case "RestElement":
+      collectPatternNames(p.argument, out);
+      return;
+    case "ObjectPattern":
+      for (const prop of p.properties) {
+        if (prop.type === "RestElement") collectPatternNames(prop.argument, out);
+        else collectPatternNames(prop.value, out);
+      }
+      return;
+    case "ArrayPattern":
+      for (const elem of p.elements) {
+        if (elem != null) collectPatternNames(elem, out);
+      }
+      return;
+  }
+}
+
+/**
+ * Scans `node` (a function body or program) for declarations introduced into the same scope as
+ * the enclosing function's params. Does NOT descend into nested function bodies — those open new
+ * scopes — but does descend through blocks, conditionals, loops, try/catch, switch, and labels.
+ * `var`/`let`/`const` are treated uniformly; the only consequence is that block-scoped names can
+ * still shadow outer params, which matches the pessimistic intent of the pass.
+ */
+function visitForLocals(node: acorn.Node | null | undefined, out: Set<string>): void {
+  if (!node) return;
+  switch (node.type) {
+    case "Program":
+      for (const stmt of (node as acorn.Program).body) visitForLocals(stmt, out);
+      return;
+    case "BlockStatement":
+      for (const stmt of (node as acorn.BlockStatement).body) visitForLocals(stmt, out);
+      return;
+    case "VariableDeclaration":
+      for (const decl of (node as acorn.VariableDeclaration).declarations) {
+        collectPatternNames(decl.id, out);
+      }
+      return;
+    case "FunctionDeclaration": {
+      const id = (node as acorn.FunctionDeclaration).id;
+      if (id) out.add(id.name);
+      return;
+    }
+    case "ClassDeclaration": {
+      const id = (node as acorn.ClassDeclaration).id;
+      if (id) out.add(id.name);
+      return;
+    }
+    case "ImportDeclaration":
+      for (const spec of (node as acorn.ImportDeclaration).specifiers) {
+        if (spec.local?.type === "Identifier") out.add(spec.local.name);
+      }
+      return;
+    case "ExportNamedDeclaration": {
+      const decl = (node as acorn.ExportNamedDeclaration).declaration;
+      if (decl) visitForLocals(decl, out);
+      return;
+    }
+    case "ExportDefaultDeclaration": {
+      const decl = (node as acorn.ExportDefaultDeclaration).declaration;
+      if (decl) visitForLocals(decl as acorn.Node, out);
+      return;
+    }
+    case "IfStatement": {
+      const n = node as acorn.IfStatement;
+      visitForLocals(n.consequent, out);
+      if (n.alternate) visitForLocals(n.alternate, out);
+      return;
+    }
+    case "ForStatement": {
+      const n = node as acorn.ForStatement;
+      if (n.init && n.init.type === "VariableDeclaration") {
+        for (const decl of n.init.declarations) collectPatternNames(decl.id, out);
+      }
+      visitForLocals(n.body, out);
+      return;
+    }
+    case "ForInStatement":
+    case "ForOfStatement": {
+      const n = node as acorn.ForInStatement | acorn.ForOfStatement;
+      if (n.left && n.left.type === "VariableDeclaration") {
+        for (const decl of n.left.declarations) collectPatternNames(decl.id, out);
+      }
+      visitForLocals(n.body, out);
+      return;
+    }
+    case "WhileStatement":
+    case "DoWhileStatement":
+      visitForLocals((node as acorn.WhileStatement).body, out);
+      return;
+    case "SwitchStatement":
+      for (const c of (node as acorn.SwitchStatement).cases) {
+        for (const stmt of c.consequent) visitForLocals(stmt, out);
+      }
+      return;
+    case "TryStatement": {
+      const n = node as acorn.TryStatement;
+      visitForLocals(n.block, out);
+      if (n.handler) {
+        if (n.handler.param) collectPatternNames(n.handler.param, out);
+        visitForLocals(n.handler.body, out);
+      }
+      if (n.finalizer) visitForLocals(n.finalizer, out);
+      return;
+    }
+    case "LabeledStatement":
+      visitForLocals((node as acorn.LabeledStatement).body, out);
+      return;
+  }
+}
+
+/** Builds a ScopeFrame for a function (or the module top-level). */
+function buildScopeFrame(params: acorn.Pattern[], body: acorn.Node | null | undefined): ScopeFrame {
+  const ps = new Set<string>();
+  for (const p of params) collectPatternNames(p, ps);
+  const locals = new Set<string>();
+  visitForLocals(body, locals);
+  return { params: ps, locals };
+}
+
+/**
+ * Walks the scope chain innermost-to-outermost. The first frame that declares `name` as a local
+ * shadows any outer params; otherwise the first frame that lists `name` as a parameter signals an
+ * `ns`-alias-eligible identifier.
+ */
+function rootIsVisibleParam(name: string, scopes: ScopeFrame[]): boolean {
+  for (let i = scopes.length - 1; i >= 0; i--) {
+    if (scopes[i].locals.has(name)) return false;
+    if (scopes[i].params.has(name)) return true;
+  }
+  return false;
+}
+
+/** Top-level `import` binding names in this module (default, namespace, and named specifiers). */
+function collectModuleImportLocals(ast: acorn.Node): Set<string> {
+  const names = new Set<string>();
+  if (ast.type !== "Program") return names;
+  for (const stmt of (ast as acorn.Program).body) {
+    if (stmt.type !== "ImportDeclaration") continue;
+    for (const spec of stmt.specifiers) {
+      if (spec.local?.type === "Identifier") names.add(spec.local.name);
+    }
+  }
+  return names;
+}
+
+/**
+ * True if `name` refers to a module import (not a parameter or inner local that shadows the same
+ * identifier).
+ */
+function calleeBindingIsModuleImport(name: string, scopes: ScopeFrame[], importedBindings: Set<string>): boolean {
+  if (!importedBindings.has(name)) return false;
+  for (let i = scopes.length - 1; i >= 0; i--) {
+    if (scopes[i].params.has(name) || scopes[i].locals.has(name)) {
+      return i === 0;
+    }
+  }
+  return false;
+}
+
+/** Strip parens / optional-chain wrappers from a variable initializer or assignment RHS. */
+function unwrapInit(init: acorn.Expression | null | undefined): acorn.Expression | null {
+  if (!init) return null;
+  let n: acorn.Node = init;
+  for (;;) {
+    if (n.type === "ParenthesizedExpression") {
+      n = (n as acorn.ParenthesizedExpression).expression;
+      continue;
+    }
+    if (n.type === "ChainExpression") {
+      n = (n as acorn.ChainExpression).expression;
+      continue;
+    }
+    return n as acorn.Expression;
+  }
+}
+
+/**
+ * True for any binding whose RHS is `ns` or `this.ns` / `super.ns`. The local should be treated
+ * exactly like the `ns` param for path-normalization purposes.
+ */
+function rhsIsNsLike(init: acorn.Expression | null | undefined, scopes: ScopeFrame[]): boolean {
+  const n = unwrapInit(init);
+  if (n === null) return false;
+  if (n.type === "Identifier") return n.name === "ns" && rootIsVisibleParam("ns", scopes);
+  if (n.type !== "MemberExpression" || n.computed) return false;
+  const obj = unwrapExpression(n.object as acorn.Expression);
+  if (obj.type !== "ThisExpression" && obj.type !== "Super") return false;
+  return n.property.type === "Identifier" && n.property.name === "ns";
+}
+
+/**
+ * For `const x = ns.gang` (or `_ns.gang` when `_ns` is already an ns alias), returns the namespace
+ * segment (`"gang"`) so a later access on `x` resolves into `RamCosts.gang.*`.
+ */
+function extractNsNamespaceAlias(
+  init: acorn.Expression | null | undefined,
+  scopes: ScopeFrame[],
+  nsParamAliases: Set<string>,
+): string | null {
+  const n = unwrapInit(init);
+  if (n === null || n.type !== "MemberExpression" || n.computed) return null;
+  const obj = unwrapExpression(n.object as acorn.Expression);
+  if (obj.type !== "Identifier") return null;
+  const isNs = (obj.name === "ns" && rootIsVisibleParam("ns", scopes)) || nsParamAliases.has(obj.name);
+  if (!isNs) return null;
+  return n.property.type === "Identifier" ? n.property.name : null;
+}
+
+/** Non-computed `globalThis.<slot>`. */
+function isGlobalThisSlotMember(expr: acorn.Expression): { slot: string } | null {
+  const n = unwrapExpression(expr);
+  if (n.type !== "MemberExpression" || n.computed) return null;
+  const obj = unwrapExpression(n.object as acorn.Expression);
+  if (obj.type !== "Identifier" || obj.name !== "globalThis") return null;
+  if (n.property.type !== "Identifier") return null;
+  return { slot: n.property.name };
+}
+
+/**
+ * For each `globalThis.<slot> = …` that assigns from `ns` or `ns.<api>`, maps `<slot>` to the
+ * RamCosts path prefix (segments) after stripping `globalThis.<slot>`. An empty prefix means the
+ * whole `ns` object was stored (e.g. `globalThis.ns = ns` or `globalThis.foo = ns`). A one-segment
+ * prefix means `ns.<segment>` was stored (e.g. `globalThis.gang = ns.gang` → `["gang"]`).
+ *
+ * Module-wide and order-insensitive like the old `globalThis.ns = ns` hint: any read of
+ * `globalThis.<slot>.*` in a sibling function may hit Netscript APIs because `globalThis` is shared.
+ */
+function moduleGlobalThisNsSlotPrefixMap(ast: acorn.Node): Map<string, string[]> {
+  const map = new Map<string, string[]>();
+  walk.simple(ast, {
+    AssignmentExpression(node: acorn.AssignmentExpression) {
+      if (node.operator !== "=") return;
+      const slotInfo = isGlobalThisSlotMember(node.left as acorn.Expression);
+      if (slotInfo === null) return;
+      const r = unwrapInit(node.right);
+      if (r === null) return;
+      if (r.type === "Identifier" && r.name === "ns") {
+        map.set(slotInfo.slot, []);
+        return;
+      }
+      if (r.type === "MemberExpression" && !r.computed) {
+        const robj = unwrapExpression(r.object as acorn.Expression);
+        if (robj.type !== "Identifier" || robj.name !== "ns") return;
+        if (r.property.type !== "Identifier") return;
+        map.set(slotInfo.slot, [r.property.name]);
+      }
+    },
+  });
+  return map;
+}
+
+/**
+ * Records aliases produced by `const { a, b: c } = ns.<namespace>` so a bare reference to `a` or
+ * `c` charges the namespace-qualified API.
+ */
+function recordDestructuredNamespaceAliases(
+  pattern: acorn.ObjectPattern,
+  init: acorn.Expression | null | undefined,
+  scopes: ScopeFrame[],
+  nsParamAliases: Set<string>,
+  apiLeafAliases: Map<string, string>,
+): void {
+  const nsSeg = extractNsNamespaceAlias(init, scopes, nsParamAliases);
+  if (nsSeg === null) return;
+  for (const prop of pattern.properties) {
+    if (prop.type !== "Property" || prop.computed) continue;
+    const sourceName =
+      prop.key.type === "Identifier"
+        ? prop.key.name
+        : prop.key.type === "Literal" && typeof prop.key.value === "string"
+        ? prop.key.value
+        : null;
+    if (sourceName === null) continue;
+    if (prop.value.type !== "Identifier") continue;
+    apiLeafAliases.set(prop.value.name, `${nsSeg}.${sourceName}`);
+  }
+}
+
+/**
+ * Strips `this`/`super`, rewrites `globalThis.<slot>` when the module assigns that slot from `ns`
+ * or `ns.<api>` (see `moduleGlobalThisNsSlotPrefixMap`), then rewrites `ns` and full-ns aliases away
+ * and substitutes namespace aliases. The returned segments are the dotted ref into `RamCosts`.
+ */
+function normalizeMemberPathForRam(
+  path: string[],
+  scopes: ScopeFrame[],
+  nsParamAliases: Set<string>,
+  namespaceAliases: Map<string, string>,
+  globalThisNsSlotPrefixes: Map<string, string[]>,
+): string[] {
+  let segments = path;
+  if (segments[0] === "this" || segments[0] === "super") segments = segments.slice(1);
+  if (segments[0] === "globalThis" && segments.length >= 2) {
+    const prefix = globalThisNsSlotPrefixes.get(segments[1]);
+    if (prefix !== undefined) {
+      segments = [...prefix, ...segments.slice(2)];
+    }
+  }
+  if (segments.length === 0) return segments;
+  const head = segments[0];
+  if (nsParamAliases.has(head)) {
+    segments = segments.slice(1);
+  } else if (head === "ns" && rootIsVisibleParam("ns", scopes)) {
+    segments = segments.slice(1);
+  } else {
+    const mapped = namespaceAliases.get(head);
+    if (mapped !== undefined) segments = [mapped, ...segments.slice(1)];
+  }
+  return segments;
+}
+
+/**
+ * Maps a normalized static access path to candidate `RamCosts` ref strings. The bare leaf is
+ * returned as an extra candidate only when `allowLeafFallback` is true — caller-controlled so
+ * that e.g. `readback.weaken` (issue #298) or `test.run()` (issue #1894) do NOT pick up
+ * `weaken` / `run`. The strict bare-lookup in `lookupRamCost` further ensures the leaf candidate
+ * cannot pick up nested API names (e.g. `attempt` does not resolve to `codingcontract.attempt`).
+ */
+function ramCostRefsFromStaticPath(path: string[], allowLeafFallback: boolean): string[] {
+  if (path.length === 0) return [];
+  const refs: string[] = [path.join(".")];
+  if (allowLeafFallback && path.length > 1) refs.push(path[path.length - 1]);
+  return refs;
+}
+
+/**
+ * Resolves a dependency string against `RamCosts`. Dotted refs use strict path traversal; bare
+ * refs only match top-level leaves so locals (e.g. `attempt`) do not pick up nested API keys
+ * (`codingcontract.attempt`).
+ */
+function lookupRamCost(ref: string): { func: (() => number) | number; refDetail: string } | undefined {
+  if (!ref) return undefined;
+  const costs = RamCosts as Record<string, unknown>;
+  if (ref.includes(".")) {
+    const segments = ref.split(".");
+    let cur: unknown = costs;
+    for (let i = 0; i < segments.length; i++) {
+      if (cur === null || typeof cur !== "object") return undefined;
+      const next = (cur as Record<string, unknown>)[segments[i]];
+      if (i === segments.length - 1) {
+        if (typeof next === "number" || typeof next === "function") {
+          return { func: next as (() => number) | number, refDetail: ref };
+        }
+        return undefined;
+      }
+      cur = next;
+    }
+    return undefined;
+  }
+  const leaf = costs[ref];
+  if (typeof leaf === "number" || typeof leaf === "function") {
+    return { func: leaf as (() => number) | number, refDetail: ref };
+  }
+  return undefined;
+}
+
 /**
  * Parses code into an AST and walks through it recursively to calculate
  * RAM usage. Also accounts for imported modules.
@@ -221,29 +651,7 @@ function parseOnlyRamCalculate(
       }
       loadedFns[ref] = true;
 
-      // This accounts for namespaces (Bladeburner, CodingContract, etc.)
-      const findFunc = (
-        prefix: string,
-        obj: object,
-        ref: string,
-      ): { func: (() => number) | number; refDetail: string } | undefined => {
-        if (!obj) {
-          return;
-        }
-        const elem = Object.entries(obj).find(([key]) => key === ref);
-        if (elem !== undefined && (typeof elem[1] === "function" || typeof elem[1] === "number")) {
-          return { func: elem[1] as (() => number) | number, refDetail: `${prefix}${ref}` };
-        }
-        for (const [key, value] of Object.entries(obj)) {
-          const found = findFunc(`${key}.`, value as object, ref);
-          if (found) {
-            return found;
-          }
-        }
-        return undefined;
-      };
-
-      const details = findFunc("", RamCosts, ref);
+      const details = lookupRamCost(ref);
       const fnRam = getNumericCost(details?.func ?? 0);
       ram += fnRam;
       detailedCosts.push({ type: "fn", name: details?.refDetail ?? "", cost: fnRam });
@@ -324,11 +732,24 @@ function parseOnlyCalculateDeps(
   const dependencyMap: Record<string, Set<string> | undefined> = {};
   dependencyMap[globalKey] = new Set<string>();
 
+  // The module's top-level scope frame. Its `params` is empty (the module is not a function); its
+  // `locals` hold every top-level binding. The MemberExpression visitor walks this stack
+  // innermost-first to decide whether a static chain like `X.hack` is rooted in a visible
+  // parameter (and thus eligible for an `ns`-alias leaf fallback).
+  const moduleFrame: ScopeFrame = { params: new Set(), locals: new Set() };
+  visitForLocals(ast as acorn.Node, moduleFrame.locals);
+
+  const importedBindings = collectModuleImportLocals(ast as acorn.Node);
+
   // If we reference this internal name, we're really referencing that external name.
   // Filled when we import names from other modules.
   const internalToExternal: Record<string, string | undefined> = {};
 
   const additionalModules: ScriptFilePath[] = [];
+
+  // Assignments like `globalThis.ns = ns` / `globalThis.gang = ns.gang`: sibling functions may
+  // read those slots; `globalThis` is shared at runtime. Cheap one-pass prescan.
+  const globalThisNsSlotPrefixes = moduleGlobalThisNsSlotPrefixMap(ast as acorn.Node);
 
   // References get added pessimistically. They are added for thisModule.name, name, and for
   // any aliases.
@@ -347,6 +768,44 @@ function parseOnlyCalculateDeps(
 
   interface State {
     key: string;
+    /** Active lexical scope chain, innermost frame last. */
+    scopes: ScopeFrame[];
+    /** Module-top-level `import` locals; used for pessimistic `imported().api` charging. */
+    importedBindings: Set<string>;
+    /** Locals assigned from `ns` / `this.ns` — treated like `ns` for path normalization. */
+    nsParamAliases: Set<string>;
+    /** Locals assigned from `ns.<namespace>` — maps local name to the first RamCosts segment. */
+    namespaceAliases: Map<string, string>;
+    /** Names pulled out of `ns.<namespace>` via destructuring — maps local name to a dotted ref. */
+    apiLeafAliases: Map<string, string>;
+  }
+
+  /**
+   * Enters a function scope for the duration of `run`. Saves and snapshot-copies the alias state,
+   * then restores on exit so child scopes can't leak bindings outward.
+   */
+  function withFunctionScope(
+    params: acorn.Pattern[],
+    body: acorn.Node | null | undefined,
+    st: State,
+    run: () => void,
+  ): void {
+    const frame = buildScopeFrame(params, body);
+    const prevNsAliases = st.nsParamAliases;
+    const prevNamespaceAliases = st.namespaceAliases;
+    const prevApiLeafAliases = st.apiLeafAliases;
+    st.nsParamAliases = new Set(prevNsAliases);
+    st.namespaceAliases = new Map(prevNamespaceAliases);
+    st.apiLeafAliases = new Map(prevApiLeafAliases);
+    st.scopes.push(frame);
+    try {
+      run();
+    } finally {
+      st.scopes.pop();
+      st.nsParamAliases = prevNsAliases;
+      st.namespaceAliases = prevNamespaceAliases;
+      st.apiLeafAliases = prevApiLeafAliases;
+    }
   }
 
   function checkRamOverride(node: acorn.BlockStatement) {
@@ -408,6 +867,11 @@ function parseOnlyCalculateDeps(
         if (objectPrototypeProperties.includes(node.name)) {
           return;
         }
+        const apiLeaf = st.apiLeafAliases.get(node.name);
+        if (apiLeaf !== undefined) {
+          addRef(st.key, apiLeaf);
+          return;
+        }
         addRef(st.key, node.name);
       },
       WhileStatement: (node: acorn.WhileStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
@@ -434,98 +898,261 @@ function parseOnlyCalculateDeps(
         node.alternate && walkDeeper(node.alternate, st);
       },
       MemberExpression: (node: acorn.MemberExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        const path = collectStaticMemberPath(node);
+        if (path !== null && path.length >= 2) {
+          const root = path[0];
+          const normalized = normalizeMemberPathForRam(
+            path,
+            st.scopes,
+            st.nsParamAliases,
+            st.namespaceAliases,
+            globalThisNsSlotPrefixes,
+          );
+          if (normalized.length >= 1) {
+            const allowLeafFallback =
+              root === "this" || root === "super" || rootIsVisibleParam(root, st.scopes) || st.nsParamAliases.has(root);
+            for (const ref of ramCostRefsFromStaticPath(normalized, allowLeafFallback)) {
+              addRef(st.key, ref);
+            }
+          }
+        }
+        // For `knownApiCall().leaf`: charge the called API only. The leaf is data on the return
+        // value, not a reference to a top-level NS API (issue #875), including under namespace
+        // aliases and when nested inside another call's arguments.
+        if (!node.computed && node.property.type === "Identifier") {
+          const obj = unwrapExpression(node.object as acorn.Expression);
+          if (obj.type === "CallExpression") {
+            const callee = unwrapExpression(obj.callee as acorn.Expression);
+            const calleePath = callee.type === "MemberExpression" ? collectStaticMemberPath(callee) : null;
+            if (calleePath !== null && calleePath.length >= 2) {
+              const normalizedCallee = normalizeMemberPathForRam(
+                calleePath,
+                st.scopes,
+                st.nsParamAliases,
+                st.namespaceAliases,
+                globalThisNsSlotPrefixes,
+              );
+              if (normalizedCallee.length >= 2 && lookupRamCost(normalizedCallee.join("."))) {
+                for (const ref of ramCostRefsFromStaticPath(normalizedCallee, false)) {
+                  addRef(st.key, ref);
+                }
+              }
+            }
+            // Pessimistic: `import { foo } …; foo().hack()` may forward `ns.hack` from another module.
+            if (
+              callee.type === "Identifier" &&
+              node.property.type === "Identifier" &&
+              calleeBindingIsModuleImport(callee.name, st.scopes, st.importedBindings)
+            ) {
+              const apiLeaf = node.property.name;
+              if (lookupRamCost(apiLeaf)) {
+                addRef(st.key, apiLeaf);
+              }
+            }
+          }
+        }
         node.object && walkDeeper(node.object, st);
-        node.property && walkDeeper(node.property, st);
+        // Only descend into the property for computed access (e.g. obj[expr]), where the property
+        // expression can contain real identifier references. A non-computed property name is just
+        // a static key and must not be treated as an identifier reference into RamCosts; static
+        // API references are captured via the path collection above.
+        if (node.computed && node.property) {
+          walkDeeper(node.property, st);
+        }
+      },
+      VariableDeclaration: (node: acorn.VariableDeclaration, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        for (const decl of node.declarations) {
+          if (decl.init) walkDeeper(decl.init, st);
+          if (decl.id.type === "Identifier" && decl.init) {
+            if (rhsIsNsLike(decl.init, st.scopes)) {
+              st.nsParamAliases.add(decl.id.name);
+            }
+            const nsSeg = extractNsNamespaceAlias(decl.init, st.scopes, st.nsParamAliases);
+            if (nsSeg !== null) st.namespaceAliases.set(decl.id.name, nsSeg);
+          } else if (decl.id.type === "ObjectPattern" && decl.init) {
+            recordDestructuredNamespaceAliases(decl.id, decl.init, st.scopes, st.nsParamAliases, st.apiLeafAliases);
+            if (extractNsNamespaceAlias(decl.init, st.scopes, st.nsParamAliases) === null) {
+              walkDeeper(decl.id, st);
+            }
+          } else if (decl.id.type !== "Identifier") {
+            walkDeeper(decl.id, st);
+          }
+        }
+      },
+      AssignmentExpression: (node: acorn.AssignmentExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        if (node.operator === "=" && node.left.type === "Identifier") {
+          walkDeeper(node.right, st);
+          if (rhsIsNsLike(node.right, st.scopes)) {
+            st.nsParamAliases.add(node.left.name);
+          }
+          walkDeeper(node.left, st);
+          return;
+        }
+        walkDeeper(node.left, st);
+        walkDeeper(node.right, st);
+      },
+      CallExpression: (node: acorn.CallExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        walkDeeper(node.callee, st);
+        for (const arg of node.arguments) walkDeeper(arg, st);
+      },
+      FunctionDeclaration: (
+        node: acorn.FunctionDeclaration | acorn.AnonymousFunctionDeclaration,
+        st: State,
+        walkDeeper: walk.WalkerCallback<State>,
+      ) => {
+        withFunctionScope(node.params, node.body, st, () => {
+          if (node.body) walkDeeper(node.body, st);
+        });
+      },
+      FunctionExpression: (node: acorn.FunctionExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        withFunctionScope(node.params, node.body, st, () => {
+          if (node.body) walkDeeper(node.body, st);
+        });
+      },
+      ArrowFunctionExpression: (
+        node: acorn.ArrowFunctionExpression,
+        st: State,
+        walkDeeper: walk.WalkerCallback<State>,
+      ) => {
+        withFunctionScope(node.params, node.body, st, () => {
+          if (node.body) walkDeeper(node.body, st);
+        });
       },
     };
   }
 
   walk.recursive<State>(
     ast as acorn.Node, // Pretend that ast is an acorn node
-    { key: globalKey },
-    Object.assign(
-      {
-        ImportDeclaration: (node: acorn.ImportDeclaration, st: State) => {
-          const rawImportModuleName = node.source.value;
-          if (typeof rawImportModuleName !== "string") {
-            console.error("Invalid node when walking ImportDeclaration in parseOnlyCalculateDeps. node:", node);
-            return;
-          }
-          // Skip these modules. They are popular path aliases of NetscriptDefinitions.d.ts.
-          if (fileTypeFeature.isTypeScript && (rawImportModuleName === "@nsdefs" || rawImportModuleName === "@ns")) {
-            return;
-          }
-          const importModuleName = getModuleScript(rawImportModuleName, currentModule, otherScripts).filename;
-          additionalModules.push(importModuleName);
+    {
+      key: globalKey,
+      scopes: [moduleFrame],
+      importedBindings,
+      nsParamAliases: new Set<string>(),
+      namespaceAliases: new Map<string, string>(),
+      apiLeafAliases: new Map<string, string>(),
+    },
+    // commonVisitors first so the top-level handlers below override them at the outermost walk.
+    // The top-level FunctionDeclaration handler is responsible for `checkRamOverride` and for
+    // opening a new dep-map key per function; it then dispatches into commonVisitors for the body,
+    // where the scope-pushing function visitors take over.
+    Object.assign(commonVisitors(), {
+      ImportDeclaration: (node: acorn.ImportDeclaration, st: State) => {
+        const rawImportModuleName = node.source.value;
+        if (typeof rawImportModuleName !== "string") {
+          console.error("Invalid node when walking ImportDeclaration in parseOnlyCalculateDeps. node:", node);
+          return;
+        }
+        // Skip these modules. They are popular path aliases of NetscriptDefinitions.d.ts.
+        if (fileTypeFeature.isTypeScript && (rawImportModuleName === "@nsdefs" || rawImportModuleName === "@ns")) {
+          return;
+        }
+        const importModuleName = getModuleScript(rawImportModuleName, currentModule, otherScripts).filename;
+        additionalModules.push(importModuleName);
 
-          // This module's global scope refers to that module's global scope, no matter how we
-          // import it.
-          const set = dependencyMap[st.key];
-          if (set === undefined) throw new Error("set should not be undefined");
-          set.add(importModuleName + memCheckGlobalKey);
+        // This module's global scope refers to that module's global scope, no matter how we
+        // import it.
+        const set = dependencyMap[st.key];
+        if (set === undefined) throw new Error("set should not be undefined");
+        set.add(importModuleName + memCheckGlobalKey);
 
-          for (let i = 0; i < node.specifiers.length; ++i) {
-            const spec = node.specifiers[i];
-            /**
-             * spec can be ImportSpecifier, ImportDefaultSpecifier, or ImportNamespaceSpecifier. "imported" only exists
-             * in ImportSpecifier. "imported" can be Identifier or Literal. imported.name only exists in Identifier.
-             */
-            if (spec.type === "ImportSpecifier" && spec.imported.type === "Identifier" && spec.local !== undefined) {
-              // We depend on specific things.
-              internalToExternal[spec.local.name] = importModuleName + "." + spec.imported.name;
-            } else {
-              // We depend on everything.
-              const set = dependencyMap[st.key];
-              if (set === undefined) throw new Error("set should not be undefined");
-              set.add(importModuleName + ".*");
-            }
+        for (let i = 0; i < node.specifiers.length; ++i) {
+          const spec = node.specifiers[i];
+          /**
+           * spec can be ImportSpecifier, ImportDefaultSpecifier, or ImportNamespaceSpecifier. "imported" only exists
+           * in ImportSpecifier. "imported" can be Identifier or Literal. imported.name only exists in Identifier.
+           */
+          if (spec.type === "ImportSpecifier" && spec.imported.type === "Identifier" && spec.local !== undefined) {
+            // We depend on specific things.
+            internalToExternal[spec.local.name] = importModuleName + "." + spec.imported.name;
+          } else {
+            // We depend on everything.
+            const set = dependencyMap[st.key];
+            if (set === undefined) throw new Error("set should not be undefined");
+            set.add(importModuleName + ".*");
           }
-        },
-        FunctionDeclaration: (node: acorn.FunctionDeclaration) => {
-          if (node.id?.name === "main") {
-            checkRamOverride(node.body);
-          }
-          // node.id will be null when using 'export default'. Add a module name indicating the default export.
-          const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
-          walk.recursive(node, { key: key }, commonVisitors());
-        },
-        ExportNamedDeclaration: (
-          node: acorn.ExportNamedDeclaration,
-          st: State,
-          walkDeeper: walk.WalkerCallback<State>,
-        ) => {
-          if (node.declaration != null) {
-            // if this is true, the statement is not a named export, but rather a exported function/variable
-            walkDeeper(node.declaration, st);
-            return;
-          }
-
-          for (const specifier of node.specifiers) {
-            /**
-             * specifier.exported can be Identifier or Literal. specifier.exported.name only exists in Identifier.
-             */
-            if (specifier.exported.type === "Literal") {
-              continue;
-            }
-            const exportedDepName = currentModule + "." + specifier.exported.name;
-            /**
-             * We need to use specifier.local.name and node.source.value. Before doing that, we need to check if they
-             * exist. local.name only exists in Identifier.
-             */
-            if (node.source != null && typeof node.source.value === "string" && specifier.local.type === "Identifier") {
-              // if this is true, we are re-exporting something
-              addRef(exportedDepName, specifier.local.name, node.source.value as ScriptFilePath);
-              additionalModules.push(node.source.value as ScriptFilePath);
-            } else if (specifier.local.type === "Identifier" && specifier.exported.name !== specifier.local.name) {
-              // this makes sure we are not referring to ourselves
-              // if this is not true, we don't need to add anything
-              addRef(exportedDepName, specifier.local.name);
-            }
-          }
-        },
+        }
       },
-      commonVisitors(),
-    ),
+      ClassDeclaration: (node: acorn.ClassDeclaration, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+        // Top-level class bodies are walked under their own dependency key so NS API usage in
+        // methods is not attributed to the module global scope (which every import links to).
+        // Class RAM is charged only when the class is referenced from reachable code.
+        if (st.key !== globalKey || node.id === null) {
+          if (node.body) walkDeeper(node.body, st);
+          return;
+        }
+        const classKey = currentModule + "." + node.id.name;
+        const ownFrame = buildScopeFrame([], node.body);
+        walk.recursive(
+          node.body,
+          {
+            key: classKey,
+            scopes: [moduleFrame, ownFrame],
+            importedBindings,
+            nsParamAliases: new Set<string>(),
+            namespaceAliases: new Map<string, string>(),
+            apiLeafAliases: new Map<string, string>(),
+          },
+          commonVisitors(),
+        );
+      },
+      FunctionDeclaration: (node: acorn.FunctionDeclaration) => {
+        if (node.id?.name === "main") {
+          checkRamOverride(node.body);
+        }
+        // node.id will be null when using 'export default'. Add a module name indicating the default export.
+        const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
+        // Seed the scope chain with the module frame and this function's own frame. We walk the
+        // body directly so the commonVisitors FunctionDeclaration handler doesn't fire on this
+        // same node and double-push the frame.
+        const ownFrame = buildScopeFrame(node.params, node.body);
+        walk.recursive(
+          node.body,
+          {
+            key,
+            scopes: [moduleFrame, ownFrame],
+            importedBindings,
+            nsParamAliases: new Set<string>(),
+            namespaceAliases: new Map<string, string>(),
+            apiLeafAliases: new Map<string, string>(),
+          },
+          commonVisitors(),
+        );
+      },
+      ExportNamedDeclaration: (
+        node: acorn.ExportNamedDeclaration,
+        st: State,
+        walkDeeper: walk.WalkerCallback<State>,
+      ) => {
+        if (node.declaration != null) {
+          // if this is true, the statement is not a named export, but rather a exported function/variable
+          walkDeeper(node.declaration, st);
+          return;
+        }
+
+        for (const specifier of node.specifiers) {
+          /**
+           * specifier.exported can be Identifier or Literal. specifier.exported.name only exists in Identifier.
+           */
+          if (specifier.exported.type === "Literal") {
+            continue;
+          }
+          const exportedDepName = currentModule + "." + specifier.exported.name;
+          /**
+           * We need to use specifier.local.name and node.source.value. Before doing that, we need to check if they
+           * exist. local.name only exists in Identifier.
+           */
+          if (node.source != null && typeof node.source.value === "string" && specifier.local.type === "Identifier") {
+            // if this is true, we are re-exporting something
+            addRef(exportedDepName, specifier.local.name, node.source.value as ScriptFilePath);
+            additionalModules.push(node.source.value as ScriptFilePath);
+          } else if (specifier.local.type === "Identifier" && specifier.exported.name !== specifier.local.name) {
+            // this makes sure we are not referring to ourselves
+            // if this is not true, we don't need to add anything
+            addRef(exportedDepName, specifier.local.name);
+          }
+        }
+      },
+    }),
   );
 
   return { dependencyMap: dependencyMap, additionalModules: additionalModules };
