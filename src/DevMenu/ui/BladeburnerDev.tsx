@@ -39,12 +39,16 @@ export function BladeburnerDev(): React.ReactElement {
   const bladeburner = Player.bladeburner;
 
   // Rank functions
-  const modifyBladeburnerRank = (modify: number) => (rank: number) => bladeburner.changeRank(Player, rank * modify);
+  const modifyBladeburnerRank = (modify: number) => (rank: number) => {
+    bladeburner.changeRank(Player, rank * modify);
+  };
   const resetBladeburnerRank = () => {
     bladeburner.rank = 0;
     bladeburner.maxRank = 0;
   };
-  const addTonsBladeburnerRank = () => bladeburner.changeRank(Player, bigNumber);
+  const addTonsBladeburnerRank = () => {
+    bladeburner.changeRank(Player, bigNumber);
+  };
 
   // Skill point functions
   const modifyBladeburnerSP = (modify: number) => (skillPoints: number) => {
@@ -62,13 +66,19 @@ export function BladeburnerDev(): React.ReactElement {
   const addTonsBladeburnerCycles = () => (bladeburner.storedCycles += bigNumber);
 
   // Chaos functions
-  const wipeAllChaos = () => Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos = 0));
+  const wipeAllChaos = () => {
+    Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos = 0));
+  };
   const wipeActiveCityChaos = () => (bladeburner.cities[bladeburner.city].chaos = 0);
   const addAllChaos = (modify: number) => (chaos: number) => {
-    Object.values(CityName).forEach((city) => bladeburner.cities[city].changeChaosByCount(chaos * modify));
+    Object.values(CityName).forEach((city) => {
+      bladeburner.cities[city].changeChaosByCount(chaos * modify);
+    });
   };
   const addTonsAllChaos = () => {
-    Object.values(CityName).forEach((city) => bladeburner.cities[city].changeChaosByCount(bigNumber));
+    Object.values(CityName).forEach((city) => {
+      bladeburner.cities[city].changeChaosByCount(bigNumber);
+    });
   };
 
   // Skill functions

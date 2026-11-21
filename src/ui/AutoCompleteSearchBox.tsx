@@ -79,7 +79,9 @@ export function AutoCompleteSearchBox({
         />
       )}
       filterOptions={(options) => options}
-      onChange={(event, selection) => onSelection(event, selection, options, searchValue)}
+      onChange={(event, selection) => {
+        onSelection(event, selection, options, searchValue);
+      }}
     />
   );
 }

@@ -6,16 +6,24 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 
 export function cp(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 2) {
-    return Terminal.error("Incorrect usage of cp command. Usage: cp [source filename] [destination]");
+    Terminal.error("Incorrect usage of cp command. Usage: cp [source filename] [destination]");
+    return;
   }
   // Find the source file
   const sourceFilePath = Terminal.getFilepath(String(args[0]));
-  if (!sourceFilePath) return Terminal.error(`Invalid source filename ${args[0]}`);
+  if (!sourceFilePath) {
+    Terminal.error(`Invalid source filename ${args[0]}`);
+    return;
+  }
   if (!hasTextExtension(sourceFilePath) && !hasScriptExtension(sourceFilePath)) {
-    return Terminal.error("cp: Can only be performed on script and text files");
+    Terminal.error("cp: Can only be performed on script and text files");
+    return;
   }
   const source = server.getContentFile(sourceFilePath);
-  if (!source) return Terminal.error(`File not found: ${sourceFilePath}`);
+  if (!source) {
+    Terminal.error(`File not found: ${sourceFilePath}`);
+    return;
+  }
 
   // Determine the destination file path.
   const destinationInput = String(args[1]);
@@ -23,11 +31,15 @@ export function cp(args: (string | number | boolean)[], server: BaseServer): und
   let destFilePath = Terminal.getFilepath(destinationInput);
   if (!destFilePath) {
     const destDirectory = Terminal.getDirectory(destinationInput);
-    if (!destDirectory) return Terminal.error(`Could not resolve ${destinationInput} as a FilePath or Directory`);
+    if (!destDirectory) {
+      Terminal.error(`Could not resolve ${destinationInput} as a FilePath or Directory`);
+      return;
+    }
     destFilePath = combinePath(destDirectory, getFilenameOnly(sourceFilePath));
   }
   if (!hasTextExtension(destFilePath) && !hasScriptExtension(destFilePath)) {
-    return Terminal.error(`cp: Can only copy to script and text files (${destFilePath} is invalid destination)`);
+    Terminal.error(`cp: Can only copy to script and text files (${destFilePath} is invalid destination)`);
+    return;
   }
 
   const result = server.writeToContentFile(destFilePath, source.content);

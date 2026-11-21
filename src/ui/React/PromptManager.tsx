@@ -83,8 +83,12 @@ interface IContentProps {
 }
 
 function PromptMenuBoolean({ resolve }: IContentProps): React.ReactElement {
-  const yes = (): void => resolve(true);
-  const no = (): void => resolve(false);
+  const yes = (): void => {
+    resolve(true);
+  };
+  const no = (): void => {
+    resolve(false);
+  };
 
   return (
     <>

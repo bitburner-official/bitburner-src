@@ -11,8 +11,14 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
     } else if (typeof commandArray[0] === "string") {
       const [rawName, ...args] = commandArray;
       const path = Terminal.getFilepath(rawName);
-      if (!path) return Terminal.error(`Invalid filename: ${rawName}`);
-      if (!hasScriptExtension(path)) return Terminal.error(`Invalid file extension. Tail can only be used on scripts.`);
+      if (!path) {
+        Terminal.error(`Invalid filename: ${rawName}`);
+        return;
+      }
+      if (!hasScriptExtension(path)) {
+        Terminal.error(`Invalid file extension. Tail can only be used on scripts.`);
+        return;
+      }
 
       const candidates = findRunningScripts(path, args, server);
 

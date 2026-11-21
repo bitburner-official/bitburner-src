@@ -8,11 +8,15 @@ export function check(args: (string | number | boolean)[], server: BaseServer): 
     Terminal.error(`Incorrect number of arguments. Usage: check [script] [arg1] [arg2]...`);
   } else {
     const scriptName = Terminal.getFilepath(args[0] + "");
-    if (!scriptName) return Terminal.error(`Invalid filename: ${args[0]}`);
+    if (!scriptName) {
+      Terminal.error(`Invalid filename: ${args[0]}`);
+      return;
+    }
 
     // Can only tail script files
     if (!hasScriptExtension(scriptName)) {
-      return Terminal.error(`check: File extension must be one of ${validScriptExtensions.join(", ")})`);
+      Terminal.error(`check: File extension must be one of ${validScriptExtensions.join(", ")})`);
+      return;
     }
 
     // Check that the script is running on this machine

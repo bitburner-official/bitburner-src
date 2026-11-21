@@ -315,6 +315,11 @@ function setUpAutocompleteFunction(filePath: string) {
   const autocomplete = jest.fn(() => {
     return [`${filePath}_foo`];
   });
-  script.mod = new LoadedModule("" as ScriptURL, new Promise((r) => r({ autocomplete })));
+  script.mod = new LoadedModule(
+    "" as ScriptURL,
+    new Promise((r) => {
+      r({ autocomplete });
+    }),
+  );
   return autocomplete;
 }

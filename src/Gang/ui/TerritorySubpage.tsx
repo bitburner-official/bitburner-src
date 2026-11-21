@@ -24,7 +24,12 @@ export function TerritorySubpage(): React.ReactElement {
         represents how much of the total territory you control.
       </Typography>
 
-      <Button onClick={() => setInfoOpen(true)} sx={{ my: 1 }}>
+      <Button
+        onClick={() => {
+          setInfoOpen(true);
+        }}
+        sx={{ my: 1 }}
+      >
         <Help sx={{ mr: 1 }} />
         About Gang Territory
       </Button>
@@ -134,7 +139,12 @@ export function TerritorySubpage(): React.ReactElement {
             <OtherGangTerritory key={name} name={name} />
           ))}
       </Box>
-      <TerritoryInfoModal open={infoOpen} onClose={() => setInfoOpen(false)} />
+      <TerritoryInfoModal
+        open={infoOpen}
+        onClose={() => {
+          setInfoOpen(false);
+        }}
+      />
     </Container>
   );
 }

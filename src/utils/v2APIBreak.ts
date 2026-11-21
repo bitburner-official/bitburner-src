@@ -239,7 +239,9 @@ export const v2APIBreak = () => {
   for (const server of GetAllServers()) {
     server.runningScriptMap = new Map();
   }
-  exportGame().catch((e) => console.error(e));
+  exportGame().catch((e) => {
+    console.error(e);
+  });
 };
 
 const formatOffenders = (offenders: IFileLine[]): string => {

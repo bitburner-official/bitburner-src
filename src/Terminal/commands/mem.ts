@@ -27,7 +27,10 @@ export function mem(args: (string | number | boolean)[], server: BaseServer): un
     }
 
     const singleRamUsage = script.getRamUsage(server.scripts);
-    if (!singleRamUsage) return Terminal.error(`Could not calculate ram usage for ${scriptName}`);
+    if (!singleRamUsage) {
+      Terminal.error(`Could not calculate ram usage for ${scriptName}`);
+      return;
+    }
 
     const ramUsage = singleRamUsage * numThreads;
 

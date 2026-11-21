@@ -18,9 +18,13 @@ export function FragmentInspector(props: IProps): React.ReactElement {
   const [, setC] = useState(new Date());
 
   useEffect(() => {
-    const id = setInterval(() => setC(new Date()), 250);
+    const id = setInterval(() => {
+      setC(new Date());
+    }, 250);
 
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+    };
   }, []);
 
   if (props.fragment === undefined) {

@@ -139,7 +139,7 @@ interface IMoneyModalProps {
 
 function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
   function convertMoneySourceTrackerToString(src: MoneySourceTracker): React.ReactElement {
-    const parts: [string, JSX.Element][] = [[`Total:`, <Money key="total" money={src.total} />]];
+    const parts: [string, React.JSX.Element][] = [[`Total:`, <Money key="total" money={src.total} />]];
     if (src.augmentations) {
       parts.push([`Augmentations:`, <Money key="aug" money={src.augmentations} />]);
     }
@@ -260,7 +260,12 @@ export function CharacterStats(): React.ReactElement {
               <StatsRow name="Money" color={Settings.theme.money} data={{}}>
                 <>
                   <Money money={Player.money} />
-                  <IconButton onClick={() => setMoneyOpen(true)} sx={{ p: 0 }}>
+                  <IconButton
+                    onClick={() => {
+                      setMoneyOpen(true);
+                    }}
+                    sx={{ p: 0 }}
+                  >
                     <MoreHoriz color="info" />
                   </IconButton>
                 </>
@@ -270,7 +275,12 @@ export function CharacterStats(): React.ReactElement {
                 <StatsRow name="All Employers" color={Settings.theme.primary} data={{}}>
                   <>
                     <span style={{ color: Settings.theme.primary }}>{Object.keys(Player.jobs).length} total</span>
-                    <IconButton onClick={() => setEmployersOpen(true)} sx={{ p: 0 }}>
+                    <IconButton
+                      onClick={() => {
+                        setEmployersOpen(true);
+                      }}
+                      sx={{ p: 0 }}
+                    >
                       <MoreHoriz color="info" />
                     </IconButton>
                   </>
@@ -629,8 +639,18 @@ export function CharacterStats(): React.ReactElement {
         </Paper>
       )}
 
-      <MoneyModal open={moneyOpen} onClose={() => setMoneyOpen(false)} />
-      <EmployersModal open={employersOpen} onClose={() => setEmployersOpen(false)} />
+      <MoneyModal
+        open={moneyOpen}
+        onClose={() => {
+          setMoneyOpen(false);
+        }}
+      />
+      <EmployersModal
+        open={employersOpen}
+        onClose={() => {
+          setEmployersOpen(false);
+        }}
+      />
     </Container>
   );
 }

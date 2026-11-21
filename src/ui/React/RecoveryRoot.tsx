@@ -191,7 +191,12 @@ export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): Re
       <div>
         <Button onClick={exportSaveFile}>Export save file</Button>
         {crashReport && (
-          <Button onClick={() => exportCrashReport(crashReport.body)} style={{ marginLeft: "20px" }}>
+          <Button
+            onClick={() => {
+              exportCrashReport(crashReport.body);
+            }}
+            style={{ marginLeft: "20px" }}
+          >
             Export crash report
           </Button>
         )}

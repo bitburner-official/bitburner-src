@@ -65,7 +65,12 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
 
   return (
     <>
-      <ListItemButton onClick={() => setOpen((old) => !old)} component={Paper}>
+      <ListItemButton
+        onClick={() => {
+          setOpen((old) => !old);
+        }}
+        component={Paper}
+      >
         <ListItemText
           primary={
             <Typography sx={{ overflowWrap: "break-word" }}>

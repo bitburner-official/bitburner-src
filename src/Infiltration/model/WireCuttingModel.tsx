@@ -116,13 +116,15 @@ export class WireCuttingModel implements InfiltrationStage {
 
     // Check if game has been lost
     if (!this.wiresToCut.has(wireIndex)) {
-      return this.state.onFailure();
+      this.state.onFailure();
+      return;
     }
 
     // Check if game has been won
     this.wiresToCut.delete(wireIndex);
     if (this.wiresToCut.size === 0) {
-      return this.state.onSuccess();
+      this.state.onSuccess();
+      return;
     }
     this.state.updateEvent.emit();
   }

@@ -43,7 +43,9 @@ export function getNextTurn(color: GoColor.black | GoColor.white): Promise<Play>
 
 export function resetGoPromises(): void {
   resetAI();
-  handleNextTurn().catch((error) => exceptionAlert(error, true));
+  handleNextTurn().catch((error) => {
+    exceptionAlert(error, true);
+  });
 }
 
 /**
@@ -114,7 +116,9 @@ export function handleNextTurn(boardState: BoardState = Go.currentGame, useOffli
         // delayed promise.
         return handleNextTurn(boardState, useOfflineCycles);
       })
-      .catch((error) => exceptionAlert(error));
+      .catch((error) => {
+        exceptionAlert(error);
+      });
   }
 
   // If we haven't resolved currentPromise yet (for instance, at game start),
@@ -151,7 +155,9 @@ export function resetAI(endOfGame = false): void {
 function createPromise(promiseObj: PlayerPromise): void {
   promiseObj.resolver?.();
   promiseObj.nextTurn = new Promise((resolve) => {
-    promiseObj.resolver = (play?: Play) => resolve(play ?? getPreviousMoveDetails());
+    promiseObj.resolver = (play?: Play) => {
+      resolve(play ?? getPreviousMoveDetails());
+    };
   });
 }
 
@@ -463,11 +469,11 @@ function getCornerMove(board: Board) {
  */
 function findLiveNodesInArea(board: Board, x1: number, y1: number, x2: number, y2: number) {
   const foundPoints: PointState[] = [];
-  board.forEach((column) =>
+  board.forEach((column) => {
     column.forEach(
       (point) => point && point.x >= x1 && point.x <= x2 && point.y >= y1 && point.y <= y2 && foundPoints.push(point),
-    ),
-  );
+    );
+  });
   return foundPoints;
 }
 

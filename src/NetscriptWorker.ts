@@ -177,7 +177,9 @@ export function updateOnlineScriptTimes(numCycles = 1): void {
 // created, and thus before AlertManager exists to listen to the alerts we
 // create.
 function deferredError(msg: string) {
-  setTimeout(() => dialogBoxCreate(msg), 0);
+  setTimeout(() => {
+    dialogBoxCreate(msg);
+  }, 0);
 }
 
 function createAutoexec(server: BaseServer): RunningScript | null {

@@ -1,11 +1,11 @@
 import { BitNodes } from "../BitNode/BitNode";
 
 export class SourceFile {
-  info: JSX.Element;
+  info: React.JSX.Element;
   n: number;
   name: string;
 
-  constructor(number: number, info: JSX.Element) {
+  constructor(number: number, info: React.JSX.Element) {
     const bitnodeKey = "BitNode" + number;
     const bitnode = BitNodes[bitnodeKey];
     if (bitnode == null) {

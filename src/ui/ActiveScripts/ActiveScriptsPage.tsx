@@ -104,16 +104,36 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
     return (
       <>
         <Typography marginRight="1em">{`${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}</Typography>
-        <IconButton onClick={() => changePage(0)} disabled={page === 0}>
+        <IconButton
+          onClick={() => {
+            changePage(0);
+          }}
+          disabled={page === 0}
+        >
           <FirstPage />
         </IconButton>
-        <IconButton onClick={() => changePage(page - 1)} disabled={page === 0}>
+        <IconButton
+          onClick={() => {
+            changePage(page - 1);
+          }}
+          disabled={page === 0}
+        >
           <KeyboardArrowLeft />
         </IconButton>
-        <IconButton onClick={() => changePage(page + 1)} disabled={page === lastPage}>
+        <IconButton
+          onClick={() => {
+            changePage(page + 1);
+          }}
+          disabled={page === lastPage}
+        >
           <KeyboardArrowRight />
         </IconButton>
-        <IconButton onClick={() => changePage(lastPage)} disabled={page === lastPage}>
+        <IconButton
+          onClick={() => {
+            changePage(lastPage);
+          }}
+          disabled={page === lastPage}
+        >
           <LastPage />
         </IconButton>
       </>
@@ -148,7 +168,9 @@ export function ActiveScriptsPage(props: IProps): React.ReactElement {
         <TextField
           sx={{ marginLeft: "2em" }}
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={(e) => {
+            setFilter(e.target.value);
+          }}
           autoFocus
           InputProps={{ startAdornment: <Search />, spellCheck: false }}
           size="small"

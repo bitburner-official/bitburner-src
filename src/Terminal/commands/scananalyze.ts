@@ -26,18 +26,22 @@ export function scananalyze(args: (string | number | boolean)[]): undefined {
     const depth = parseInt(args[0] + "");
 
     if (isNaN(depth) || depth < 0) {
-      return Terminal.error("Incorrect usage of scan-analyze command. depth argument must be positive numeric");
+      Terminal.error("Incorrect usage of scan-analyze command. depth argument must be positive numeric");
+      return;
     }
     if (
       depth > 3 &&
       !Player.hasProgram(CompletedProgramName.deepScan1) &&
       !Player.hasProgram(CompletedProgramName.deepScan2)
     ) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 3");
+      Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 3");
+      return;
     } else if (depth > 5 && !Player.hasProgram(CompletedProgramName.deepScan2)) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 5");
+      Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 5");
+      return;
     } else if (depth > 10) {
-      return Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 10");
+      Terminal.error("You cannot scan-analyze with that high of a depth. Maximum depth is 10");
+      return;
     }
     executeScanAnalyzeCommand(depth, all);
   }
@@ -106,9 +110,9 @@ function executeScanAnalyzeCommand(depth: number, all: boolean): void {
       Terminal.print(`${infoPrefix}Root Access: ${hasRoot}` + "\n");
     }
     Terminal.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n");
-    node.children.forEach((n, i) =>
-      printOutput(n, [...prefix, i === node.children.length - 1 ? "  " : "┃ "], i === node.children.length - 1),
-    );
+    node.children.forEach((n, i) => {
+      printOutput(n, [...prefix, i === node.children.length - 1 ? "  " : "┃ "], i === node.children.length - 1);
+    });
   };
 
   printOutput(root);

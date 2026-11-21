@@ -48,7 +48,9 @@ export function Snackbar({ hidden }: { hidden: boolean }): React.ReactElement {
         content: (k, m) => <Paper key={k}>{m}</Paper>,
         variant: variant,
         autoHideDuration: duration,
-        onClick: () => closeSnackbar(id),
+        onClick: () => {
+          closeSnackbar(id);
+        },
       });
     });
   }, [closeSnackbar, enqueueSnackbar, hidden]);

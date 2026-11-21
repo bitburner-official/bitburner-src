@@ -122,7 +122,9 @@ export async function save(saveData: SaveData): Promise<void> {
     // transaction.oncomplete is used instead of request.onsuccess to ensure durability.
     // A request can succeed in memory, but the transaction may still fail to commit due to disk I/O errors, quota
     // limits, or system interruptions.
-    transaction.oncomplete = () => resolve();
+    transaction.oncomplete = () => {
+      resolve();
+    };
   });
 }
 
@@ -136,6 +138,8 @@ export function deleteGame(): Promise<void> {
       reject(new Error("Database in use by another tab. Please close all other Bitburner tabs."));
     };
 
-    request.onsuccess = () => resolve();
+    request.onsuccess = () => {
+      resolve();
+    };
   });
 }

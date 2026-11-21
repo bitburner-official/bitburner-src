@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 interface IProps {
   onClick: () => void;
   text: string;
-  tooltip?: JSX.Element | null;
+  tooltip?: React.JSX.Element | null;
 }
 
 export function StockTickerTxButton(props: IProps): React.ReactElement {

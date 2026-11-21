@@ -42,7 +42,8 @@ export function runScript(
   const numThreads = parseFloat(flags["-t"] ?? 1);
   const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : undefined;
   if (!isPositiveInteger(numThreads)) {
-    return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
+    Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
+    return;
   }
   if (ramOverride != null && (isNaN(ramOverride) || ramOverride < RamCostConstants.Base)) {
     Terminal.error(

@@ -63,7 +63,12 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
     <Paper sx={{ p: 1, overflowY: "auto", overflowX: "hidden", wordBreak: "break-all" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1, maxHeight: "60vh" }}>
         <Box sx={{ alignSelf: "flex-start", width: "100%" }}>
-          <Button onClick={() => setTravelOpen(true)} sx={{ width: "50%" }}>
+          <Button
+            onClick={() => {
+              setTravelOpen(true);
+            }}
+            sx={{ width: "50%" }}
+          >
             Travel
           </Button>
           <Tooltip title={!inFaction ? <Typography>Rank 25 required.</Typography> : ""}>
@@ -73,7 +78,13 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
               </Button>
             </span>
           </Tooltip>
-          <TravelModal open={travelOpen} onClose={() => setTravelOpen(false)} bladeburner={bladeburner} />
+          <TravelModal
+            open={travelOpen}
+            onClose={() => {
+              setTravelOpen(false);
+            }}
+            bladeburner={bladeburner}
+          />
         </Box>
         <Box display="flex">
           <Tooltip title={<Typography>Your rank within the Bladeburner division.</Typography>}>

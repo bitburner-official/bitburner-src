@@ -18,7 +18,10 @@ export class SleeveInfiltrateWork extends SleeveBaseWork {
   }
 
   process(sleeve: Sleeve, cycles: number) {
-    if (!Player.bladeburner) return sleeve.stopWork();
+    if (!Player.bladeburner) {
+      sleeve.stopWork();
+      return;
+    }
     this.cyclesWorked += cycles;
     if (this.cyclesWorked > this.cyclesNeeded()) {
       this.cyclesWorked -= this.cyclesNeeded();

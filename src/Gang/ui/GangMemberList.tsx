@@ -29,7 +29,11 @@ export function GangMemberList(): React.ReactElement {
 
   return (
     <>
-      <RecruitButton onRecruit={() => setRerender((old) => !old)} />
+      <RecruitButton
+        onRecruit={() => {
+          setRerender((old) => !old);
+        }}
+      />
       <TextField
         value={filter}
         onChange={handleFilterChange}
@@ -43,7 +47,9 @@ export function GangMemberList(): React.ReactElement {
       />
       <OptionSwitch
         checked={ascendOnly}
-        onChange={(newValue) => setAscendOnly(newValue)}
+        onChange={(newValue) => {
+          setAscendOnly(newValue);
+        }}
         text="Show only ascendable"
         tooltip={<>Filter the members list by whether or not the member can be ascended.</>}
       />

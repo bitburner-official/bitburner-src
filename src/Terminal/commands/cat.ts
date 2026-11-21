@@ -8,22 +8,32 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 import { isMember } from "../../utils/EnumHelper";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer): undefined {
-  if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]");
+  if (args.length !== 1) {
+    Terminal.error("Incorrect usage of cat command. Usage: cat [file]");
+    return;
+  }
 
   const relative_filename = args[0] + "";
   const path = Terminal.getFilepath(relative_filename);
-  if (!path) return Terminal.error(`Invalid filename: ${relative_filename}`);
+  if (!path) {
+    Terminal.error(`Invalid filename: ${relative_filename}`);
+    return;
+  }
 
   if (hasScriptExtension(path) || hasTextExtension(path)) {
     const file = server.getContentFile(path);
-    if (!file) return Terminal.error(`No file at path ${path}`);
+    if (!file) {
+      Terminal.error(`No file at path ${path}`);
+      return;
+    }
     dialogBoxCreate(`${file.filename}\n\n${file.content}`);
     return;
   }
   if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
-    return Terminal.error(
+    Terminal.error(
       "Invalid file extension. Filename must end with .msg, .lit, a script extension (.js, .jsx, .ts, .tsx) or a text extension (.txt, .json, .css)",
     );
+    return;
   }
 
   // Message

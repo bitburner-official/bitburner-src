@@ -109,7 +109,9 @@ export function CompaniesDev(): React.ReactElement {
                 <Adjuster
                   label="reputation"
                   placeholder="amt"
-                  tons={() => modifyCompanyRep(1)(largeAmountOfReputation)}
+                  tons={() => {
+                    modifyCompanyRep(1)(largeAmountOfReputation);
+                  }}
                   add={modifyCompanyRep(1)}
                   subtract={modifyCompanyRep(-1)}
                   reset={resetCompanyRep}
@@ -124,7 +126,9 @@ export function CompaniesDev(): React.ReactElement {
                 <Adjuster
                   label="favor"
                   placeholder="amt"
-                  tons={() => modifyCompanyFavor(1)(2000)}
+                  tons={() => {
+                    modifyCompanyFavor(1)(2000);
+                  }}
                   add={modifyCompanyFavor(1)}
                   subtract={modifyCompanyFavor(-1)}
                   reset={resetCompanyFavor}

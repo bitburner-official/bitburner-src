@@ -110,13 +110,15 @@ export function Roulette(): React.ReactElement {
   const [rng] = useState(new WHRNG(new Date().getTime()));
   const [investment, setInvestment] = useState(initialBet);
   const [canPlay, setCanPlay] = useState(true);
-  const [status, setStatus] = useState<string | JSX.Element>("waiting");
+  const [status, setStatus] = useState<string | React.JSX.Element>("waiting");
   const [n, setN] = useState(0);
   const [lock, setLock] = useState(true);
 
   useEffect(() => {
     const i = window.setInterval(step, 50);
-    return () => clearInterval(i);
+    return () => {
+      clearInterval(i);
+    };
   });
 
   function step(): void {
@@ -192,242 +194,472 @@ export function Roulette(): React.ReactElement {
         <tbody>
           <tr>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(3)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(3));
+                })}
+              >
                 3
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(6)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(6));
+                })}
+              >
                 6
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(9)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(9));
+                })}
+              >
                 9
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(12)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(12));
+                })}
+              >
                 12
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(15)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(15));
+                })}
+              >
                 15
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(18)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(18));
+                })}
+              >
                 18
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(21)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(21));
+                })}
+              >
                 21
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(24)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(24));
+                })}
+              >
                 24
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(27)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(27));
+                })}
+              >
                 27
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(30)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(30));
+                })}
+              >
                 30
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(33)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(33));
+                })}
+              >
                 33
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(36)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(36));
+                })}
+              >
                 36
               </Button>
             </td>
           </tr>
           <tr>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(2)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(2));
+                })}
+              >
                 2
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(5)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(5));
+                })}
+              >
                 5
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(8)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(8));
+                })}
+              >
                 8
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(11)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(11));
+                })}
+              >
                 11
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(14)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(14));
+                })}
+              >
                 14
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(17)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(17));
+                })}
+              >
                 17
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(20)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(20));
+                })}
+              >
                 20
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(23)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(23));
+                })}
+              >
                 23
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(26)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(26));
+                })}
+              >
                 26
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(29)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(29));
+                })}
+              >
                 29
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(32)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(32));
+                })}
+              >
                 32
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(35)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(35));
+                })}
+              >
                 35
               </Button>
             </td>
           </tr>
           <tr>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(1)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(1));
+                })}
+              >
                 1
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(4)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(4));
+                })}
+              >
                 4
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(7)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(7));
+                })}
+              >
                 7
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(10)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(10));
+                })}
+              >
                 10
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(13)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(13));
+                })}
+              >
                 13
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(16)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(16));
+                })}
+              >
                 16
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(19)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(19));
+                })}
+              >
                 19
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(22)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(22));
+                })}
+              >
                 22
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(25)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(25));
+                })}
+              >
                 25
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(28)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(28));
+                })}
+              >
                 28
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(31)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(31));
+                })}
+              >
                 31
               </Button>
             </td>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(34)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(34));
+                })}
+              >
                 34
               </Button>
             </td>
           </tr>
           <tr>
             <td colSpan={4}>
-              <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Third1))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(strategies.Third1);
+                })}
+              >
                 1 to 12
               </Button>
             </td>
             <td colSpan={4}>
-              <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Third2))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(strategies.Third2);
+                })}
+              >
                 13 to 24
               </Button>
             </td>
             <td colSpan={4}>
-              <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Third3))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(strategies.Third3);
+                })}
+              >
                 25 to 36
               </Button>
             </td>
           </tr>
           <tr>
             <td colSpan={2}>
-              <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Red))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(strategies.Red);
+                })}
+              >
                 Red
               </Button>
             </td>
             <td colSpan={2}>
-              <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Black))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(strategies.Black);
+                })}
+              >
                 Black
               </Button>
             </td>
             <td colSpan={2}>
-              <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Odd))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(strategies.Odd);
+                })}
+              >
                 Odd
               </Button>
             </td>
             <td colSpan={2}>
-              <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Even))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(strategies.Even);
+                })}
+              >
                 Even
               </Button>
             </td>
             <td colSpan={2}>
-              <Button disabled={!canPlay} onClick={trusted(() => play(strategies.High))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(strategies.High);
+                })}
+              >
                 High
               </Button>
             </td>
             <td colSpan={2}>
-              <Button disabled={!canPlay} onClick={trusted(() => play(strategies.Low))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(strategies.Low);
+                })}
+              >
                 Low
               </Button>
             </td>
           </tr>
           <tr>
             <td>
-              <Button disabled={!canPlay} onClick={trusted(() => play(Single(0)))}>
+              <Button
+                disabled={!canPlay}
+                onClick={trusted(() => {
+                  play(Single(0));
+                })}
+              >
                 0
               </Button>
             </td>

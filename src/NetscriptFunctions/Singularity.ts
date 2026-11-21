@@ -72,11 +72,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     if (!script) return;
     const ramUsage = script.getRamUsage(home.scripts);
     if (!ramUsage) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but could not calculate ram usage.`);
+      Terminal.error(`Attempted to launch ${cbScript} after reset but could not calculate ram usage.`);
+      return;
     }
     const ramAvailable = home.maxRam - home.ramUsed;
     if (ramUsage > ramAvailable + 0.001) {
-      return Terminal.error(`Attempted to launch ${cbScript} after reset but there was not enough ram.`);
+      Terminal.error(`Attempted to launch ${cbScript} after reset but there was not enough ram.`);
+      return;
     }
     // Start script with no args and 1 thread (default).
     const runningScriptObj = new RunningScript(script, ramUsage, []);
@@ -200,7 +202,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       helpers.log(ctx, () => "Soft resetting. This will cause this script to be killed");
       installAugmentations(true);
-      if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
+      if (cbScript)
+        setTimeout(() => {
+          runAfterReset(cbScript);
+        }, 500);
     },
     installAugmentations: (ctx, _cbScript) => {
       helpers.checkSingularityAccess(ctx);
@@ -216,7 +221,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 10);
       helpers.log(ctx, () => "Installing Augmentations. This will cause this script to be killed");
       installAugmentations();
-      if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
+      if (cbScript)
+        setTimeout(() => {
+          runAfterReset(cbScript);
+        }, 500);
     },
 
     goToLocation: (ctx, _locationName) => {
@@ -532,7 +540,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         server.backdoorInstalled = true;
 
         if (SpecialServers.WorldDaemon === server.hostname) {
-          return Router.toPage(Page.BitVerse, { flume: false, quick: false });
+          Router.toPage(Page.BitVerse, { flume: false, quick: false });
+          return;
         }
         // Manunally check for faction invites
         processFactionInvitations();
@@ -1125,7 +1134,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const bitNodeOptions = helpers.validateBitNodeOptions(ctx, _bitNodeOptions);
       enterBitNode(true, Player.bitNodeN, nextBN, bitNodeOptions);
       if (cbScript) {
-        setTimeout(() => runAfterReset(cbScript), 500);
+        setTimeout(() => {
+          runAfterReset(cbScript);
+        }, 500);
       }
     },
     destroyW0r1dD43m0n: (ctx, _nextBN, _cbScript, _bitNodeOptions) => {
@@ -1178,7 +1189,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       enterBitNode(false, Player.bitNodeN, nextBN, bitNodeOptions);
       if (cbScript) {
-        setTimeout(() => runAfterReset(cbScript), 500);
+        setTimeout(() => {
+          runAfterReset(cbScript);
+        }, 500);
       }
     },
     getCurrentWork: (ctx) => {

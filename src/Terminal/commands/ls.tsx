@@ -79,7 +79,8 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
   }
 
   if (numArgs > 5) {
-    return incorrectUsage();
+    incorrectUsage();
+    return;
   }
 
   let baseDirectory = Terminal.currDir;
@@ -88,7 +89,10 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
     const directory = resolveDirectory(args[0], args[0].startsWith("/") ? root : Terminal.currDir);
     if (directory !== null && directoryExistsOnServer(directory, server)) {
       baseDirectory = directory;
-    } else return incorrectUsage();
+    } else {
+      incorrectUsage();
+      return;
+    }
   }
 
   // Display all programs and scripts
@@ -262,7 +266,8 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): und
     })();
     function onClick(): void {
       if (!server.isConnectedTo) {
-        return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`);
+        Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`);
+        return;
       }
       // Message and lit files are always in root, no need to combine path with base directory
       if (isMember("MessageFilename", props.path)) {

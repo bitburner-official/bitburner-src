@@ -43,8 +43,8 @@ import { GangCampaign } from "./ui/GangCampaign";
 import { GangConstants } from "../Gang/data/Constants";
 
 interface FactionInfoParams {
-  infoText?: JSX.Element;
-  rumorText?: JSX.Element;
+  infoText?: React.JSX.Element;
+  rumorText?: React.JSX.Element;
   inviteReqs?: PlayerCondition[];
   rumorReqs?: PlayerCondition[];
   enemies?: FactionName[];
@@ -62,10 +62,10 @@ export class FactionInfo {
   enemies: FactionName[];
 
   /** The descriptive text to show on the faction's page. */
-  infoText: JSX.Element;
+  infoText: React.JSX.Element;
 
   /** The hint to show about how to get invited to this faction. */
-  rumorText: JSX.Element;
+  rumorText: React.JSX.Element;
 
   /** Conditions for being automatically invited to this faction. */
   inviteReqs: CompoundPlayerCondition;
@@ -715,7 +715,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         <Option
           buttonText={"Open Bladeburner headquarters"}
           infoText={"Gain reputation by completing contracts and operations."}
-          onClick={() => Router.toPage(Page.Bladeburner)}
+          onClick={() => {
+            Router.toPage(Page.Bladeburner);
+          }}
         />
       );
     },
@@ -780,7 +782,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
             "Stanek's Gift is a powerful augmentation that powers up the stat you chose to boost. " +
             "Gaining reputation with the Church of the Machine God can only be done by charging the gift."
           }
-          onClick={() => Router.toPage(Page.StaneksGift)}
+          onClick={() => {
+            Router.toPage(Page.StaneksGift);
+          }}
         />
       );
     },

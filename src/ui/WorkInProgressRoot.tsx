@@ -357,7 +357,9 @@ export function WorkInProgressRoot(): React.ReactElement {
     if (!faction) {
       workInfo = {
         buttons: {
-          cancel: () => Router.toPage(Page.Factions),
+          cancel: () => {
+            Router.toPage(Page.Factions);
+          },
         },
         title:
           `You have not joined ${Player.currentWork.factionName || "(Faction not found)"} at this time,` +
@@ -411,7 +413,9 @@ export function WorkInProgressRoot(): React.ReactElement {
     if (comp) {
       workInfo = {
         buttons: {
-          cancel: () => Router.toPage(Page.Terminal),
+          cancel: () => {
+            Router.toPage(Page.Terminal);
+          },
         },
         title:
           `You cannot work for ${Player.currentWork.companyName} at this time,` +

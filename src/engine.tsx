@@ -115,7 +115,9 @@ const Engine = {
     if (Player.bladeburner) Player.bladeburner.storeCycles(numCycles);
 
     // Sleeves
-    Player.sleeves.forEach((sleeve) => sleeve.process(numCycles));
+    Player.sleeves.forEach((sleeve) => {
+      sleeve.process(numCycles);
+    });
 
     // Darknet
     if (hasDarknetAccess()) {
@@ -231,7 +233,9 @@ const Engine = {
         Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
       } else {
         Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
-        saveGame(!Settings.SuppressSavedGameToast).catch((error) => console.error(error));
+        saveGame(!Settings.SuppressSavedGameToast).catch((error) => {
+          console.error(error);
+        });
       }
     }
   },
@@ -338,7 +342,9 @@ const Engine = {
       staneksGift.process(numCyclesOffline);
 
       // Sleeves offline progress
-      Player.sleeves.forEach((sleeve) => sleeve.process(numCyclesOffline));
+      Player.sleeves.forEach((sleeve) => {
+        sleeve.process(numCyclesOffline);
+      });
 
       // Update total playtime
       const time = numCyclesOffline * CONSTANTS.MilliPerCycle;
@@ -354,30 +360,28 @@ const Engine = {
       Engine.start(); // Run main game loop and Scripts loop
       const timeOfflineString = convertTimeMsToTimeElapsedString(time);
       if (!Settings.SuppressLoadPopups) {
-        setTimeout(
-          () =>
-            AlertEvents.emit(
-              <>
-                <Typography>Offline for {timeOfflineString}. While you were offline:</Typography>
-                <ul>
-                  <li>
-                    <Typography>
-                      Your scripts generated <Money money={offlineHackingIncome} />
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography>Your Hacknet Nodes generated {hacknetProdInfo}</Typography>
-                  </li>
-                  <li>
-                    <Typography>
-                      You gained <Reputation reputation={offlineReputation} /> reputation divided amongst your factions
-                    </Typography>
-                  </li>
-                </ul>
-              </>,
-            ),
-          250,
-        );
+        setTimeout(() => {
+          AlertEvents.emit(
+            <>
+              <Typography>Offline for {timeOfflineString}. While you were offline:</Typography>
+              <ul>
+                <li>
+                  <Typography>
+                    Your scripts generated <Money money={offlineHackingIncome} />
+                  </Typography>
+                </li>
+                <li>
+                  <Typography>Your Hacknet Nodes generated {hacknetProdInfo}</Typography>
+                </li>
+                <li>
+                  <Typography>
+                    You gained <Reputation reputation={offlineReputation} /> reputation divided amongst your factions
+                  </Typography>
+                </li>
+              </ul>
+            </>,
+          );
+        }, 250);
       }
     } else {
       // No save found, start new game
@@ -406,7 +410,9 @@ const Engine = {
         Companies: Companies,
       };
     }
-    globalThis.openDevMenu = () => apr1();
+    globalThis.openDevMenu = () => {
+      apr1();
+    };
   },
 
   start: function () {

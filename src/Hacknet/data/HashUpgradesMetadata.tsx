@@ -15,7 +15,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
       </>
     ),
     name: HashUpgradeEnum.SellForMoney,
-    effectText: (level: number): JSX.Element | null => (
+    effectText: (level: number): React.JSX.Element | null => (
       <>
         Sold for <Money money={1e6 * level} />
       </>
@@ -30,7 +30,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
       </>
     ),
     name: HashUpgradeEnum.SellForCorporationFunds,
-    effectText: (level: number): JSX.Element | null => (
+    effectText: (level: number): React.JSX.Element | null => (
       <>
         Sold for <Money money={1e9 * level} /> Corporation funds.
       </>
@@ -66,7 +66,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
       "Use hashes to improve the experience earned when studying at a university by 20%. " +
       "This effect persists until you install augmentations.",
     name: HashUpgradeEnum.ImproveStudying,
-    effectText: (level: number): JSX.Element | null => <>Improves studying by {level * 20}%</>,
+    effectText: (level: number): React.JSX.Element | null => <>Improves studying by {level * 20}%</>,
     value: 20, // Improves studying by value%
   },
   {
@@ -75,14 +75,14 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
       "Use hashes to improve the experience earned when training at the gym by 20%. This effect " +
       "persists until you install augmentations.",
     name: HashUpgradeEnum.ImproveGymTraining,
-    effectText: (level: number): JSX.Element | null => <>Improves training by {level * 20}%</>,
+    effectText: (level: number): React.JSX.Element | null => <>Improves training by {level * 20}%</>,
     value: 20, // Improves training by value%
   },
   {
     costPerLevel: 200,
     desc: "Exchange hashes for 1k Scientific Research in all of your corporation's divisions",
     name: HashUpgradeEnum.ExchangeForCorporationResearch,
-    effectText: (level: number): JSX.Element | null => (
+    effectText: (level: number): React.JSX.Element | null => (
       <>Acquired a total of {formatInt(level * 1000)} Scientific Research in your divisions.</>
     ),
     value: 1000,
@@ -91,7 +91,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
     costPerLevel: 250,
     desc: "Exchange hashes for 100 Bladeburner Rank",
     name: HashUpgradeEnum.ExchangeForBladeburnerRank,
-    effectText: (level: number): JSX.Element | null => (
+    effectText: (level: number): React.JSX.Element | null => (
       <>Acquired a total of {formatInt(100 * level)} Bladeburner rank</>
     ),
     value: 100,
@@ -100,7 +100,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
     costPerLevel: 250,
     desc: "Exchanges hashes for 10 Bladeburner Skill Points",
     name: HashUpgradeEnum.ExchangeForBladeburnerSP,
-    effectText: (level: number): JSX.Element | null => (
+    effectText: (level: number): React.JSX.Element | null => (
       <>Acquired a total of {formatInt(10 * level)} Bladeburner Skill Points</>
     ),
     value: 10,
@@ -109,7 +109,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
     costPerLevel: 25,
     desc: "Generate a random Coding Contract somewhere on the network",
     name: HashUpgradeEnum.GenerateCodingContract,
-    effectText: (level: number): JSX.Element | null => <>Generated {level} contracts.</>,
+    effectText: (level: number): React.JSX.Element | null => <>Generated {level} contracts.</>,
     value: 1,
   },
   {

@@ -199,9 +199,15 @@ test("alias", () => {
   ns.ui.alias("foo", "   ");
   expect(ns.ui.getAllAliases().get("foo")?.substitution).toBe("");
 
-  expect(() => ns.ui.alias("", "bar")).toThrow();
-  expect(() => ns.ui.alias("   ", "bar")).toThrow();
-  expect(() => ns.ui.alias("^", "bar")).toThrow();
+  expect(() => {
+    ns.ui.alias("", "bar");
+  }).toThrow();
+  expect(() => {
+    ns.ui.alias("   ", "bar");
+  }).toThrow();
+  expect(() => {
+    ns.ui.alias("^", "bar");
+  }).toThrow();
 });
 
 test("createConnectLink", () => {

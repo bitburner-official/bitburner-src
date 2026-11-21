@@ -49,7 +49,9 @@ export class ScriptEditor {
         loader.language.tokenizer.root.unshift([new RegExp(`\\b${k}\\b`), { token: "otherkeyvars" }]),
       );
       loader.language.tokenizer.root.unshift([new RegExp("\\bthis\\b"), { token: "this" }]);
-    })().catch((e) => exceptionAlert(e));
+    })().catch((e) => {
+      exceptionAlert(e);
+    });
 
     for (const [language, languageDefaults, getLanguageWorker] of [
       ["javascript", monaco.typescript.javascriptDefaults, monaco.typescript.getJavaScriptWorker],
@@ -99,7 +101,9 @@ export class ScriptEditor {
         monaco.languages.onLanguage(language, () => {
           getLanguageWorker()
             .then(resolve)
-            .catch((error) => exceptionAlert(error));
+            .catch((error) => {
+              exceptionAlert(error);
+            });
         }),
       );
       // Whenever a model is created, arrange for it to be synced to the language server.
@@ -109,7 +113,11 @@ export class ScriptEditor {
           return;
         }
         if (["javascript", "typescript"].includes(model.getLanguageId())) {
-          languageWorker.then((resolve) => resolve(model.uri)).catch((error) => exceptionAlert(error));
+          languageWorker
+            .then((resolve) => resolve(model.uri))
+            .catch((error) => {
+              exceptionAlert(error);
+            });
         }
       });
     }

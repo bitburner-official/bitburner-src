@@ -4,7 +4,7 @@ import React from "react";
 import { Typography } from "@mui/material";
 
 export function dialogBoxCreate(
-  txt: string | JSX.Element,
+  txt: string | React.JSX.Element,
   { html, canBeDismissedEasily } = { html: false, canBeDismissedEasily: true },
 ): void {
   AlertEvents.emit(

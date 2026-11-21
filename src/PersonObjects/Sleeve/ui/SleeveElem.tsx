@@ -219,11 +219,19 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
         <span>
           <StatsElement sleeve={props.sleeve} />
           <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr", width: "100%" }}>
-            <Button onClick={() => setStatsOpen(true)}>More Stats</Button>
+            <Button
+              onClick={() => {
+                setStatsOpen(true);
+              }}
+            >
+              More Stats
+            </Button>
             <Tooltip title={Player.money < CONSTANTS.TravelCost ? <Typography>Insufficient funds</Typography> : ""}>
               <span>
                 <Button
-                  onClick={() => setTravelOpen(true)}
+                  onClick={() => {
+                    setTravelOpen(true);
+                  }}
                   disabled={Player.money < CONSTANTS.TravelCost}
                   sx={{ width: "100%", height: "100%" }}
                 >
@@ -238,7 +246,9 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
             >
               <span>
                 <Button
-                  onClick={() => setAugmentationsOpen(true)}
+                  onClick={() => {
+                    setAugmentationsOpen(true);
+                  }}
                   disabled={!checkingPreconditionsResult.success}
                   sx={{ width: "100%", height: "100%" }}
                 >
@@ -258,16 +268,26 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
           {percentBar}
         </span>
       </Paper>
-      <MoreStatsModal open={statsOpen} onClose={() => setStatsOpen(false)} sleeve={props.sleeve} />
+      <MoreStatsModal
+        open={statsOpen}
+        onClose={() => {
+          setStatsOpen(false);
+        }}
+        sleeve={props.sleeve}
+      />
       <TravelModal
         open={travelOpen}
-        onClose={() => setTravelOpen(false)}
+        onClose={() => {
+          setTravelOpen(false);
+        }}
         sleeve={props.sleeve}
         rerender={props.rerender}
       />
       <SleeveAugmentationsModal
         open={augmentationsOpen}
-        onClose={() => setAugmentationsOpen(false)}
+        onClose={() => {
+          setAugmentationsOpen(false);
+        }}
         sleeve={props.sleeve}
       />
     </>

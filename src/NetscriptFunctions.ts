@@ -268,7 +268,11 @@ export const ns: InternalAPI<NSFull> = {
   asleep: (ctx, _time = 0) => {
     const time = helpers.number(ctx, "time", _time);
     helpers.log(ctx, () => `Sleeping for ${convertTimeMsToTimeElapsedString(time, true)}.`);
-    return new Promise((resolve) => setTimeout(() => resolve(true), time));
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve(true);
+      }, time),
+    );
   },
   grow: (ctx, _host, opts?) => {
     const { threads, stock, additionalMsec } = helpers.validateHGWOptions(ctx, opts);
@@ -1145,7 +1149,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   clearPort: (ctx, _portNumber) => {
     deprecationWarning("ns.clearPort", "Use ns.port.clear instead.");
-    return ns.port.clear(ctx, _portNumber);
+    ns.port.clear(ctx, _portNumber);
   },
   getPortHandle: (ctx, _portNumber) => {
     deprecationWarning("ns.getPortHandle", "Use ns.port.getHandle instead.");

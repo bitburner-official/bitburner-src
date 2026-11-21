@@ -35,16 +35,36 @@ export function ServerAccordionContent({ scripts }: ServerActiveScriptsProps): R
           component="span"
           marginRight="auto"
         >{`Displaying scripts ${firstScriptNumber}-${lastScriptNumber} of ${scripts.length}`}</Typography>
-        <IconButton onClick={() => changePage(0)} disabled={page === 0}>
+        <IconButton
+          onClick={() => {
+            changePage(0);
+          }}
+          disabled={page === 0}
+        >
           <FirstPage />
         </IconButton>
-        <IconButton onClick={() => changePage(page - 1)} disabled={page === 0}>
+        <IconButton
+          onClick={() => {
+            changePage(page - 1);
+          }}
+          disabled={page === 0}
+        >
           <KeyboardArrowLeft />
         </IconButton>
-        <IconButton onClick={() => changePage(page + 1)} disabled={page === lastPage}>
+        <IconButton
+          onClick={() => {
+            changePage(page + 1);
+          }}
+          disabled={page === lastPage}
+        >
           <KeyboardArrowRight />
         </IconButton>
-        <IconButton onClick={() => changePage(lastPage)} disabled={page === lastPage}>
+        <IconButton
+          onClick={() => {
+            changePage(lastPage);
+          }}
+          disabled={page === lastPage}
+        >
           <LastPage />
         </IconButton>
       </div>

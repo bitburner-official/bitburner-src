@@ -84,11 +84,13 @@ export class MinesweeperModel implements InfiltrationStage {
 
     if (event.key == KEY.SPACE) {
       if (!this.minefield[this.y][this.x]) {
-        return this.state.onFailure();
+        this.state.onFailure();
+        return;
       }
       this.answer[this.y][this.x] = true;
       if (fieldEquals(this.minefield, this.answer)) {
-        return this.state.onSuccess();
+        this.state.onSuccess();
+        return;
       }
     }
     this.state.updateEvent.emit();

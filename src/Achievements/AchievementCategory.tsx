@@ -21,7 +21,7 @@ export function AchievementCategory({
   allAchievements,
   usePadding,
   children,
-}: React.PropsWithChildren<IProps>): JSX.Element {
+}: React.PropsWithChildren<IProps>) {
   return (
     <Accordion defaultExpanded={!!allAchievements} disableGutters square>
       <AccordionSummary>

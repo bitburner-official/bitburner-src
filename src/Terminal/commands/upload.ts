@@ -136,12 +136,14 @@ async function uploadAsync(destination: Directory, destForPrint: string, server:
 
 export function upload(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
   if (args.length !== 1) {
-    return Terminal.error("Incorrect usage of upload command. Usage: upload [dir]");
+    Terminal.error("Incorrect usage of upload command. Usage: upload [dir]");
+    return;
   }
   const destinationInput = String(args[0]);
   const destination = Terminal.getDirectory(destinationInput);
   if (destination === null) {
-    return Terminal.error(`Could not resolve ${destinationInput} as a Directory`);
+    Terminal.error(`Could not resolve ${destinationInput} as a Directory`);
+    return;
   }
   const destForPrint = destination === "" ? "/" : destination;
   return {

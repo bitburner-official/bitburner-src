@@ -38,7 +38,9 @@ function UpgradeSizeButton(props: IUpgradeButton): React.ReactElement {
       <span>
         <Button
           disabled={corp.funds < props.cost}
-          onClick={() => upgradeSize(props.cost, props.size as PositiveInteger)}
+          onClick={() => {
+            upgradeSize(props.cost, props.size as PositiveInteger);
+          }}
         >
           +{props.size}
         </Button>

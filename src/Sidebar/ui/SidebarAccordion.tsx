@@ -43,7 +43,9 @@ function getClickFn(toWrap: (page: Page) => void, page: Page) {
     clickFnCache.set(toWrap, first);
   }
   // Short-circuit: Avoid assign/eval of function on found
-  return (first[page] ??= () => toWrap(page));
+  return (first[page] ??= () => {
+    toWrap(page);
+  });
 }
 
 // This can't be usefully memoized, because props.items is a new array every time.
@@ -68,7 +70,11 @@ export function SidebarAccordion({
       {useMemo(
         () => (
           <ListItem classes={li_classes} disablePadding>
-            <ListItemButton onClick={() => setOpen((open) => !open)}>
+            <ListItemButton
+              onClick={() => {
+                setOpen((open) => !open);
+              }}
+            >
               <ListItemIcon>
                 <Tooltip title={!sidebarOpen ? key_ : ""}>
                   <Icon color={"primary"} />
