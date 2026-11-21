@@ -58,7 +58,10 @@ function AutoAssignJob(props: IAutoAssignProps): React.ReactElement {
   const nextUna = props.office.employeeNextJobs[CorpEmployeeJob.Unassigned];
 
   function assignEmployee(): void {
-    if (nextUna <= 0) return console.warn("Cannot assign employee. No unassigned employees available");
+    if (nextUna <= 0) {
+      console.warn("Cannot assign employee. No unassigned employees available");
+      return;
+    }
 
     props.office.autoAssignJob(props.job, nextJob + 1);
     props.rerender();
@@ -377,7 +380,9 @@ export function DivisionOffice(props: OfficeProps): React.ReactElement {
           </ButtonWithTooltip>
           <ButtonWithTooltip
             normalTooltip={"Upgrade the office's size so that it can hold more employees!"}
-            onClick={() => setUpgradeOfficeSizeOpen(true)}
+            onClick={() => {
+              setUpgradeOfficeSizeOpen(true);
+            }}
           >
             Upgrade size
           </ButtonWithTooltip>
@@ -385,7 +390,9 @@ export function DivisionOffice(props: OfficeProps): React.ReactElement {
             rerender={props.rerender}
             office={props.office}
             open={upgradeOfficeSizeOpen}
-            onClose={() => setUpgradeOfficeSizeOpen(false)}
+            onClose={() => {
+              setUpgradeOfficeSizeOpen(false);
+            }}
           />
 
           {!division.hasResearch("AutoBrew") && (
@@ -409,7 +416,9 @@ export function DivisionOffice(props: OfficeProps): React.ReactElement {
               <ButtonWithTooltip
                 normalTooltip={"Throw an office party to increase your employees' morale"}
                 disabledTooltip={partyDisabledText}
-                onClick={() => setThrowPartyOpen(true)}
+                onClick={() => {
+                  setThrowPartyOpen(true);
+                }}
               >
                 {props.office.partyMult > 1 ? "Throwing Party..." : "Throw Party"}
               </ButtonWithTooltip>
@@ -417,7 +426,9 @@ export function DivisionOffice(props: OfficeProps): React.ReactElement {
                 rerender={props.rerender}
                 office={props.office}
                 open={throwPartyOpen}
-                onClose={() => setThrowPartyOpen(false)}
+                onClose={() => {
+                  setThrowPartyOpen(false);
+                }}
               />
             </>
           )}

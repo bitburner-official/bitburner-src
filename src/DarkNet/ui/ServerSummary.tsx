@@ -83,7 +83,9 @@ export function ServerSummary({
     <Tooltip key="runningScript" title={<>{runningScriptsTooltip}</>} style={{ cursor: "pointer" }}>
       <Typography
         color={runningScriptCount > 0 ? "primary" : "secondary"}
-        onClick={() => Router.toPage(ComplexPage.ActiveScripts, { serverName: server.hostname })}
+        onClick={() => {
+          Router.toPage(ComplexPage.ActiveScripts, { serverName: server.hostname });
+        }}
       >
         <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
         {runningScriptCount}

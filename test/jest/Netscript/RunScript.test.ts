@@ -66,10 +66,14 @@ beforeEach(() => {
   resetPidCounter();
 
   alerted = new Promise((resolve) => {
-    alertEventCleanUpFunction = AlertEvents.subscribe((x) => resolve(x));
+    alertEventCleanUpFunction = AlertEvents.subscribe((x) => {
+      resolve(x);
+    });
   });
   errorShown = new Promise((resolve) => {
-    errorPopUpEventCleanUpFunction = ErrorState.ErrorUpdate.subscribe((x) => resolve(x));
+    errorPopUpEventCleanUpFunction = ErrorState.ErrorUpdate.subscribe((x) => {
+      resolve(x);
+    });
   });
 });
 

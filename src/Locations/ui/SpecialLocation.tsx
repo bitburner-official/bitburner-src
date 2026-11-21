@@ -208,10 +208,21 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
     return (
       <>
-        <Button disabled={!Player.canAccessCorporation() || !!Player.corporation} onClick={() => setOpen(true)}>
+        <Button
+          disabled={!Player.canAccessCorporation() || !!Player.corporation}
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
           Create a Corporation
         </Button>
-        <CreateCorporationModal open={open} onClose={() => setOpen(false)} restart={false} />
+        <CreateCorporationModal
+          open={open}
+          onClose={() => {
+            setOpen(false);
+          }}
+          restart={false}
+        />
       </>
     );
   }
@@ -243,7 +254,15 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
   }
 
   function renderCotMG(): React.ReactElement {
-    const toStanek = <Button onClick={() => Router.toPage(Page.StaneksGift)}>Open Stanek's Gift</Button>;
+    const toStanek = (
+      <Button
+        onClick={() => {
+          Router.toPage(Page.StaneksGift);
+        }}
+      >
+        Open Stanek's Gift
+      </Button>
+    );
     // prettier-ignore
     const symbol = <Typography sx={{ lineHeight: '1em', whiteSpace: 'pre' }}>
       {"                 ``          "}<br />
@@ -377,8 +396,12 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       for (let i = 0; i < 25; ++i) {
         delay += -1000 * Math.log(1 - Math.random());
       }
-      const id = setTimeout(() => Router.toPage(Page.Location, { location: Locations[LocationName.Void] }), delay);
-      return () => clearTimeout(id);
+      const id = setTimeout(() => {
+        Router.toPage(Page.Location, { location: Locations[LocationName.Void] });
+      }, delay);
+      return () => {
+        clearTimeout(id);
+      };
     });
 
     return (
@@ -470,7 +493,13 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           <br />
           <br />
           <br />
-          <Button onClick={() => Router.toPage(Page.Go)}>IPvGO Subnet Takeover</Button>
+          <Button
+            onClick={() => {
+              Router.toPage(Page.Go);
+            }}
+          >
+            IPvGO Subnet Takeover
+          </Button>
         </>
       );
     }

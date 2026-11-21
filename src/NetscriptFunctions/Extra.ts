@@ -16,8 +16,12 @@ export interface INetscriptExtra {
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
   return {
-    openDevMenu: () => devMenu.emit(),
-    exploit: () => Player.giveExploit(Exploit.UndocumentedFunctionCall),
+    openDevMenu: () => {
+      devMenu.emit();
+    },
+    exploit: () => {
+      Player.giveExploit(Exploit.UndocumentedFunctionCall);
+    },
     bypass: (ctx, doc) => {
       // reset both fields first
       interface temporary {

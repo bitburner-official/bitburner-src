@@ -59,7 +59,9 @@ export function ThemeEntry({ theme, onActivated, onImageClick }: IProps): React.
           borderBottom: `1px solid ${Settings.theme.welllight}`,
           cursor: "zoom-in",
         }}
-        onClick={() => onImageClick(theme.screenshot)}
+        onClick={() => {
+          onImageClick(theme.screenshot);
+        }}
       />
       <CardContent>
         <Typography

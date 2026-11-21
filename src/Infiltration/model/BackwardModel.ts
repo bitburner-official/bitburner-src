@@ -43,10 +43,12 @@ export class BackwardModel implements InfiltrationStage {
     if (ignorableKeyboardEvent(event)) return;
     this.guess += event.key.toUpperCase();
     if (this.answer === this.guess) {
-      return this.state.onSuccess();
+      this.state.onSuccess();
+      return;
     }
     if (!this.answer.startsWith(this.guess)) {
-      return this.state.onFailure();
+      this.state.onFailure();
+      return;
     }
     this.state.updateEvent.emit();
   }

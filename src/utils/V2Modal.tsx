@@ -23,7 +23,13 @@ export const V2Modal = (): React.ReactElement => {
         <DocumentationLink page="migrations/v2.md">the migration guide</DocumentationLink> as well as{" "}
         <DocumentationLink page="changelog.md">the changelog</DocumentationLink>.
       </Typography>
-      <Button onClick={() => setOpen(false)}>I understand</Button>
+      <Button
+        onClick={() => {
+          setOpen(false);
+        }}
+      >
+        I understand
+      </Button>
     </Modal>
   );
 };

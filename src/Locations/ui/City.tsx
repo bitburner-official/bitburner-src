@@ -57,7 +57,14 @@ function LocationLetter(location: Location, className: string): React.ReactEleme
   if (location.types.includes(LocationType.Special)) L = "?";
   if (!location) return <span>*</span>;
   return (
-    <span aria-label={location.name} key={location.name} className={className} onClick={() => toLocation(location)}>
+    <span
+      aria-label={location.name}
+      key={location.name}
+      className={className}
+      onClick={() => {
+        toLocation(location);
+      }}
+    >
       <b>{L}</b>
     </span>
   );
@@ -118,7 +125,7 @@ function ASCIICity(props: IProps): React.ReactElement {
     return elems;
   };
 
-  const elems: JSX.Element[] = [];
+  const elems: React.JSX.Element[] = [];
   const lines = props.city.asciiArt.split("\n");
   let i = 0;
   for (const line of lines) {
@@ -137,7 +144,13 @@ function ListCity(props: IProps): React.ReactElement {
   const locationButtons = props.city.locations.map((locName) => {
     return (
       <React.Fragment key={locName}>
-        <Button onClick={() => toLocation(Locations[locName])}>{locName}</Button>
+        <Button
+          onClick={() => {
+            toLocation(Locations[locName]);
+          }}
+        >
+          {locName}
+        </Button>
         <br />
       </React.Fragment>
     );

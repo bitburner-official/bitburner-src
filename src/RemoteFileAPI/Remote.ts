@@ -30,7 +30,9 @@ export class Remote {
     // Cancel all pending retries immediately. This function is only called when we intentionally close the current
     // connection before starting a new one or the player intentionally closes the current connection. The new
     // connection will retry on its own if needed.
-    timeOutIds.forEach((id) => window.clearTimeout(id));
+    timeOutIds.forEach((id) => {
+      window.clearTimeout(id);
+    });
     timeOutIds.clear();
 
     if (this.connection) {
@@ -129,7 +131,9 @@ function handleMessageEvent(this: WebSocket, e: MessageEvent): void {
   }
   const response = RFARequestHandler[msg.method](msg);
   if (response instanceof Promise) {
-    void response.then((data) => this.send(JSON.stringify(data)));
+    void response.then((data) => {
+      this.send(JSON.stringify(data));
+    });
     return;
   }
   this.send(JSON.stringify(response));

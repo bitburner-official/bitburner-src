@@ -90,18 +90,31 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     }
   }
 
-  const addAliases = () => addGeneric({ iterable: Aliases.keys() });
-  const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
-  const addCommands = () => addGeneric({ iterable: supportedCommands });
-  const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
-  const addServerNames = () =>
+  const addAliases = () => {
+    addGeneric({ iterable: Aliases.keys() });
+  };
+  const addGlobalAliases = () => {
+    addGeneric({ iterable: GlobalAliases.keys() });
+  };
+  const addCommands = () => {
+    addGeneric({ iterable: supportedCommands });
+  };
+  const addDarkwebItems = () => {
+    addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
+  };
+  const addServerNames = () => {
     addGeneric({
       iterable: GetAllServers()
         .filter((server) => server.serversOnNetwork.length !== 0)
         .map((server) => server.hostname),
     });
-  const addScripts = () => addGeneric({ iterable: currServ.scripts.keys(), usePathing: true });
-  const addTextFiles = () => addGeneric({ iterable: currServ.textFiles.keys(), usePathing: true });
+  };
+  const addScripts = () => {
+    addGeneric({ iterable: currServ.scripts.keys(), usePathing: true });
+  };
+  const addTextFiles = () => {
+    addGeneric({ iterable: currServ.textFiles.keys(), usePathing: true });
+  };
   const addCodingContracts = () => {
     addGeneric({ iterable: currServ.contracts.map((contract) => contract.fn), usePathing: true });
   };

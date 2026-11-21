@@ -62,8 +62,12 @@ export function Grid(props: IProps): React.ReactElement {
       cells.push(
         <Cell
           key={i}
-          onMouseEnter={() => props.enter(i, j)}
-          onClick={() => props.click(i, j)}
+          onMouseEnter={() => {
+            props.enter(i, j);
+          }}
+          onClick={() => {
+            props.click(i, j);
+          }}
           color={color(i, j)}
           borderBottom={borderWidth(i, j, i, j + 1)}
           borderRight={borderWidth(i, j, i + 1, j)}

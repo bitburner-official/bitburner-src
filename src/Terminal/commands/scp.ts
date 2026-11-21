@@ -9,13 +9,17 @@ import { ContentFile } from "../../Paths/ContentFile";
 
 export function scp(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length < 2) {
-    return Terminal.error("Incorrect usage of scp command. Usage: scp [source filename] [destination hostname]");
+    Terminal.error("Incorrect usage of scp command. Usage: scp [source filename] [destination hostname]");
+    return;
   }
 
   // Validate destination server
   const destHostname = String(args.pop());
   const destServer = GetReachableServer(destHostname);
-  if (!destServer) return Terminal.error(`Invalid destination server: ${destHostname}`);
+  if (!destServer) {
+    Terminal.error(`Invalid destination server: ${destHostname}`);
+    return;
+  }
 
   // Validate filepaths
   const filenames = args.map(String);
@@ -24,23 +28,31 @@ export function scp(args: (string | number | boolean)[], server: BaseServer): un
   // File validation loop, handle all errors before copying any files
   for (const filename of filenames) {
     const path = Terminal.getFilepath(filename);
-    if (!path) return Terminal.error(`Invalid file path: ${filename}`);
+    if (!path) {
+      Terminal.error(`Invalid file path: ${filename}`);
+      return;
+    }
     // Validate .lit files
     if (path.endsWith(".lit")) {
       if (!isMember("LiteratureName", path) || !server.messages.includes(path)) {
-        return Terminal.error(`scp failed: ${path} does not exist on server ${server.hostname}`);
+        Terminal.error(`scp failed: ${path} does not exist on server ${server.hostname}`);
+        return;
       }
       files.push(path);
       continue;
     }
     // Error for invalid filetype
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-      return Terminal.error(
+      Terminal.error(
         `scp failed: ${path} has invalid extension. scp only works for scripts (.js, .jsx, .ts, .tsx), text files (.txt, .json, .css), and literature files (.lit)`,
       );
+      return;
     }
     const sourceContentFile = server.getContentFile(path);
-    if (!sourceContentFile) return Terminal.error(`scp failed: ${path} does not exist on server ${server.hostname}`);
+    if (!sourceContentFile) {
+      Terminal.error(`scp failed: ${path} does not exist on server ${server.hostname}`);
+      return;
+    }
     files.push(sourceContentFile);
   }
 

@@ -22,7 +22,9 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
   }.zip`;
   zip
     .generateAsync({ type: "blob" })
-    .then((content: Blob) => downloadContentAsFile(content, filename))
+    .then((content: Blob) => {
+      downloadContentAsFile(content, filename);
+    })
     .catch((error) => {
       console.error(error);
       Terminal.error(`Cannot compress scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`);
@@ -31,7 +33,8 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
 
 export function download(args: (string | number | boolean)[], server: BaseServer): undefined {
   if (args.length !== 1) {
-    return Terminal.error("Incorrect usage of download command. Usage: download [script/text file]");
+    Terminal.error("Incorrect usage of download command. Usage: download [script/text file]");
+    return;
   }
   const pattern = String(args[0]);
   // If the path contains a * or ?, treat as glob
@@ -46,11 +49,18 @@ export function download(args: (string | number | boolean)[], server: BaseServer
     }
   }
   const path = Terminal.getFilepath(pattern);
-  if (!path) return Terminal.error(`Could not resolve path ${pattern}`);
+  if (!path) {
+    Terminal.error(`Could not resolve path ${pattern}`);
+    return;
+  }
   if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-    return Terminal.error("Can only download script and text files");
+    Terminal.error("Can only download script and text files");
+    return;
   }
   const file = server.getContentFile(path);
-  if (!file) return Terminal.error(`File not found: ${path}`);
+  if (!file) {
+    Terminal.error(`File not found: ${path}`);
+    return;
+  }
   downloadContentAsFile(file.content, file.filename);
 }

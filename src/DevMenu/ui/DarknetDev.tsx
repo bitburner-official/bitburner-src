@@ -175,7 +175,9 @@ export function DarknetDev(): React.ReactElement {
           <OptionSwitch
             disabled={!hasDarknetAccess()}
             checked={DarknetState.showFullNetwork}
-            onChange={(newValue) => toggleShowFullNetwork(newValue)}
+            onChange={(newValue) => {
+              toggleShowFullNetwork(newValue);
+            }}
             text="Show Full Network"
             tooltip={<>If this is set, the full depth of the darknet will be displayed.</>}
           />
@@ -223,7 +225,12 @@ export function DarknetDev(): React.ReactElement {
           <br />
           <Tooltip title={<Typography>Adds a new server of a specific variety.</Typography>}>
             <span>
-              <Button disabled={!hasDarknetAccess()} onClick={() => setOpen(true)}>
+              <Button
+                disabled={!hasDarknetAccess()}
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
                 Add Darknet Servers...
               </Button>
             </span>

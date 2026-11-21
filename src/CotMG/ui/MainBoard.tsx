@@ -83,7 +83,9 @@ export function MainBoard(props: IProps): React.ReactElement {
       }
     }
     document.addEventListener("keydown", doRotate);
-    return () => document.removeEventListener("keydown", doRotate);
+    return () => {
+      document.removeEventListener("keydown", doRotate);
+    };
   });
 
   return (
@@ -95,8 +97,12 @@ export function MainBoard(props: IProps): React.ReactElement {
             height={props.gift.height()}
             ghostGrid={ghostGrid}
             gift={props.gift}
-            enter={(i, j) => moveGhost(i, j, rotation)}
-            click={(i, j) => clickAt(i, j)}
+            enter={(i, j) => {
+              moveGhost(i, j, rotation);
+            }}
+            click={(i, j) => {
+              clickAt(i, j);
+            }}
           />
         </Table>
         <FragmentInspector gift={props.gift} x={pos[0]} y={pos[1]} fragment={props.gift.fragmentAt(pos[0], pos[1])} />

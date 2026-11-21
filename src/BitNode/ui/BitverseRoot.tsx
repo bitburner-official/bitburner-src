@@ -90,14 +90,22 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
         }
       >
         {Settings.DisableASCIIArt ? (
-          <Button onClick={() => setPortalOpen(true)} sx={{ m: 2 }} aria-description={bitNode.tagline}>
+          <Button
+            onClick={() => {
+              setPortalOpen(true);
+            }}
+            sx={{ m: 2 }}
+            aria-description={bitNode.tagline}
+          >
             <Typography>
               BitNode-{bitNode.number.toString()}: {bitNode.name}
             </Typography>
           </Button>
         ) : (
           <IconButton
-            onClick={() => setPortalOpen(true)}
+            onClick={() => {
+              setPortalOpen(true);
+            }}
             className={cssClass}
             aria-label={`BitNode-${bitNode.number.toString()}: ${bitNode.name}`}
             aria-description={bitNode.tagline}
@@ -108,7 +116,9 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
       </Tooltip>
       <PortalModal
         open={portalOpen}
-        onClose={() => setPortalOpen(false)}
+        onClose={() => {
+          setPortalOpen(false);
+        }}
         n={props.n}
         level={props.level}
         destroyedBitNode={props.destroyedBitNode}
@@ -136,12 +146,20 @@ function BitVerseLore({ flume }: { flume: boolean }): React.ReactElement {
     const timeOutId = window.setTimeout(() => {
       setOpen(true);
     }, 300000);
-    return () => window.clearTimeout(timeOutId);
+    return () => {
+      window.clearTimeout(timeOutId);
+    };
   }, [flume]);
 
   return (
     <>
-      <Modal open={open} onClose={() => setOpen(false)} canBeDismissedEasily={false}>
+      <Modal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+        canBeDismissedEasily={false}
+      >
         <Typography component="div">
           It looks like you are wondering which BitNode you should choose. If you want to get advice on choosing your
           next BitNode, you can check these BitNode recommendation guides:
@@ -159,7 +177,12 @@ function BitVerseLore({ flume }: { flume: boolean }): React.ReactElement {
           You can read these guides later in the Documentation tab. Make sure to check that tab. Many pages are unlocked
           now.
         </Typography>
-        <Button onClick={() => setOpen(false)} sx={{ marginTop: "10px" }}>
+        <Button
+          onClick={() => {
+            setOpen(false);
+          }}
+          sx={{ marginTop: "10px" }}
+        >
           OK
         </Button>
       </Modal>
@@ -252,7 +275,15 @@ export function BitverseRoot(props: IProps): React.ReactElement {
         "..............................................",
       ];
     }
-    return <CinematicText lines={cinematicLines} onDone={() => setDestroySequence(false)} auto={true} />;
+    return (
+      <CinematicText
+        lines={cinematicLines}
+        onDone={() => {
+          setDestroySequence(false);
+        }}
+        auto={true}
+      />
+    );
   }
 
   const nextSourceFileLvl = (n: number): number => {

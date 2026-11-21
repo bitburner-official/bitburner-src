@@ -99,7 +99,9 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
     const didUpdateBoard = makeMove(boardState, x, y, currentPlayer);
     if (didUpdateBoard) {
-      takeAiTurn(boardState).catch((error) => exceptionAlert(error));
+      takeAiTurn(boardState).catch((error) => {
+        exceptionAlert(error);
+      });
     }
   }
 
@@ -109,7 +111,9 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       return;
     }
     passTurn(boardState, boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black);
-    takeAiTurn(boardState).catch((error) => exceptionAlert(error));
+    takeAiTurn(boardState).catch((error) => {
+      exceptionAlert(error);
+    });
   }
 
   async function takeAiTurn(boardState: BoardState) {
@@ -190,18 +194,31 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       <GoSubnetSearch
         open={searchOpen}
         search={resetState}
-        cancel={() => setSearchOpen(false)}
+        cancel={() => {
+          setSearchOpen(false);
+        }}
         showInstructions={showInstructions}
       />
       <GoScoreModal
         open={scoreOpen}
-        onClose={() => setScoreOpen(false)}
-        newSubnet={() => newSubnet()}
+        onClose={() => {
+          setScoreOpen(false);
+        }}
+        newSubnet={() => {
+          newSubnet();
+        }}
         finalScore={score}
         opponent={Go.currentGame.ai}
-        showScoreExplanation={() => setScoreExplanationOpen(true)}
+        showScoreExplanation={() => {
+          setScoreExplanationOpen(true);
+        }}
       />
-      <GoScoreExplanation onClose={() => setScoreExplanationOpen(false)} open={scoreExplanationOpen} />
+      <GoScoreExplanation
+        onClose={() => {
+          setScoreExplanationOpen(false);
+        }}
+        open={scoreExplanationOpen}
+      />
       <div className={classes.boardFrame}>
         {traditional ? (
           ""
@@ -231,7 +248,12 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
           />
         </div>
         <Box className={classes.inlineFlexBox}>
-          <Button onClick={() => setSearchOpen(true)} className={classes.resetBoard}>
+          <Button
+            onClick={() => {
+              setSearchOpen(true);
+            }}
+            className={classes.resetBoard}
+          >
             Find New Subnet
           </Button>
           <Typography className={classes.scoreBox}>{scoreBoxText}</Typography>
@@ -248,14 +270,18 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
             <br />
             <OptionSwitch
               checked={traditional}
-              onChange={(newValue) => setTraditional(newValue)}
+              onChange={(newValue) => {
+                setTraditional(newValue);
+              }}
               text="Traditional Go look"
               tooltip={<>Show stones and grid as if it was a standard Go board</>}
             />
             <OptionSwitch
               checked={showPriorMove}
               disabled={!boardState.previousBoards.length}
-              onChange={(newValue) => showPreviousMove(newValue)}
+              onChange={(newValue) => {
+                showPreviousMove(newValue);
+              }}
               text="Show previous move"
               tooltip={<>Show the board as it was before the last move</>}
             />

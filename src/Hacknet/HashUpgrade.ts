@@ -10,7 +10,7 @@ export interface HashUpgradeParams {
   hasTargetCompany?: boolean;
   name: HacknetServerHashUpgrade;
   value: number;
-  effectText?: (level: number) => JSX.Element | null;
+  effectText?: (level: number) => React.JSX.Element | null;
 }
 
 export class HashUpgrade {
@@ -67,7 +67,7 @@ export class HashUpgrade {
   }
 
   // Functions that returns the UI element to display the effect of this upgrade.
-  effectText: (level: number) => JSX.Element | null = () => null;
+  effectText: (level: number) => React.JSX.Element | null = () => null;
 
   getCost(currentLevel: number, count = 1): number {
     if (typeof this.cost === "number") {

@@ -61,7 +61,7 @@ export function StockTicker(props: IProps): React.ReactElement {
     place: () => false,
   });
 
-  function getBuyTransactionCostContent(): JSX.Element | null {
+  function getBuyTransactionCostContent(): React.JSX.Element | null {
     const stock = props.stock;
     const qty: number = getQuantity();
     if (isNaN(qty)) {
@@ -85,7 +85,7 @@ export function StockTicker(props: IProps): React.ReactElement {
     return Math.round(parseFloat(qty));
   }
 
-  function getSellTransactionCostContent(): JSX.Element | null {
+  function getSellTransactionCostContent(): React.JSX.Element | null {
     const stock = props.stock;
     const qty: number = getQuantity();
     if (isNaN(qty)) {
@@ -281,7 +281,11 @@ export function StockTicker(props: IProps): React.ReactElement {
 
   return (
     <Box component={Paper}>
-      <ListItemButton onClick={() => setTicketOpen((old) => !old)}>
+      <ListItemButton
+        onClick={() => {
+          setTicketOpen((old) => !old);
+        }}
+      >
         <ListItemText primary={<StockTickerHeaderText stock={props.stock} />} />
         {tickerOpen ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
@@ -324,7 +328,9 @@ export function StockTicker(props: IProps): React.ReactElement {
             placeText={modalProps.placeText}
             place={modalProps.place}
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={() => {
+              setOpen(false);
+            }}
           />
         </Box>
       </Collapse>

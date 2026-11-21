@@ -36,13 +36,24 @@ export function SleeveRoot(): React.ReactElement {
         )}
       </Container>
 
-      <Button onClick={() => setFAQOpen(true)}>FAQ</Button>
+      <Button
+        onClick={() => {
+          setFAQOpen(true);
+        }}
+      >
+        FAQ
+      </Button>
       <Box display="grid" sx={{ gridTemplateColumns: "repeat(2, 1fr)", mt: 1 }}>
         {Player.sleeves.map((sleeve, i) => (
           <SleeveElem key={i} rerender={rerender} sleeve={sleeve} />
         ))}
       </Box>
-      <FAQModal open={FAQOpen} onClose={() => setFAQOpen(false)} />
+      <FAQModal
+        open={FAQOpen}
+        onClose={() => {
+          setFAQOpen(false);
+        }}
+      />
     </>
   );
 }

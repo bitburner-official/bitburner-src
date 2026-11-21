@@ -91,10 +91,14 @@ export function SleevesDev(): React.ReactElement {
                 <Adjuster
                   label="Stored Cycles"
                   placeholder="cycles"
-                  tons={() => sleeveSetStoredCycles(10000000)}
+                  tons={() => {
+                    sleeveSetStoredCycles(10000000);
+                  }}
                   add={sleeveSetStoredCycles}
                   subtract={sleeveSetStoredCycles}
-                  reset={() => sleeveSetStoredCycles(0)}
+                  reset={() => {
+                    sleeveSetStoredCycles(0);
+                  }}
                 />
               </td>
             </tr>

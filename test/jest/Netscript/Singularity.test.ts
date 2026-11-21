@@ -282,7 +282,9 @@ describe("b1tflum3", () => {
     });
     test("Invalid nextBN", () => {
       const ns = getNS();
-      expect(() => ns.singularity.b1tflum3(-1)).toThrow("Invalid BitNode");
+      expect(() => {
+        ns.singularity.b1tflum3(-1);
+      }).toThrow("Invalid BitNode");
     });
   });
 });
@@ -394,8 +396,12 @@ describe("destroyW0r1dD43m0n", () => {
     });
     test("Invalid nextBN", () => {
       const ns = getNS();
-      expect(() => ns.singularity.destroyW0r1dD43m0n(0)).toThrow("Invalid BitNode");
-      expect(() => ns.singularity.destroyW0r1dD43m0n(-1)).toThrow("Invalid BitNode");
+      expect(() => {
+        ns.singularity.destroyW0r1dD43m0n(0);
+      }).toThrow("Invalid BitNode");
+      expect(() => {
+        ns.singularity.destroyW0r1dD43m0n(-1);
+      }).toThrow("Invalid BitNode");
     });
     test.each([
       ["1", undefined, getDefaultBitNodeOptions()],
@@ -405,9 +411,9 @@ describe("destroyW0r1dD43m0n", () => {
       setNumBlackOpsComplete(0);
       const ns = getNS();
       const spiedRouterToPage = jest.spyOn(Router, "toPage");
-      expect(() => ns.singularity.destroyW0r1dD43m0n(undefined, callbackScript, bitNodeOptions)).toThrow(
-        "When nextBN is nullish, other parameters must be nullish.",
-      );
+      expect(() => {
+        ns.singularity.destroyW0r1dD43m0n(undefined, callbackScript, bitNodeOptions);
+      }).toThrow("When nextBN is nullish, other parameters must be nullish.");
 
       expectFailToJumpToNextBN();
       expect(spiedRouterToPage).not.toHaveBeenCalled();
@@ -904,16 +910,18 @@ describe("Intelligence", () => {
 
 const nextCompletionTestCases = [
   {
-    action: () =>
+    action: () => {
       expect(
         getNS().singularity.universityCourse(LocationName.Sector12RothmanUniversity, UniversityClassType.algorithms),
-      ).toStrictEqual(true),
+      ).toStrictEqual(true);
+    },
     taskType: "CLASS",
     isPlayerTask: true,
   },
   {
-    action: () =>
-      expect(getNS().singularity.gymWorkout(LocationName.Sector12PowerhouseGym, GymType.strength)).toStrictEqual(true),
+    action: () => {
+      expect(getNS().singularity.gymWorkout(LocationName.Sector12PowerhouseGym, GymType.strength)).toStrictEqual(true);
+    },
     taskType: "CLASS",
     isPlayerTask: true,
   },
@@ -927,7 +935,9 @@ const nextCompletionTestCases = [
     isPlayerTask: true,
   },
   {
-    action: () => expect(getNS().singularity.createProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true),
+    action: () => {
+      expect(getNS().singularity.createProgram(CompletedProgramName.bruteSsh)).toStrictEqual(true);
+    },
     taskType: "CREATE_PROGRAM",
     isPlayerTask: true,
   },
@@ -941,8 +951,9 @@ const nextCompletionTestCases = [
     isPlayerTask: true,
   },
   {
-    action: () =>
-      expect(getNS().singularity.workForFaction(FactionName.Sector12, FactionWorkType.hacking)).toStrictEqual(true),
+    action: () => {
+      expect(getNS().singularity.workForFaction(FactionName.Sector12, FactionWorkType.hacking)).toStrictEqual(true);
+    },
     taskType: "FACTION",
     isPlayerTask: true,
   },
@@ -956,18 +967,20 @@ const nextCompletionTestCases = [
     isPlayerTask: true,
   },
   {
-    action: () =>
+    action: () => {
       expect(
         getNS().sleeve.setToUniversityCourse(0, LocationName.Sector12RothmanUniversity, UniversityClassType.algorithms),
-      ).toStrictEqual(true),
+      ).toStrictEqual(true);
+    },
     taskType: "CLASS",
     isPlayerTask: false,
   },
   {
-    action: () =>
+    action: () => {
       expect(getNS().sleeve.setToGymWorkout(0, LocationName.Sector12PowerhouseGym, GymType.strength)).toStrictEqual(
         true,
-      ),
+      );
+    },
     taskType: "CLASS",
     isPlayerTask: false,
   },
@@ -981,57 +994,68 @@ const nextCompletionTestCases = [
     isPlayerTask: false,
   },
   {
-    action: () => expect(getNS().sleeve.setToCommitCrime(0, CrimeType.mug)).toStrictEqual(true),
+    action: () => {
+      expect(getNS().sleeve.setToCommitCrime(0, CrimeType.mug)).toStrictEqual(true);
+    },
     taskType: "CRIME",
     isPlayerTask: false,
   },
   {
-    action: () =>
-      expect(getNS().sleeve.setToFactionWork(0, FactionName.Sector12, FactionWorkType.hacking)).toStrictEqual(true),
+    action: () => {
+      expect(getNS().sleeve.setToFactionWork(0, FactionName.Sector12, FactionWorkType.hacking)).toStrictEqual(true);
+    },
     taskType: "FACTION",
     isPlayerTask: false,
   },
   {
-    action: () => expect(getNS().sleeve.setToShockRecovery(0)).toStrictEqual(true),
+    action: () => {
+      expect(getNS().sleeve.setToShockRecovery(0)).toStrictEqual(true);
+    },
     taskType: "RECOVERY",
     isPlayerTask: false,
   },
   {
-    action: () => expect(getNS().sleeve.setToSynchronize(0)).toStrictEqual(true),
+    action: () => {
+      expect(getNS().sleeve.setToSynchronize(0)).toStrictEqual(true);
+    },
     taskType: "SYNCHRO",
     isPlayerTask: false,
   },
   {
-    action: () =>
-      expect(getNS().sleeve.setToBladeburnerAction(0, BladeburnerGeneralActionName.Training)).toStrictEqual(true),
+    action: () => {
+      expect(getNS().sleeve.setToBladeburnerAction(0, BladeburnerGeneralActionName.Training)).toStrictEqual(true);
+    },
     taskType: "BLADEBURNER",
     isPlayerTask: false,
   },
   {
-    action: () =>
+    action: () => {
       expect(
         getNS().sleeve.setToBladeburnerAction(0, SpecialBladeburnerActionTypeForSleeve.InfiltrateSynthoids),
-      ).toStrictEqual(true),
+      ).toStrictEqual(true);
+    },
     taskType: "INFILTRATE",
     isPlayerTask: false,
   },
   {
-    action: () =>
+    action: () => {
       expect(
         getNS().sleeve.setToBladeburnerAction(0, SpecialBladeburnerActionTypeForSleeve.SupportMainSleeve),
-      ).toStrictEqual(true),
+      ).toStrictEqual(true);
+    },
     taskType: "SUPPORT",
     isPlayerTask: false,
   },
   {
-    action: () =>
+    action: () => {
       expect(
         getNS().sleeve.setToBladeburnerAction(
           0,
           SpecialBladeburnerActionTypeForSleeve.TakeOnContracts,
           BladeburnerContractName.Tracking,
         ),
-      ).toStrictEqual(true),
+      ).toStrictEqual(true);
+    },
     taskType: "BLADEBURNER",
     isPlayerTask: false,
   },

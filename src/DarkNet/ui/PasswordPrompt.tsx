@@ -98,7 +98,9 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
       return;
     }
     if (!isAuthenticating) {
-      attemptPassword(inputPassword).catch((error) => console.error(error));
+      attemptPassword(inputPassword).catch((error) => {
+        console.error(error);
+      });
     }
   };
 
@@ -117,13 +119,19 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
     <>
       <div className={classes.inlineFlexBox}>
         <div>
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <form
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+          >
             <TextField
               ref={passwordInput}
               label="Password"
               type="text"
               value={inputPassword}
-              onChange={(e) => setInputPassword(e.target.value)}
+              onChange={(e) => {
+                setInputPassword(e.target.value);
+              }}
               variant="outlined"
               autoComplete="off"
               autoFocus={!server.hasAdminRights}
@@ -131,7 +139,12 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
             />
           </form>
           <br />
-          <Button onClick={(e) => handleSubmit(e)} disabled={isAuthenticating}>
+          <Button
+            onClick={(e) => {
+              handleSubmit(e);
+            }}
+            disabled={isAuthenticating}
+          >
             Submit Password
           </Button>
           <br />

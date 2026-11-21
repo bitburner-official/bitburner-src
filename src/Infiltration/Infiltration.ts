@@ -118,7 +118,7 @@ export class Infiltration {
     const currentStage = this.stage;
     return this.updateEvent.subscribe(() => {
       if (currentStage !== this.stage) return;
-      return cb();
+      cb();
     });
   }
 

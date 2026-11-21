@@ -10,7 +10,9 @@ export const formatToMaxDigits = (value: number, maxDigits: number): string => {
 };
 
 export const copyToClipboard = (text: string): void => {
-  navigator.clipboard.writeText(text).catch((error) => console.error(error));
+  navigator.clipboard.writeText(text).catch((error) => {
+    console.error(error);
+  });
   SnackbarEvents.emit(`Copied "${text}" to clipboard`, ToastVariant.SUCCESS, 2000);
 };
 

@@ -145,7 +145,9 @@ export function prestigeSourceFile(this: PlayerObject): void {
   this.prestigeAugmentation();
   this.karma = 0;
   // Duplicate sleeves are reset to level 1 every Bit Node (but the number of sleeves you have persists)
-  this.sleeves.forEach((sleeve) => sleeve.prestige());
+  this.sleeves.forEach((sleeve) => {
+    sleeve.prestige();
+  });
 
   if (this.bitNodeN === 10) {
     for (let i = 0; i < this.sleeves.length; i++) {

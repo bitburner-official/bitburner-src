@@ -144,9 +144,15 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
                         isActive={isActive}
                         isExternal={hostname !== SpecialServers.Home}
                         isUnsaved={() => isUnsavedFile(scripts, index)}
-                        onClick={() => onTabClick(originalIndex)}
-                        onClose={() => onTabClose(originalIndex)}
-                        onUpdate={() => onTabUpdate(originalIndex)}
+                        onClick={() => {
+                          onTabClick(originalIndex);
+                        }}
+                        onClose={() => {
+                          onTabClose(originalIndex);
+                        }}
+                        onUpdate={() => {
+                          onTabUpdate(originalIndex);
+                        }}
                       />
                     )}
                   </Draggable>

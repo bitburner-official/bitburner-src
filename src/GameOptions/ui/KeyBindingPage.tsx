@@ -307,7 +307,9 @@ export function KeyBindingPage(): React.ReactElement {
                         : Settings.theme.primary
                     }`,
                   }}
-                  onClick={() => showModal(keyBindingType, isPrimary)}
+                  onClick={() => {
+                    showModal(keyBindingType, isPrimary);
+                  }}
                 >
                   {CurrentKeyBindings[keyBindingType][value] ? (
                     parseKeyCombinationToString(CurrentKeyBindings[keyBindingType][value])
@@ -332,7 +334,9 @@ export function KeyBindingPage(): React.ReactElement {
       </table>
       <SettingUpKeyBindingModal
         open={popupOpen}
-        onClose={() => setPopupOpen(false)}
+        onClose={() => {
+          setPopupOpen(false);
+        }}
         keyBindingType={keyBindingType}
         isPrimary={isPrimary}
       />

@@ -87,7 +87,12 @@ function MakeProductButton(): React.ReactElement {
       >
         {createProductButtonText}
       </ButtonWithTooltip>
-      <MakeProductModal open={makeOpen} onClose={() => setMakeOpen(false)} />
+      <MakeProductModal
+        open={makeOpen}
+        onClose={() => {
+          setMakeOpen(false);
+        }}
+      />
     </>
   );
 }
@@ -173,10 +178,19 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
         >
           <Typography>Production Multiplier: {formatCorpMultiplier(division.productionMult)}</Typography>
         </Tooltip>
-        <IconButton onClick={() => setHelpOpen(true)}>
+        <IconButton
+          onClick={() => {
+            setHelpOpen(true);
+          }}
+        >
           <HelpIcon />
         </IconButton>
-        <StaticModal open={helpOpen} onClose={() => setHelpOpen(false)}>
+        <StaticModal
+          open={helpOpen}
+          onClose={() => {
+            setHelpOpen(false);
+          }}
+        >
           <Typography>
             Owning Hardware, Robots, AI Cores, and Real Estate can boost your Industry's production. The effect these
             materials have on your production varies between Industries. For example, Real Estate may be very effective
@@ -206,10 +220,21 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
         <Tooltip title={"Scientific Research increases the quality of the materials and products that you produce."}>
           <Typography>Scientific Research: {formatBigNumber(division.researchPoints)}</Typography>
         </Tooltip>
-        <Button sx={{ mx: 1 }} onClick={() => setResearchOpen(true)}>
+        <Button
+          sx={{ mx: 1 }}
+          onClick={() => {
+            setResearchOpen(true);
+          }}
+        >
           Research
         </Button>
-        <ResearchModal open={researchOpen} onClose={() => setResearchOpen(false)} industry={division} />
+        <ResearchModal
+          open={researchOpen}
+          onClose={() => {
+            setResearchOpen(false);
+          }}
+          industry={division}
+        />
       </Box>
       <br />
       <Box display="flex" alignItems="center">

@@ -131,13 +131,21 @@ export function CompanyLocation(props: IProps): React.ReactElement {
         {isEmployedHere && (
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
             <Button onClick={work}>Work</Button>
-            <Button onClick={() => setQuitOpen(true)}>Quit</Button>
+            <Button
+              onClick={() => {
+                setQuitOpen(true);
+              }}
+            >
+              Quit
+            </Button>
             <QuitJobModal
               companyName={props.companyName}
               company={company}
               onQuit={rerender}
               open={quitOpen}
-              onClose={() => setQuitOpen(false)}
+              onClose={() => {
+                setQuitOpen(false);
+              }}
             />
           </Box>
         )}

@@ -240,7 +240,9 @@ export function updateCaptures(board: Board, playerWhoMoved: GoColor, resetChain
     return;
   }
 
-  chainsToCapture?.forEach((chain) => captureChain(chain));
+  chainsToCapture?.forEach((chain) => {
+    captureChain(chain);
+  });
   updateChains(board);
 }
 

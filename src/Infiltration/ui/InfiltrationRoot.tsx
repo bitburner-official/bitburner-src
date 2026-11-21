@@ -81,7 +81,9 @@ export function InfiltrationRoot(): React.ReactElement {
       // stuff, it can lag behind (potentially a lot, in edge cases).
       state.stage.onKey(event);
     };
-    const unsub = state.updateEvent.subscribe(() => setRefresh((old) => old + 1));
+    const unsub = state.updateEvent.subscribe(() => {
+      setRefresh((old) => old + 1);
+    });
     document.addEventListener("keydown", press);
     return () => {
       unsub();

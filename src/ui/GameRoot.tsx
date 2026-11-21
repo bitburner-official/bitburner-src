@@ -145,12 +145,13 @@ export function GameRoot(): React.ReactElement {
     pageWithContext = { page: Page.Terminal };
   }
 
-  const setNextPage = (pageWithContext: PageWithContext) =>
+  const setNextPage = (pageWithContext: PageWithContext) => {
     setPages((prev) => {
       const next = [pageWithContext, ...prev];
       next.length = Math.min(next.length, MAX_PAGES_IN_HISTORY);
       return next;
     });
+  };
 
   const rerender = useRerender();
 
@@ -172,7 +173,9 @@ export function GameRoot(): React.ReactElement {
     }
     saveGame()
       .then(() => {
-        setTimeout(() => htmlLocation.reload(), 0);
+        setTimeout(() => {
+          htmlLocation.reload();
+        }, 0);
       })
       .catch((error) => {
         exceptionAlert(error);
@@ -193,10 +196,15 @@ export function GameRoot(): React.ReactElement {
 
   setRouter({
     page: () => pageWithContext.page,
-    allowRouting: (value: boolean) => setAllowRoutingCalls(value),
+    allowRouting: (value: boolean) => {
+      setAllowRoutingCalls(value);
+    },
     hidingMessages: () => hiddenPages.has(pageWithContext.page),
     toPage: (page: Page, context?: PageContext<ComplexPage>) => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("toPage");
+      if (!allowRoutingCalls) {
+        attemptedForbiddenRouting("toPage");
+        return;
+      }
       switch (page) {
         case Page.Travel:
           Player.gotoLocation(LocationName.TravelAgency);
@@ -225,7 +233,8 @@ export function GameRoot(): React.ReactElement {
     },
     back: () => {
       if (!allowRoutingCalls) {
-        return attemptedForbiddenRouting("back");
+        attemptedForbiddenRouting("back");
+        return;
       }
       /**
        * If something calls Router.back() when the "pages" array has only 1 item, that array will be empty when the UI
@@ -390,10 +399,14 @@ export function GameRoot(): React.ReactElement {
         <GameOptionsRoot
           tab={pageWithContext.tab}
           save={() => {
-            saveGame().catch((error) => exceptionAlert(error));
+            saveGame().catch((error) => {
+              exceptionAlert(error);
+            });
           }}
           export={() => {
-            exportGame().catch((error) => exceptionAlert(error));
+            exportGame().catch((error) => {
+              exceptionAlert(error);
+            });
           }}
           forceKill={killAllScripts}
           softReset={softReset}
@@ -412,7 +425,9 @@ export function GameRoot(): React.ReactElement {
       mainPage = (
         <AugmentationsRoot
           exportGameFn={() => {
-            exportGame().catch((error) => exceptionAlert(error));
+            exportGame().catch((error) => {
+              exceptionAlert(error);
+            });
           }}
           installAugmentationsFn={() => {
             installAugmentations();
@@ -488,7 +503,9 @@ export function GameRoot(): React.ReactElement {
                     <CharacterOverview
                       parentOpen={parentOpen}
                       save={() => {
-                        saveGame().catch((error) => exceptionAlert(error));
+                        saveGame().catch((error) => {
+                          exceptionAlert(error);
+                        });
                       }}
                       killScripts={killAllScripts}
                     />

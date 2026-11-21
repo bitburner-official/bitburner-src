@@ -155,7 +155,9 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
     // No need to rerender augs that are owned
     if (props.owned) return;
     const interval = setInterval(rerender, 600);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, [props.owned, rerender]);
 
   const aug = Augmentations[props.augName];
@@ -192,11 +194,11 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
       <>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Button
-            onClick={() =>
+            onClick={() => {
               props.parent.purchaseAugmentation(aug, (open): void => {
                 setOpen(open);
-              })
-            }
+              });
+            }}
             disabled={!props.parent.canPurchase(aug) || props.owned}
             sx={{ width: "48px", height: "36px", float: "left", clear: "none", mr: 1 }}
           >

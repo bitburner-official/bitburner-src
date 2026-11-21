@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
 }));
 
-export function Augmentation({ name }: { name: string }): JSX.Element {
+export function Augmentation({ name }: { name: string }): React.JSX.Element {
   const { classes } = useStyles();
   return <span className={classes.aug}>{name}</span>;
 }

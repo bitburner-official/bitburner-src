@@ -54,7 +54,9 @@ export function FactionsDev(): React.ReactElement {
   }
 
   function receiveAllRumors(): void {
-    getRecordValues(FactionName).forEach((factionName) => Player.receiveRumor(factionName));
+    getRecordValues(FactionName).forEach((factionName) => {
+      Player.receiveRumor(factionName);
+    });
     rerender();
   }
 
@@ -172,7 +174,9 @@ export function FactionsDev(): React.ReactElement {
                 <Adjuster
                   label="reputation"
                   placeholder="amt"
-                  tons={() => modifyFactionRep(1)(largeAmountOfReputation)}
+                  tons={() => {
+                    modifyFactionRep(1)(largeAmountOfReputation);
+                  }}
                   add={modifyFactionRep(1)}
                   subtract={modifyFactionRep(-1)}
                   reset={resetFactionRep}
@@ -187,7 +191,9 @@ export function FactionsDev(): React.ReactElement {
                 <Adjuster
                   label="favor"
                   placeholder="amt"
-                  tons={() => modifyFactionFavor(1)(MaxFavor)}
+                  tons={() => {
+                    modifyFactionFavor(1)(MaxFavor);
+                  }}
                   add={modifyFactionFavor(1)}
                   subtract={modifyFactionFavor(-1)}
                   reset={resetFactionFavor}

@@ -27,11 +27,23 @@ function ServerButton(props: { ram: number }): React.ReactElement {
   const reachLimitOfPrivateServer = Player.purchasedServers.length >= getCloudServerLimit();
   return (
     <>
-      <Button onClick={() => setOpen(true)} disabled={!Player.canAfford(cost) || reachLimitOfPrivateServer}>
+      <Button
+        onClick={() => {
+          setOpen(true);
+        }}
+        disabled={!Player.canAfford(cost) || reachLimitOfPrivateServer}
+      >
         Purchase {formatRam(props.ram)} Cloud Server -&nbsp;
         {reachLimitOfPrivateServer ? "Max" : <Money money={cost} forPurchase={true} />}
       </Button>
-      <PurchaseServerModal open={open} onClose={() => setOpen(false)} ram={props.ram} cost={cost} />
+      <PurchaseServerModal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+        ram={props.ram}
+        cost={cost}
+      />
     </>
   );
 }

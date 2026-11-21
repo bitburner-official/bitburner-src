@@ -104,7 +104,13 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
 
   return (
     <>
-      <Button onClick={() => Router.toPage(Page.Factions)}>Back</Button>
+      <Button
+        onClick={() => {
+          Router.toPage(Page.Factions);
+        }}
+      >
+        Back
+      </Button>
       <Typography variant="h4" color="primary">
         {faction.name}
       </Typography>
@@ -125,17 +131,27 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
             <Option
               buttonText={"Hacking Contracts"}
               infoText={hackingContractsInfo}
-              onClick={() => startHackingContracts(faction)}
+              onClick={() => {
+                startHackingContracts(faction);
+              }}
             />
           )}
           {factionInfo.offerFieldWork && (
-            <Option buttonText={"Field Work"} infoText={fieldWorkInfo} onClick={() => startFieldWork(faction)} />
+            <Option
+              buttonText={"Field Work"}
+              infoText={fieldWorkInfo}
+              onClick={() => {
+                startFieldWork(faction);
+              }}
+            />
           )}
           {factionInfo.offerSecurityWork && (
             <Option
               buttonText={"Security Work"}
               infoText={securityWorkInfo}
-              onClick={() => startSecurityWork(faction)}
+              onClick={() => {
+                startSecurityWork(faction);
+              }}
             />
           )}
           {factionInfo.offersWork() && (
@@ -157,7 +173,13 @@ export function FactionRoot({ faction }: FactionRootProps): React.ReactElement {
         <Typography variant="h4" color="primary">
           You have not joined {faction.name} yet!
         </Typography>
-        <Button onClick={() => Router.toPage(Page.Factions)}>Back to Factions</Button>
+        <Button
+          onClick={() => {
+            Router.toPage(Page.Factions);
+          }}
+        >
+          Back to Factions
+        </Button>
       </>
     );
   }
@@ -166,7 +188,9 @@ export function FactionRoot({ faction }: FactionRootProps): React.ReactElement {
     <MainPage
       rerender={rerender}
       faction={faction}
-      onAugmentations={() => Router.toPage(Page.FactionAugmentations, { faction })}
+      onAugmentations={() => {
+        Router.toPage(Page.FactionAugmentations, { faction });
+      }}
     />
   );
 }

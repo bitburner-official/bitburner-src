@@ -152,7 +152,8 @@ export class StatusBar {
     if (html.innerText.startsWith("----------Registers----------\n\n") && html.innerText.length > 31) {
       this.parseRegisters(html);
       this.showRegisters = true;
-      return this.update();
+      this.update();
+      return;
     }
     if (html.innerText.startsWith("----------Registers----------\n\n")) this.notification = "Registers are empty";
     else this.notification = html.innerText;

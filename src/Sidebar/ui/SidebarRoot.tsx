@@ -306,16 +306,19 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     }
 
     document.addEventListener("keydown", handleShortcuts);
-    return () => document.removeEventListener("keydown", handleShortcuts);
+    return () => {
+      document.removeEventListener("keydown", handleShortcuts);
+    };
   }, [canGoToPage, clickPage, props.page]);
 
   const { classes } = useStyles();
   const [open, setOpen] = useState(Settings.IsSidebarOpened);
-  const toggleDrawer = (): void =>
+  const toggleDrawer = (): void => {
     setOpen((old) => {
       Settings.IsSidebarOpened = !old;
       return !old;
     });
+  };
   const li_classes = useMemo(() => ({ root: classes.listitem }), [classes.listitem]);
   const ChevronOpenClose = open ? ChevronLeftIcon : ChevronRightIcon;
 

@@ -19,7 +19,10 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): und
       "You are trying to delete all files within the root directory. If this is intentional, use the --no-preserve-root flag",
   } as const;
 
-  if (args.length === 0) return Terminal.error(errors["arg"]("No arguments provided"));
+  if (args.length === 0) {
+    Terminal.error(errors["arg"]("No arguments provided"));
+    return;
+  }
 
   const recursive = args.includes("-r") || args.includes("-R") || args.includes("--recursive") || args.includes("-rf");
   const force = args.includes("-f") || args.includes("--force") || args.includes("-rf");
@@ -33,8 +36,14 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): und
     typeof arg === "string" && (!arg.startsWith("-") || (index - 1 >= 0 && array[index - 1] === "--"));
   const targets = args.filter(isTargetString);
 
-  if (targets.length === 0) return Terminal.error(errors["arg"]("No targets provided"));
-  if (!ignoreSpecialRoot && targets.includes("/")) return Terminal.error(errors["rootDeletion"]());
+  if (targets.length === 0) {
+    Terminal.error(errors["arg"]("No targets provided"));
+    return;
+  }
+  if (!ignoreSpecialRoot && targets.includes("/")) {
+    Terminal.error(errors["rootDeletion"]());
+    return;
+  }
 
   const directories: Directory[] = [];
   const files: FilePath[] = [];
@@ -62,7 +71,10 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): und
 
     const fileExists = file !== null && allFiles.has(file);
 
-    if (fileDir === null) return Terminal.error(errors.invalidFile(target));
+    if (fileDir === null) {
+      Terminal.error(errors.invalidFile(target));
+      return;
+    }
     const dirExists = allDirs.has(fileDir);
     if (file === null || dirExists) {
       // If file === null, it means we specified a trailing-slash directory/,
@@ -82,11 +94,13 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): und
           continue;
         } else {
           // Only exists as a directory (maybe).
-          return Terminal.error(errors.dirsProvided(target));
+          Terminal.error(errors.dirsProvided(target));
+          return;
         }
       }
       if (!dirExists && !force) {
-        return Terminal.error(errors.noSuchDir(target));
+        Terminal.error(errors.noSuchDir(target));
+        return;
       }
       // If we pass -f and pass a non-existing directory, we will add it
       // here and then it will match no files, producing no errors. This
@@ -96,7 +110,8 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): und
     }
     if (!force && !allFiles.has(file)) {
       // With -f, we ignore file-not-found and try to delete everything at the end.
-      return Terminal.error(errors.noSuchFile(target));
+      Terminal.error(errors.noSuchFile(target));
+      return;
     }
     files.push(file);
   }

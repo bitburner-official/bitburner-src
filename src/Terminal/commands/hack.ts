@@ -18,15 +18,28 @@ import { ServerConstants } from "../../Server/data/Constants";
 import { formatExp, formatMoney, formatSecurity } from "../../ui/formatNumber";
 
 export function hack(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
-  if (args.length !== 0) return Terminal.error("Incorrect usage of hack command. Usage: hack");
-  if (server.purchasedByPlayer) return Terminal.error("Cannot hack your own machines!");
-  if (!server.hasAdminRights) return Terminal.error("You do not have admin rights for this machine!");
+  if (args.length !== 0) {
+    Terminal.error("Incorrect usage of hack command. Usage: hack");
+    return;
+  }
+  if (server.purchasedByPlayer) {
+    Terminal.error("Cannot hack your own machines!");
+    return;
+  }
+  if (!server.hasAdminRights) {
+    Terminal.error("You do not have admin rights for this machine!");
+    return;
+  }
   // Acts as a functional check that the server is hackable. Hacknet servers should already be filtered out anyway by purchasedByPlayer
-  if (server.requiredHackingSkill === undefined) return Terminal.error("Cannot hack this server.");
+  if (server.requiredHackingSkill === undefined) {
+    Terminal.error("Cannot hack this server.");
+    return;
+  }
   if (server.requiredHackingSkill > Player.skills.hacking) {
-    return Terminal.error(
+    Terminal.error(
       "Your hacking skill is not high enough to hack this machine. Try analyzing the machine to determine the required hacking skill",
     );
+    return;
   }
 
   // Hacking through Terminal should be faster than hacking through a script

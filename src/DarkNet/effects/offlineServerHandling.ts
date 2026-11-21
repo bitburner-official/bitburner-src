@@ -27,7 +27,9 @@ type CheckDarknetServerOptions = {
   backdoorBypasses?: boolean;
 };
 
-export const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
+export const logger = (ctx: NetscriptContext) => (message: string) => {
+  helpers.log(ctx, () => message);
+};
 
 export function expectDarknetAccess(ctx: NetscriptContext): void {
   if (!hasDarknetAccess()) {

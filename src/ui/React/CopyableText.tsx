@@ -35,7 +35,9 @@ export function CopyableText(props: IProps): React.ReactElement {
     document.execCommand("copy");
     document.body.removeChild(copyText);
     setOpen(true);
-    setTimeout(() => setOpen(false), 1000);
+    setTimeout(() => {
+      setOpen(false);
+    }, 1000);
   }
 
   return (

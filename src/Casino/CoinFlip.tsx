@@ -52,7 +52,9 @@ export function CoinFlip(): React.ReactElement {
     setStatus(correct ? " win!" : "lose!");
     setPlayLock(true);
 
-    setTimeout(() => setPlayLock(false), 250);
+    setTimeout(() => {
+      setPlayLock(false);
+    }, 250);
     if (correct) {
       win(investment);
     } else {
@@ -72,10 +74,20 @@ export function CoinFlip(): React.ReactElement {
           }}
         />
         <Box>
-          <Button onClick={trusted(() => play(CoinFlipResult.Head))} disabled={playLock}>
+          <Button
+            onClick={trusted(() => {
+              play(CoinFlipResult.Head);
+            })}
+            disabled={playLock}
+          >
             Head!
           </Button>
-          <Button onClick={trusted(() => play(CoinFlipResult.Tail))} disabled={playLock}>
+          <Button
+            onClick={trusted(() => {
+              play(CoinFlipResult.Tail);
+            })}
+            disabled={playLock}
+          >
             Tail!
           </Button>
         </Box>

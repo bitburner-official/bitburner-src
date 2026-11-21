@@ -412,12 +412,16 @@ describe("Save/Load system", () => {
     [
       "ClassWork-University",
       () => getNS().singularity.universityCourse("Rothman University", "Computer Science"),
-      () => expect((Player.currentWork as ClassWork).location).toBe("Rothman University"),
+      () => {
+        expect((Player.currentWork as ClassWork).location).toBe("Rothman University");
+      },
     ],
     [
       "ClassWork-Gym",
       () => getNS().singularity.gymWorkout("Powerhouse Gym", "str"),
-      () => expect((Player.currentWork as ClassWork).location).toBe("Powerhouse Gym"),
+      () => {
+        expect((Player.currentWork as ClassWork).location).toBe("Powerhouse Gym");
+      },
     ],
     [
       "CompanyWork",
@@ -426,7 +430,9 @@ describe("Save/Load system", () => {
         ns.singularity.applyToCompany("Joe's Guns", "Employee");
         ns.singularity.workForCompany("Joe's Guns");
       },
-      () => expect((Player.currentWork as CompanyWork).companyName).toBe("Joe's Guns"),
+      () => {
+        expect((Player.currentWork as CompanyWork).companyName).toBe("Joe's Guns");
+      },
     ],
     [
       "CreateProgramWork",
@@ -434,12 +440,16 @@ describe("Save/Load system", () => {
         Player.gainHackingExp(1e9);
         getNS().singularity.createProgram("BruteSSH.exe");
       },
-      () => expect((Player.currentWork as CreateProgramWork).programName).toBe("BruteSSH.exe"),
+      () => {
+        expect((Player.currentWork as CreateProgramWork).programName).toBe("BruteSSH.exe");
+      },
     ],
     [
       "CrimeWork",
       () => getNS().singularity.commitCrime("Mug"),
-      () => expect((Player.currentWork as CrimeWork).crimeType).toBe("Mug"),
+      () => {
+        expect((Player.currentWork as CrimeWork).crimeType).toBe("Mug");
+      },
     ],
     [
       "FactionWork",
@@ -447,7 +457,9 @@ describe("Save/Load system", () => {
         joinFaction(Factions.ECorp);
         getNS().singularity.workForFaction("ECorp", "hacking");
       },
-      () => expect((Player.currentWork as FactionWork).factionName).toBe("ECorp"),
+      () => {
+        expect((Player.currentWork as FactionWork).factionName).toBe("ECorp");
+      },
     ],
     [
       "GraftingWork",
@@ -456,7 +468,9 @@ describe("Save/Load system", () => {
         ns.singularity.travelToCity("New Tokyo");
         ns.grafting.graftAugmentation("QLink");
       },
-      () => expect((Player.currentWork as GraftingWork).augmentation).toBe("QLink"),
+      () => {
+        expect((Player.currentWork as GraftingWork).augmentation).toBe("QLink");
+      },
     ],
     [
       "SleeveBladeburnerWork",
@@ -464,17 +478,23 @@ describe("Save/Load system", () => {
         Player.startBladeburner();
         getNS().sleeve.setToBladeburnerAction(0, "Training");
       },
-      () => expect((Player.sleeves[0].currentWork as SleeveBladeburnerWork).actionId.name).toBe("Training"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveBladeburnerWork).actionId.name).toBe("Training");
+      },
     ],
     [
       "SleeveClassWork-University",
       () => getNS().sleeve.setToUniversityCourse(0, "Rothman University", "Computer Science"),
-      () => expect((Player.sleeves[0].currentWork as SleeveClassWork).location).toBe("Rothman University"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveClassWork).location).toBe("Rothman University");
+      },
     ],
     [
       "SleeveClassWork-Gym",
       () => getNS().sleeve.setToGymWorkout(0, "Powerhouse Gym", "str"),
-      () => expect((Player.sleeves[0].currentWork as SleeveClassWork).location).toBe("Powerhouse Gym"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveClassWork).location).toBe("Powerhouse Gym");
+      },
     ],
     [
       "SleeveCompanyWork",
@@ -483,12 +503,16 @@ describe("Save/Load system", () => {
         ns.singularity.applyToCompany("Joe's Guns", "Employee");
         ns.sleeve.setToCompanyWork(0, "Joe's Guns");
       },
-      () => expect((Player.sleeves[0].currentWork as SleeveCompanyWork).companyName).toBe("Joe's Guns"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveCompanyWork).companyName).toBe("Joe's Guns");
+      },
     ],
     [
       "SleeveCrimeWork",
       () => getNS().sleeve.setToCommitCrime(0, "Mug"),
-      () => expect((Player.sleeves[0].currentWork as SleeveCrimeWork).crimeType).toBe("Mug"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveCrimeWork).crimeType).toBe("Mug");
+      },
     ],
     [
       "SleeveFactionWork",
@@ -496,7 +520,9 @@ describe("Save/Load system", () => {
         joinFaction(Factions.ECorp);
         getNS().sleeve.setToFactionWork(0, "ECorp", "hacking");
       },
-      () => expect((Player.sleeves[0].currentWork as SleeveFactionWork).factionName).toBe("ECorp"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveFactionWork).factionName).toBe("ECorp");
+      },
     ],
     [
       "SleeveInfiltrateWork",
@@ -504,12 +530,16 @@ describe("Save/Load system", () => {
         Player.startBladeburner();
         getNS().sleeve.setToBladeburnerAction(0, "Infiltrate Synthoids");
       },
-      () => expect((Player.sleeves[0].currentWork as SleeveInfiltrateWork).type).toBe("INFILTRATE"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveInfiltrateWork).type).toBe("INFILTRATE");
+      },
     ],
     [
       "SleeveRecoveryWork",
       () => getNS().sleeve.setToShockRecovery(0),
-      () => expect((Player.sleeves[0].currentWork as SleeveRecoveryWork).type).toBe("RECOVERY"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveRecoveryWork).type).toBe("RECOVERY");
+      },
     ],
     [
       "SleeveSupportWork",
@@ -517,12 +547,16 @@ describe("Save/Load system", () => {
         Player.startBladeburner();
         getNS().sleeve.setToBladeburnerAction(0, "Support main sleeve");
       },
-      () => expect((Player.sleeves[0].currentWork as SleeveSupportWork).type).toBe("SUPPORT"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveSupportWork).type).toBe("SUPPORT");
+      },
     ],
     [
       "SleeveSynchroWork",
       () => getNS().sleeve.setToSynchronize(0),
-      () => expect((Player.sleeves[0].currentWork as SleeveSynchroWork).type).toBe("SYNCHRO"),
+      () => {
+        expect((Player.sleeves[0].currentWork as SleeveSynchroWork).type).toBe("SYNCHRO");
+      },
     ],
   ])("%s", async (_, initTestSaveData, checkTestSaveData) => {
     initTestSaveData();

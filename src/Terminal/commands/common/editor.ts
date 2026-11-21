@@ -35,7 +35,8 @@ export async function main(ns) {
 
 export function commonEditor(command: string, { args, server, vim }: EditorParameters, allowZeroFiles = false): void {
   if (args.length < 1 && !allowZeroFiles) {
-    return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
+    Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
+    return;
   }
   const files = new Map<ScriptFilePath | TextFilePath, string>();
   let hasLegacyScript = false;
@@ -60,10 +61,14 @@ export function commonEditor(command: string, { args, server, vim }: EditorParam
 
     // Non-glob, files do not need to already exist
     const path = Terminal.getFilepath(pattern);
-    if (!path) return Terminal.error(`Invalid file path ${arg}`);
+    if (!path) {
+      Terminal.error(`Invalid file path ${arg}`);
+      return;
+    }
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
       const hint = hasContractExtension(path) || hasCacheExtension(path) ? " (Try using 'run')" : "";
-      return Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}${hint}`);
+      Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}${hint}`);
+      return;
     }
     if (isLegacyScript(path)) {
       hasLegacyScript = true;

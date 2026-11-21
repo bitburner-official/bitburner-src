@@ -23,9 +23,16 @@ function GangIncompleteCampaign() {
           "The tension between our faction and its rivals has been rising. The leader plans to form a specialized " +
           "group under your command to strengthen our position by improving our standing and expanding our resources."
         }
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+        }}
       ></Option>
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+      >
         <Typography component="div">
           Each time you attempt to execute the plan, it is abruptly interrupted for reasons no one can explain. You
           receive the same distorted message every time:
@@ -82,7 +89,8 @@ export function GangCampaign({ factionName }: { factionName: FactionName }) {
   const manageGang = (): void => {
     // If player already has a gang, just go to the gang UI
     if (Player.inGang()) {
-      return Router.toPage(Page.Gang);
+      Router.toPage(Page.Gang);
+      return;
     }
 
     setGangOpen(true);
@@ -103,7 +111,13 @@ export function GangCampaign({ factionName }: { factionName: FactionName }) {
         </Paper>
       </Box>
 
-      <CreateGangModal facName={factionName} open={gangOpen} onClose={() => setGangOpen(false)} />
+      <CreateGangModal
+        facName={factionName}
+        open={gangOpen}
+        onClose={() => {
+          setGangOpen(false);
+        }}
+      />
     </>
   );
 }

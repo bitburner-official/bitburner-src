@@ -47,34 +47,60 @@ export function UniversityLocation(props: IProps): React.ReactElement {
   return (
     <Box sx={{ display: "grid", width: "fit-content" }}>
       <Tooltip title={earnHackingExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.computerScience)}>Study Computer Science (free)</Button>
+        <Button
+          onClick={() => {
+            take(UniversityClassType.computerScience);
+          }}
+        >
+          Study Computer Science (free)
+        </Button>
       </Tooltip>
       <Tooltip title={earnHackingExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.dataStructures)}>
+        <Button
+          onClick={() => {
+            take(UniversityClassType.dataStructures);
+          }}
+        >
           Take Data Structures course (
           <Money money={dataStructuresCost} forPurchase={true} /> / sec)
         </Button>
       </Tooltip>
       <Tooltip title={earnHackingExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.networks)}>
+        <Button
+          onClick={() => {
+            take(UniversityClassType.networks);
+          }}
+        >
           Take Networks course (
           <Money money={networksCost} forPurchase={true} /> / sec)
         </Button>
       </Tooltip>
       <Tooltip title={earnHackingExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.algorithms)}>
+        <Button
+          onClick={() => {
+            take(UniversityClassType.algorithms);
+          }}
+        >
           Take Algorithms course (
           <Money money={algorithmsCost} forPurchase={true} /> / sec)
         </Button>
       </Tooltip>
       <Tooltip title={earnCharismaExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.management)}>
+        <Button
+          onClick={() => {
+            take(UniversityClassType.management);
+          }}
+        >
           Take Management course (
           <Money money={managementCost} forPurchase={true} /> / sec)
         </Button>
       </Tooltip>
       <Tooltip title={earnCharismaExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.leadership)}>
+        <Button
+          onClick={() => {
+            take(UniversityClassType.leadership);
+          }}
+        >
           Take Leadership course (
           <Money money={leadershipCost} forPurchase={true} /> / sec)
         </Button>
