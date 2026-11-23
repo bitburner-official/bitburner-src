@@ -1,8 +1,6 @@
 import { Terminal } from "../../Terminal";
+import { mkdirHelpText } from "../HelpText";
 
 export function mkdir(): undefined {
-  Terminal.error(
-    "Directories do not exist in the Bitburner filesystem. They are simply part of the file path.\n" +
-      `For example, with "/foo/bar.txt", there is no actual "/foo" directory.`,
-  );
+  Terminal.warn(mkdirHelpText);
 }
