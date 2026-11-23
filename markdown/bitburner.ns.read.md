@@ -62,5 +62,5 @@ This function is used to read data from a text file (.txt, .json, .css), a scrip
 
 This function will return the data in the specified file. If the file does not exist, an empty string will be returned.
 
-With literature files, the returned data is a raw HTML string.
+With literature files, the returned data is a raw HTML string. See [printRaw](./bitburner.ns.printraw.md) and [tprintRaw](./bitburner.ns.tprintraw.md) for how to print this raw HTML string.
 
