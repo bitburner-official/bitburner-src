@@ -211,7 +211,6 @@ export const CONSTANTS = {
 - Allow killing scripts during tutorial (#2797) (@catloversg)
 - Fix issues in MathML puzzle (#2804) (@ficocelliguy)
 - Tweak charisma augments and exp gain; add dnet_money mult to NFG; fix script counts (#2792) (@ficocelliguy)
-- Apply SF -1 bonus to dnet_money multiplier (#2813) (@catloversg)
 - Fix an edge case with ram rounding (#2817) (@d0sboots)
 - Fix: Steam version fails to launch on Windows without VC++ and on old Linux distros (#2822) (@catloversg)
 - Fix deprecated nFormat replacement text (#2829) (@Groxx)
@@ -324,6 +323,7 @@ export const CONSTANTS = {
 
 ### SPOILER CHANGES - MISC
 
+- Apply SF -1 bonus to dnet_money multiplier (#2813) (@catloversg)
 - Stop using eval when parsing price and amount strings to prevent memory leaks (#2826) (@Sphyxis)
 - Prevent material quality and other data from becoming NaN in edge cases (#2865) (@catloversg)
 - Remove passive popularity decay (#2932) (@catloversg)
