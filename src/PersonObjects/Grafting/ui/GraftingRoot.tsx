@@ -72,10 +72,9 @@ const AugPreReqsChecklist = (props: IProps): React.ReactElement => {
 export const GraftingRoot = (): React.ReactElement => {
   const graftableAugmentations = useState(GraftableAugmentations())[0];
 
-  const [selectedAug, setSelectedAug] = useState(getGraftingAvailableAugs()[0]);
+  const [selectedAug, setSelectedAug] = useState<AugmentationName | undefined>(getGraftingAvailableAugs()[0]);
   const [graftOpen, setGraftOpen] = useState(false);
   const [filterText, setFilterText] = useState("");
-  const selectedAugmentation = Augmentations[selectedAug];
   const rerender = useCycleRerender();
 
   const matches = (s1: string, s2: string) => s1.toLowerCase().includes(s2.toLowerCase());
@@ -100,7 +99,14 @@ export const GraftingRoot = (): React.ReactElement => {
     rerender();
   };
 
-  const checkResult = canGraft(graftableAugmentations[selectedAug]);
+  const selected =
+    selectedAug !== undefined
+      ? {
+          name: selectedAug,
+          augmentation: Augmentations[selectedAug],
+          checkResult: canGraft(graftableAugmentations[selectedAug]),
+        }
+      : undefined;
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
@@ -135,7 +141,7 @@ export const GraftingRoot = (): React.ReactElement => {
             </Button>
           </Box>
         </Paper>
-        {getGraftingAvailableAugs().length > 0 ? (
+        {selected ? (
           <Paper sx={{ mb: 1, width: "fit-content", display: "grid", gridTemplateColumns: "1fr 3fr" }}>
             <Box>
               <TextField
@@ -166,12 +172,16 @@ export const GraftingRoot = (): React.ReactElement => {
               <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
                 <Construction sx={{ mr: 1 }} /> {selectedAug}
               </Typography>
-              <Tooltip title={checkResult.message}>
+              <Tooltip title={selected.checkResult.message}>
                 <span>
-                  <Button onClick={() => setGraftOpen(true)} sx={{ width: "100%" }} disabled={!checkResult.success}>
+                  <Button
+                    onClick={() => setGraftOpen(true)}
+                    sx={{ width: "100%" }}
+                    disabled={!selected.checkResult.success}
+                  >
                     Graft Augmentation (
                     <Typography>
-                      <Money money={graftableAugmentations[selectedAug].cost} forPurchase={true} />
+                      <Money money={graftableAugmentations[selected.name].cost} forPurchase={true} />
                     </Typography>
                     )
                   </Button>
@@ -181,7 +191,7 @@ export const GraftingRoot = (): React.ReactElement => {
                 open={graftOpen}
                 onClose={() => setGraftOpen(false)}
                 onConfirm={() => {
-                  const checkResult = canGraft(graftableAugmentations[selectedAug]);
+                  const checkResult = canGraft(graftableAugmentations[selected.name]);
                   if (!checkResult.success) {
                     setGraftOpen(false);
                     dialogBoxCreate(checkResult.message);
@@ -189,7 +199,7 @@ export const GraftingRoot = (): React.ReactElement => {
                   }
                   Player.startWork(
                     new GraftingWork({
-                      augmentation: selectedAug,
+                      augmentation: selected.name,
                       singularity: false,
                     }),
                   );
@@ -215,29 +225,29 @@ export const GraftingRoot = (): React.ReactElement => {
                 <Typography color={Settings.theme.info}>
                   <b>Time to Graft:</b>{" "}
                   {convertTimeMsToTimeElapsedString(
-                    calculateGraftingTimeWithBonus(graftableAugmentations[selectedAug]),
+                    calculateGraftingTimeWithBonus(graftableAugmentations[selected.name]),
                   )}
                   {/* Use formula so the displayed creation time is accurate to player bonus */}
                 </Typography>
 
-                {selectedAugmentation.prereqs.length > 0 && <AugPreReqsChecklist aug={selectedAugmentation} />}
+                {selected.augmentation.prereqs.length > 0 && <AugPreReqsChecklist aug={selected.augmentation} />}
 
                 <br />
 
                 <Typography whiteSpace={"pre-wrap"}>
                   {(() => {
                     const info =
-                      typeof selectedAugmentation.info === "string" ? (
-                        <span>{selectedAugmentation.info}</span>
+                      typeof selected.augmentation.info === "string" ? (
+                        <span>{selected.augmentation.info}</span>
                       ) : (
-                        selectedAugmentation.info
+                        selected.augmentation.info
                       );
                     const tooltip = (
                       <>
                         {info}
                         <br />
                         <br />
-                        {selectedAugmentation.stats}
+                        {selected.augmentation.stats}
                       </>
                     );
                     return tooltip;
