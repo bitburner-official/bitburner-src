@@ -45,8 +45,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.CorporationManagementHandbook,
     text: (
       <Typography>
-        You should check the in-game Corporation documentation in the Documentation tab (Documentation {"->"}
-        Advanced Mechanics {"->"} Corporation). It's the most useful and up-to-date resource for managing Corporation.
+        You should check the in-game Corporation documentation in the Documentation tab (Documentation → Advanced
+        Mechanics → Corporation). It's the most useful and up-to-date resource for managing Corporation.
         <br />
         <br />
         <u>Getting Started with Corporation</u>
