@@ -1124,14 +1124,6 @@ export const ns: InternalAPI<NSFull> = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- This API intentionally returns any.
     return ns.port.peek(ctx, _portNumber);
   },
-  isFullPort: (ctx, _portNumber) => {
-    deprecationWarning("ns.isFullPort", "Use ns.port.isFull instead.");
-    return ns.port.isFull(ctx, _portNumber);
-  },
-  isEmptyPort: (ctx, _portNumber) => {
-    deprecationWarning("ns.isEmptyPort", "Use ns.port.isEmpty instead.");
-    return ns.port.isEmpty(ctx, _portNumber);
-  },
   clear: (ctx, _file) => {
     const path = helpers.filePath(ctx, "file", _file);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {

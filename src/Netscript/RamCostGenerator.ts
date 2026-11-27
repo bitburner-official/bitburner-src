@@ -652,8 +652,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   writePort: 0,
   nextPortWrite: 0,
   readPort: 0,
-  isFullPort: 0,
-  isEmptyPort: 0,
   getPortHandle: 0,
   rm: RamCostConstants.Scp,
   scriptRunning: RamCostConstants.ArbScript,

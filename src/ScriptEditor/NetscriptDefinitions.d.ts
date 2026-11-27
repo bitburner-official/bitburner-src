@@ -9180,38 +9180,6 @@ export interface NS {
   getPortHandle(portNumber: number): NetscriptPort;
 
   /**
-   * Check if a port is full.
-   *
-   * @deprecated
-   * Use {@link Port.isFull | Port.isFull} instead
-   *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Returns true if the port's data queue is full, and false otherwise.
-   * Ports are shared across all hosts and contents are reset on game restart.
-   *
-   * @param portNumber - Port number. Must be a positive integer.
-   */
-  isFullPort(portNumber: number): boolean;
-
-  /**
-   * Check if a port is empty.
-   *
-   * @deprecated
-   * Use {@link Port.isEmpty | Port.isEmpty} instead
-   *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Returns true if the port's data queue is empty, and false otherwise.
-   * Ports are shared across all hosts and contents are reset on game restart.
-   *
-   * @param portNumber - Port number. Must be a positive integer.
-   */
-  isEmptyPort(portNumber: number): boolean;
-
-  /**
    * Delete a file.
    * @remarks
    * RAM cost: 0.6 GB
