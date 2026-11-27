@@ -47,6 +47,7 @@ export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): P
   try {
     script.mod = generateLoadedModule(script, scripts, []);
   } catch (error) {
+    script.clearModuleDependencies();
     throw new Error(`Cannot generate module ${script.filename}`, { cause: error });
   }
   return script.mod.module;
@@ -60,7 +61,7 @@ export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): P
 function addDependencyInfo(script: Script, seenStack: Script[]) {
   if (!script.mod) throw new Error(`addDependencyInfo called without a LoadedModule (${script.filename})`);
   if (seenStack.length) {
-    script.dependents.add(seenStack[seenStack.length - 1]);
+    seenStack[seenStack.length - 1].registerModuleDependency(script);
     for (const dependent of seenStack) dependent.dependencies.set(script.mod.url, script);
   }
   // Add self to dependencies (it's not part of the stack, since we don't want
