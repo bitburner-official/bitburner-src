@@ -9,3 +9,4 @@ export const DarknetConstants = {
 } as const;
 
 export const MAX_PASSWORD_LENGTH = 50;
+export const RECOVERY_MS = 1000 * 60 * 2;

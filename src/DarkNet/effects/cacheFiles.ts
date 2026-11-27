@@ -14,6 +14,9 @@ import type { CacheResult, CacheReward } from "@nsdefs";
 import { addClue, cctCooldownReached } from "./effects";
 import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 import { pluralize } from "../../utils/I18nUtils";
+import { DarknetState } from "../models/DarknetState";
+import { clampNumber } from "../../utils/helpers/clampNumber";
+import { RECOVERY_MS } from "../Constants";
 
 export const generateCacheFilename = (isPhishingCache: boolean, prefix?: string) => {
   const filenamePrefix = prefix ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
@@ -63,7 +66,8 @@ export const getRewardFromCache = (server: DarknetServer, cacheName: string, sup
   }
   if (getBitNodeMultipliers(Player.bitNodeN, 1).DarknetMoneyMultiplier) {
     // only include money reward if it is not disabled by the bn mults
-    rewards.push(getMoneyReward);
+    // Money rewards are more rare than other cache types
+    rewards.push(...rewards, getMoneyReward);
   }
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
   const result = reward(difficulty, server);
@@ -109,15 +113,18 @@ export const getCCTReward = (difficulty: number, server: DarknetServer): Interna
 
 export const getMoneyReward = (difficulty: number): InternalCacheReward => {
   const sf15_3Factor = Player.activeSourceFileLvl(15) >= 3 ? 1.5 : 1;
+  const msSinceLastMoneyCache = new Date().getTime() - DarknetState.lastMoneyCacheTime.getTime();
+  const recencyDebuff = clampNumber(0.2 + (0.8 * msSinceLastMoneyCache) / RECOVERY_MS, 0.2, 1);
   const reward =
     1.2 ** difficulty *
-    1e7 *
+    4e5 *
+    recencyDebuff *
     ((200 + Player.skills.charisma) / 200) *
     sf15_3Factor *
-    Player.mults.crime_money *
     Player.mults.dnet_money *
-    currentNodeMults.DarknetMoneyMultiplier; // TODO: adjust balance
+    currentNodeMults.DarknetMoneyMultiplier;
   Player.gainMoney(reward, "darknet");
+  DarknetState.lastMoneyCacheTime = new Date();
   return { message: `You have discovered a cache with ${formatMoney(reward)}.`, money: reward };
 };
 
