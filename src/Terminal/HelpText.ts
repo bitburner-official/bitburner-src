@@ -1,12 +1,11 @@
 export const mkdirHelpText =
-  "This is a no-op command.\n\n" +
-  "Directories do not exist in the Bitburner filesystem. They are simply part of the file path.\n" +
-  `With "/foo/bar.txt", there is no actual "/foo" directory.\n\n` +
+  `Bitburner has a "flat" filesystem where directories do not really exist. They are simply part of the file path.\n\n` +
+  "Unlike with real-world CLI commands, you do not need to create a directory before working with files at that path.\n" +
+  "For example: `mv bar.txt /foo/bar.txt` will move `bar.txt` to `/foo/bar.txt`.\n" +
+  "In the real world, you would need to create the `/foo` directory first, but you do not need to do that in Bitburner.\n\n" +
   "Some commands, such as ls and cd, display and handle directories only for convenience.\n" +
   "For example, ls groups files by their paths to avoid cluttering the output.\n\n" +
-  "Unlike with real-world CLI commands, you do not need to create a directory before working with files in that path.\n" +
-  `Consider the real-world mv command: "mv bar.txt /foo/bar.txt" will fail if the "/foo" directory does not exist.\n` +
-  "In Bitburner, this command works normally.";
+  "The mkdir command exists only to display this help message; it does not do anything.";
 
 export const TerminalHelpText: string[] = [
   "Type 'help name' to learn more about the command ",
@@ -41,7 +40,7 @@ export const TerminalHelpText: string[] = [
   "    ls [dir] [-l] [-h] [-g pattern]  Displays all files on the machine",
   "    lscpu                            Displays the number of CPU cores on the machine",
   "    mem [script] [-t n]              Displays the amount of RAM required to run the script",
-  "    mkdir                            No-op command. Read its help text for more information.",
+  "    mkdir                            Does nothing. Read its help text for more information.",
   "    mv [src] [dest]                  Move/rename a text or script file",
   "    nano [files...]                  Text editor - Open up and edit one or more scripts or text files",
   "    ps                               Display all scripts that are currently running",
