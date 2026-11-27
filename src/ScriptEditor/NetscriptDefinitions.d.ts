@@ -8049,7 +8049,7 @@ export interface NS {
    * ns.printRaw("foo");
    * const safeHtmlString = ns.read("foo.lit");
    * ns.printRaw(React.createElement("div", { dangerouslySetInnerHTML: { __html: safeHtmlString } }));
-   * const unsafeHtmlString = "<div>bar</div>";
+   * const unsafeHtmlString = ns.read("some_file_i_found_on_the_internet.txt");
    * // Do not do this
    * // ns.printRaw(React.createElement("div", { dangerouslySetInnerHTML: { __html: unsafeHtmlString } }));
    * // Assuming DOMPurify is imported
@@ -8128,7 +8128,7 @@ export interface NS {
    * ns.tprintRaw("foo");
    * const safeHtmlString = ns.read("foo.lit");
    * ns.tprintRaw(React.createElement("div", { dangerouslySetInnerHTML: { __html: safeHtmlString } }));
-   * const unsafeHtmlString = "<div>bar</div>";
+   * const unsafeHtmlString = ns.read("some_file_i_found_on_the_internet.txt");
    * // Do not do this
    * // ns.tprintRaw(React.createElement("div", { dangerouslySetInnerHTML: { __html: unsafeHtmlString } }));
    * // Assuming DOMPurify is imported
