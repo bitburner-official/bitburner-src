@@ -1,6 +1,6 @@
 import type { ContentFilePath } from "../../Paths/ContentFile";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import * as monaco from "monaco-editor";
 
 import type * as acorn from "acorn";
@@ -99,82 +99,89 @@ function Root(props: IProps): React.ReactElement {
    * false-positive error marker, we will reload the model. Reloading the model will force the type-checking to run
    * again.
    */
-  const reloadModelOfCurrentScript = debounce(() => {
-    if (!currentScript || !editorRef.current) {
-      return;
-    }
-    const markers = monaco.editor.getModelMarkers({
-      resource: currentScript.model.uri,
-    });
-    let needToReloadModel = false;
-    for (const marker of markers) {
-      // 2792: "Cannot find module" error
-      if (marker.code !== "2792") {
-        continue;
-      }
-      needToReloadModel = true;
-      break;
-    }
-    if (needToReloadModel) {
-      const currentModel = editorRef.current.getModel();
-      // Save the current cursor position. The position resets when the model is changed.
-      const currentPosition = editorRef.current.getPosition();
-      // Reload the model.
-      currentModel?.setValue(currentModel.getValue());
-      // Restore the saved position.
-      if (currentPosition) {
-        editorRef.current.setPosition(currentPosition);
-      }
-    }
-  }, 2000);
+  const reloadModelOfCurrentScript = useMemo(
+    () =>
+      debounce(() => {
+        if (!currentScript || !editorRef.current) {
+          return;
+        }
+        const markers = monaco.editor.getModelMarkers({
+          resource: currentScript.model.uri,
+        });
+        let needToReloadModel = false;
+        for (const marker of markers) {
+          // 2792: "Cannot find module" error
+          if (marker.code !== "2792") {
+            continue;
+          }
+          needToReloadModel = true;
+          break;
+        }
+        if (needToReloadModel) {
+          const currentModel = editorRef.current.getModel();
+          // Save the current cursor position. The position resets when the model is changed.
+          const currentPosition = editorRef.current.getPosition();
+          // Reload the model.
+          currentModel?.setValue(currentModel.getValue());
+          // Restore the saved position.
+          if (currentPosition) {
+            editorRef.current.setPosition(currentPosition);
+          }
+        }
+      }, 2000),
+    [],
+  );
 
-  function makeModelsForImports(ast: AST, server: BaseServer): void {
-    if (!currentScript) {
-      return;
-    }
-    // Skipping processing if the current file is not a script or it's a legacy script.
-    if (!hasScriptExtension(currentScript.path) || isLegacyScript(currentScript.path)) {
-      return;
-    }
-    // Dynamically load imported scripts.
-    walk.simple(
-      ast as acorn.Node, // Pretend that ast is an acorn node
-      {
-        ImportDeclaration: (node: acorn.ImportDeclaration) => {
-          if (typeof node.source.value !== "string" || !currentScript) {
-            return;
-          }
-          const importedScript = getModuleScript(
-            node.source.value,
-            currentScript.path as ScriptFilePath,
-            server.scripts,
-          );
-          /**
-           * We use openScripts to store all opened files when the player opens them in the editor. When they edit code,
-           * the changed code is in openScripts, regardless of whether they save it. When the player switches from the
-           * editor tab to another tab, all models are disposed, so the next time they open the editor, this function
-           * will load imported scripts. However, if the player did not save their code, loaded scripts would not
-           * contain changed code. Therefore, for each loaded script, we need to check if it is in openScripts. If it
-           * is, we use the script content in openScripts.
-           */
-          let code = importedScript.code;
-          for (const openScript of openScripts) {
-            if (openScript.hostname !== importedScript.server || openScript.path !== importedScript.filename) {
-              continue;
+  const makeModelsForImports = useCallback(
+    function (ast: AST, server: BaseServer): void {
+      if (!currentScript) {
+        return;
+      }
+      // Skipping processing if the current file is not a script or it's a legacy script.
+      if (!hasScriptExtension(currentScript.path) || isLegacyScript(currentScript.path)) {
+        return;
+      }
+      // Dynamically load imported scripts.
+      walk.simple(
+        ast as acorn.Node, // Pretend that ast is an acorn node
+        {
+          ImportDeclaration: (node: acorn.ImportDeclaration) => {
+            if (typeof node.source.value !== "string" || !currentScript) {
+              return;
             }
-            code = openScript.code;
-          }
-          makeModel(importedScript.server, importedScript.filename, code);
+            const importedScript = getModuleScript(
+              node.source.value,
+              currentScript.path as ScriptFilePath,
+              server.scripts,
+            );
+            /**
+             * We use openScripts to store all opened files when the player opens them in the editor. When they edit code,
+             * the changed code is in openScripts, regardless of whether they save it. When the player switches from the
+             * editor tab to another tab, all models are disposed, so the next time they open the editor, this function
+             * will load imported scripts. However, if the player did not save their code, loaded scripts would not
+             * contain changed code. Therefore, for each loaded script, we need to check if it is in openScripts. If it
+             * is, we use the script content in openScripts.
+             */
+            let code = importedScript.code;
+            for (const openScript of openScripts) {
+              if (openScript.hostname !== importedScript.server || openScript.path !== importedScript.filename) {
+                continue;
+              }
+              code = openScript.code;
+            }
+            makeModel(importedScript.server, importedScript.filename, code);
+          },
         },
-      },
-    );
-    // Reload the model to force the type-checking to run again.
-    reloadModelOfCurrentScript();
-  }
+      );
+      // Reload the model to force the type-checking to run again.
+      reloadModelOfCurrentScript();
+    },
+    [reloadModelOfCurrentScript],
+  );
 
   const { options, showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
-  let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
+  const decorations = useRef<monaco.editor.IEditorDecorationsCollection | undefined>();
 
   const beautify = useCallback(async (): Promise<void> => {
     const action = editorRef.current?.getAction("editor.action.formatDocument");
@@ -278,78 +285,86 @@ function Root(props: IProps): React.ReactElement {
     return () => document.removeEventListener("keydown", listener);
   }, [save, run]);
 
-  function infLoop(ast: AST, code: string): void {
-    if (editorRef.current === null || currentScript === null || isLegacyScript(currentScript.path)) {
-      return;
-    }
-    if (!decorations) {
-      decorations = editorRef.current.createDecorationsCollection();
-    }
-    const possibleLines = checkInfiniteLoop(ast, code);
-    if (possibleLines.length !== 0) {
-      decorations.set(
-        possibleLines.map((awaitWarning) => ({
-          range: {
-            startLineNumber: awaitWarning,
-            startColumn: 1,
-            endLineNumber: awaitWarning,
-            endColumn: 10,
-          },
-          options: {
-            isWholeLine: true,
-            glyphMarginClassName: "myGlyphMarginClass",
-            glyphMarginHoverMessage: {
-              value:
-                "Possible infinite loop, await something. If this is a false positive, use `// @ignore-infinite` to suppress.",
+  const infLoop = useCallback(
+    function (ast: AST, code: string): void {
+      if (editorRef.current === null || currentScript === null || isLegacyScript(currentScript.path)) {
+        return;
+      }
+      if (!decorations.current) {
+        decorations.current = editorRef.current.createDecorationsCollection();
+      }
+      const possibleLines = checkInfiniteLoop(ast, code);
+      if (possibleLines.length !== 0) {
+        decorations.current.set(
+          possibleLines.map((awaitWarning) => ({
+            range: {
+              startLineNumber: awaitWarning,
+              startColumn: 1,
+              endLineNumber: awaitWarning,
+              endColumn: 10,
             },
-          },
-        })),
-      );
-    } else {
-      decorations.clear();
-    }
-  }
+            options: {
+              isWholeLine: true,
+              glyphMarginClassName: "myGlyphMarginClass",
+              glyphMarginHoverMessage: {
+                value:
+                  "Possible infinite loop, await something. If this is a false positive, use `// @ignore-infinite` to suppress.",
+              },
+            },
+          })),
+        );
+      } else {
+        decorations.current.clear();
+      }
+    },
+    [editorRef],
+  );
 
-  const debouncedCodeParsing = debounce((newCode: string) => {
-    let server;
-    if (!currentScript || !hasScriptExtension(currentScript.path)) {
-      showRAMError();
+  const debouncedCodeParsing = useMemo(
+    () =>
+      debounce((newCode: string) => {
+        let server;
+        if (!currentScript || !hasScriptExtension(currentScript.path)) {
+          showRAMError();
+          return;
+        }
+        if (!(server = GetServer(currentScript.hostname))) {
+          showRAMError({
+            errorCode: RamCalculationErrorCode.InvalidServer,
+            errorMessage: `Server ${currentScript.hostname} does not exist`,
+          });
+          return;
+        }
+        let ast;
+        try {
+          ast = parseAST(currentScript.path, currentScript.hostname, newCode, getFileType(currentScript.path));
+          makeModelsForImports(ast, server);
+        } catch (error) {
+          showRAMError({
+            errorCode: RamCalculationErrorCode.SyntaxError,
+            errorMessage: error instanceof Error ? error.message : String(error),
+          });
+          return;
+        }
+        infLoop(ast, newCode);
+        updateRAM(ast, currentScript.path, server);
+        finishUpdatingRAM();
+      }, 300),
+    [finishUpdatingRAM, infLoop, makeModelsForImports, showRAMError, updateRAM],
+  );
+
+  const parseCode = useCallback(
+    (newCode: string) => {
+      startUpdatingRAM();
+      debouncedCodeParsing(newCode);
+    },
+    [startUpdatingRAM, debouncedCodeParsing],
+  );
+
+  const openFiles = useCallback(() => {
+    if (editorRef.current === null) {
       return;
     }
-    if (!(server = GetServer(currentScript.hostname))) {
-      showRAMError({
-        errorCode: RamCalculationErrorCode.InvalidServer,
-        errorMessage: `Server ${currentScript.hostname} does not exist`,
-      });
-      return;
-    }
-    let ast;
-    try {
-      ast = parseAST(currentScript.path, currentScript.hostname, newCode, getFileType(currentScript.path));
-      makeModelsForImports(ast, server);
-    } catch (error) {
-      showRAMError({
-        errorCode: RamCalculationErrorCode.SyntaxError,
-        errorMessage: error instanceof Error ? error.message : String(error),
-      });
-      return;
-    }
-    infLoop(ast, newCode);
-    updateRAM(ast, currentScript.path, server);
-    finishUpdatingRAM();
-  }, 300);
-
-  const parseCode = (newCode: string) => {
-    startUpdatingRAM();
-    debouncedCodeParsing(newCode);
-  };
-
-  // When the editor is mounted
-  function onMount(editor: IStandaloneCodeEditor): void {
-    // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
-    // the `useEffect()` for vim mode is called before editor is mounted.
-    editorRef.current = editor;
-
     // Open current script. This happens when the player switch tabs and open the editor tab.
     if (props.files.size === 0 && currentScript !== null) {
       currentScript.regenerateModel();
@@ -394,6 +409,19 @@ function Root(props: IProps): React.ReactElement {
     }
 
     editorRef.current.focus();
+  }, [parseCode, props.files, props.hostname, props.vim]);
+
+  useEffect(() => {
+    openFiles();
+  }, [openFiles]);
+
+  // When the editor is mounted
+  function onMount(editor: IStandaloneCodeEditor): void {
+    // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
+    // the `useEffect()` for vim mode is called before editor is mounted.
+    editorRef.current = editor;
+
+    openFiles();
   }
 
   // When the code is updated within the editor

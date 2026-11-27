@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { calculateRamUsage, type RamCalculationFailure } from "../../Script/RamCalculations";
@@ -31,7 +31,7 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
   const [ram, setRAM] = useState("RAM: ???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
 
-  const showRAMError: ScriptEditorContextShape["showRAMError"] = (error) => {
+  const showRAMError: ScriptEditorContextShape["showRAMError"] = useCallback((error) => {
     if (!error) {
       setRAM("N/A");
       setRamEntries([["N/A", ""]]);
@@ -54,29 +54,32 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
     }
     setRAM(`RAM: ${errorType}`);
     setRamEntries([[errorType, error.errorMessage ?? ""]]);
-  };
+  }, []);
 
-  const updateRAM: ScriptEditorContextShape["updateRAM"] = (ast, path, server) => {
-    const ramUsage = calculateRamUsage(ast, path, server.hostname, server.scripts);
-    if (ramUsage.cost && ramUsage.cost > 0) {
-      const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
-      const entriesDisp = [];
-      for (const entry of entries) {
-        entriesDisp.push([`${entry.name} (${entry.type})`, formatRam(entry.cost)]);
+  const updateRAM: ScriptEditorContextShape["updateRAM"] = useCallback(
+    (ast, path, server) => {
+      const ramUsage = calculateRamUsage(ast, path, server.hostname, server.scripts);
+      if (ramUsage.cost && ramUsage.cost > 0) {
+        const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
+        const entriesDisp = [];
+        for (const entry of entries) {
+          entriesDisp.push([`${entry.name} (${entry.type})`, formatRam(entry.cost)]);
+        }
+
+        setRAM("RAM: " + formatRam(ramUsage.cost));
+        setRamEntries(entriesDisp);
+        return;
       }
 
-      setRAM("RAM: " + formatRam(ramUsage.cost));
-      setRamEntries(entriesDisp);
-      return;
-    }
-
-    if (ramUsage.errorCode !== undefined) {
-      showRAMError(ramUsage);
-    } else {
-      setRAM("RAM: Unknown Error");
-      setRamEntries([["Unknown Error", ""]]);
-    }
-  };
+      if (ramUsage.errorCode !== undefined) {
+        showRAMError(ramUsage);
+      } else {
+        setRAM("RAM: Unknown Error");
+        setRamEntries([["Unknown Error", ""]]);
+      }
+    },
+    [showRAMError],
+  );
 
   const [isUpdatingRAM, { on: startUpdatingRAM, off: finishUpdatingRAM }] = useBoolean(false);
 
