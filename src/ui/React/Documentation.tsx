@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { type FilePath, asFilePath, resolveFilePath } from "../../Paths/FilePath";
 import { CONSTANTS } from "../../Constants";
 import { resolvePage } from "../../Documentation/root";
@@ -66,30 +66,37 @@ const onHome = (h: History): History => {
   };
 };
 
+export const ScrollContainerContext = React.createContext<React.RefObject<HTMLElement | null> | null>(null);
+
 export const HistoryProvider = (props: React.PropsWithChildren<object>): React.ReactElement => {
+  const scrollContainerRef = useRef<HTMLElement>(null);
   const [history, setHistory] = useState<History>({
     page: defaultPage,
     pages: [],
     push(p: FilePath) {
       setHistory((h) => {
-        windowTopPositionOfPages.set(h.page, window.scrollY);
+        windowTopPositionOfPages.set(h.page, scrollContainerRef.current?.scrollTop ?? 0);
         return onPush(h, p);
       });
     },
     pop() {
       setHistory((h) => {
-        windowTopPositionOfPages.set(h.page, window.scrollY);
+        windowTopPositionOfPages.set(h.page, scrollContainerRef.current?.scrollTop ?? 0);
         return onPop(h);
       });
     },
     home() {
       setHistory((h) => {
-        windowTopPositionOfPages.set(h.page, window.scrollY);
+        windowTopPositionOfPages.set(h.page, scrollContainerRef.current?.scrollTop ?? 0);
         return onHome(h);
       });
     },
   });
-  return <Provider value={history}>{props.children}</Provider>;
+  return (
+    <ScrollContainerContext.Provider value={scrollContainerRef}>
+      <Provider value={history}>{props.children}</Provider>
+    </ScrollContainerContext.Provider>
+  );
 };
 
 export function openDocExternally(path: string): void {
