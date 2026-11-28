@@ -4,7 +4,9 @@
 
 ## NumAugmentationsRequirement interface
 
-Player must have at least this many augmentations installed (if positive). Player must have no augmentations installed (if zero).
+Player must have at least this many augmentations installed (if positive).
+
+Player must have no augmentations queued or installed (if zero). The "NeuroFlux Governor" augmentation is the only exception in this case; i.e., if you queued or installed only that augmentation and nothing else, you still satisfy this condition.
 
 **Signature:**
 
