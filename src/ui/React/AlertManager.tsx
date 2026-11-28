@@ -6,10 +6,10 @@ import Box from "@mui/material/Box";
 import { cyrb53 } from "../../utils/HashUtils";
 import Button from "@mui/material/Button";
 
-export const AlertEvents = new EventEmitter<[string | JSX.Element, boolean?]>();
+export const AlertEvents = new EventEmitter<[string | React.JSX.Element, boolean?]>();
 
 interface Alert {
-  text: string | JSX.Element;
+  text: string | React.JSX.Element;
   hash: string;
   /**
    * If it's true, the player can dismiss the modal by pressing the Esc button or clicking on the backdrop.
@@ -25,7 +25,7 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
   const [alerts, setAlerts] = useState<Alert[]>([]);
   useEffect(
     () =>
-      AlertEvents.subscribe((text: string | JSX.Element, canBeDismissedEasily = true) => {
+      AlertEvents.subscribe((text: string | React.JSX.Element, canBeDismissedEasily = true) => {
         const hash = getMessageHash(text);
         setAlerts((old) => {
           if (old.some((a) => a.hash === hash)) {
@@ -51,7 +51,7 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
   const alertMessage = alerts[0]?.text || "No alert to show";
   const canBeDismissedEasily = alerts[0]?.canBeDismissedEasily;
 
-  function getMessageHash(text: string | JSX.Element): string {
+  function getMessageHash(text: string | React.JSX.Element): string {
     if (typeof text === "string") {
       return cyrb53(text);
     }

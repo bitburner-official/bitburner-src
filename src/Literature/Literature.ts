@@ -1,3 +1,4 @@
+import type React from "react";
 import { FilePath, asFilePath } from "../Paths/FilePath";
 import type { LiteratureName, FactionName } from "@enums";
 
@@ -5,7 +6,7 @@ interface LiteratureConstructorParams {
   title: string;
   filename: LiteratureName;
   factionRumors?: FactionName[];
-  text: JSX.Element;
+  text: React.JSX.Element;
 }
 /**
  * Lore / world building literature files that can be found on servers.
@@ -15,7 +16,7 @@ export class Literature {
   title: string;
   filename: LiteratureName & FilePath;
   factionRumors: FactionName[];
-  text: JSX.Element;
+  text: React.JSX.Element;
 
   constructor({ title, filename, factionRumors, text }: LiteratureConstructorParams) {
     this.title = title;

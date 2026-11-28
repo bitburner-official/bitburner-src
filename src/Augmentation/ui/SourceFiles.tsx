@@ -15,7 +15,7 @@ interface SourceFileData {
   maxLevel: number;
   activeLevel: number;
   name: string;
-  info: JSX.Element;
+  info: React.JSX.Element;
 }
 
 const getSourceFileData = (sfNumber: number): SourceFileData | null => {

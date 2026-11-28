@@ -112,7 +112,7 @@ export function StatsElement(props: IProps): React.ReactElement {
 export function EarningsElement(props: IProps): React.ReactElement {
   const { classes } = useStyles();
 
-  let data: [string, string | JSX.Element][] = [];
+  let data: [string, string | React.JSX.Element][] = [];
   if (isSleeveCrimeWork(props.sleeve.currentWork)) {
     const gains = props.sleeve.currentWork.getExp(props.sleeve);
     data = [

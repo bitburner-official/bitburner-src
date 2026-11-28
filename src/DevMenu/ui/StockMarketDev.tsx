@@ -66,7 +66,7 @@ export function StockMarketDev(): React.ReactElement {
   }
 
   function viewStockCaps(): void {
-    const stocks: JSX.Element[] = [];
+    const stocks: React.JSX.Element[] = [];
     processStocks((stock: Stock) => {
       stocks.push(
         <tr key={stock.symbol}>

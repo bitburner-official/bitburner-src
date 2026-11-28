@@ -37,7 +37,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   const totalGain = cityData.productionAmount - cityData.actualSellAmount;
 
   // Sell button
-  let sellButtonText: JSX.Element;
+  let sellButtonText: React.JSX.Element;
   const desiredSellAmount = cityData.desiredSellAmount;
   if (desiredSellAmount !== null) {
     if (typeof desiredSellAmount === "string") {

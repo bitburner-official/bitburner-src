@@ -19,7 +19,7 @@ export function CityTabs(props: IProps): React.ReactElement {
   const division = useDivision();
   const [city, setCity] = useState(props.city);
 
-  let mainContent: JSX.Element;
+  let mainContent: React.JSX.Element;
   if (city === "Expand") {
     mainContent = <ExpandNewCity cityStateSetter={setCity} />;
   } else {

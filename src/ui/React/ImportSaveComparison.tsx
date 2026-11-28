@@ -41,7 +41,7 @@ import { SaveData } from "../../types";
 import { handleGetSaveDataInfoError } from "../../utils/ErrorHandler";
 import { OptionSwitch } from "./OptionSwitch";
 
-const ComparisonIcon = ({ isBetter }: { isBetter: boolean }): JSX.Element => {
+const ComparisonIcon = ({ isBetter }: { isBetter: boolean }) => {
   const title = isBetter ? "Imported value is larger!" : "Imported value is smaller!";
   const icon = isBetter ? <ThumbUpAlt color="success" /> : <ThumbDownAlt color="error" />;
 
@@ -100,7 +100,7 @@ const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexte
 
 let initialAutosave = 0;
 
-export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boolean }): JSX.Element => {
+export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boolean }) => {
   const { classes } = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
