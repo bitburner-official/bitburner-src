@@ -119,7 +119,7 @@ export const TerminalCommands: Record<
   wget: wget,
 };
 
-// "mkdir" is a "hidden" command; i.e., it is not shown in help text or autocomplete.
+// "mkdir" is a "hidden" command; i.e., it is not shown in autocomplete.
 export const supportedCommands = Object.keys(TerminalCommands).filter((command) => command !== "mkdir");
 
 export class Terminal {
