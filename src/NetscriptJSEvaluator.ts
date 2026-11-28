@@ -162,6 +162,9 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   let newCode = scriptCode;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
+    if (node.filename.startsWith("https://")) {
+      continue;
+    }
     const importedScript = getModuleScript(node.filename, script.filename, scripts);
     for (const scriptInSeenStack of seenStack) {
       if (scriptInSeenStack.filename === script.filename) {

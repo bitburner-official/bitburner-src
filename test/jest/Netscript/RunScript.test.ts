@@ -134,28 +134,68 @@ test("Netscript execution", async () => {
   expect(runningScript.logs).toStrictEqual(["false home 8", "Script finished running"]);
 });
 
+async function testBasicCase(parentWorkerScript?: WorkerScript) {
+  Player.getHomeComputer().writeToScriptFile(
+    testScriptPath,
+    `export async function main(ns) {
+       const server = ns.getServer("home");
+       ns.print(server.hostname);
+     }`,
+  );
+  if (!parentWorkerScript) {
+    runScript(testScriptPath, [], Player.getHomeComputer());
+  } else {
+    runScriptFromScript("run", Player.getHomeComputer(), testScriptPath, [], parentWorkerScript, runOptions);
+  }
+  const workerScript = workerScripts.get(1);
+  if (!workerScript) {
+    throw new Error(`Invalid worker script`);
+  }
+  const result = await Promise.race([
+    alerted,
+    new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
+  ]);
+  expect(result).not.toBeDefined();
+  expect(workerScript.scriptRef.logs[0]).toStrictEqual(SpecialServers.Home);
+}
+
+async function testHttpsImportAndInGameFileImport(parentWorkerScript?: WorkerScript) {
+  Player.getHomeComputer().writeToScriptFile("bar.js" as ScriptFilePath, `export const bar = "bar";`);
+  Player.getHomeComputer().writeToScriptFile(
+    testScriptPath,
+    `import { foo } from "https://mock.invalid";
+     import { bar } from "bar.js";
+     export async function main(ns) {
+       ns.print(foo);
+       ns.print(bar);
+     }`,
+  );
+  if (!parentWorkerScript) {
+    runScript(testScriptPath, [], Player.getHomeComputer());
+  } else {
+    runScriptFromScript("run", Player.getHomeComputer(), testScriptPath, [], parentWorkerScript, runOptions);
+  }
+  const workerScript = workerScripts.get(1);
+  if (!workerScript) {
+    throw new Error(`Invalid worker script`);
+  }
+  const result = await Promise.race([
+    alerted,
+    new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
+  ]);
+  expect(result).not.toBeDefined();
+  expect(workerScript.scriptRef.logs[0]).toStrictEqual("foo");
+  expect(workerScript.scriptRef.logs[1]).toStrictEqual("bar");
+}
+
 describe("runScript and runScriptFromScript", () => {
   describe("runScript", () => {
     describe("Success", () => {
       test("Normal", async () => {
-        Player.getHomeComputer().writeToScriptFile(
-          testScriptPath,
-          `export async function main(ns) {
-             const server = ns.getServer("home");
-             ns.print(server.hostname);
-           }`,
-        );
-        runScript(testScriptPath, [], Player.getHomeComputer());
-        const workerScript = workerScripts.get(1);
-        if (!workerScript) {
-          throw new Error(`Invalid worker script`);
-        }
-        const result = await Promise.race([
-          alerted,
-          new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
-        ]);
-        expect(result).not.toBeDefined();
-        expect(workerScript.scriptRef.logs[0]).toStrictEqual(SpecialServers.Home);
+        await testBasicCase();
+      });
+      test("Import HTTPS URL", async () => {
+        await testHttpsImportAndInGameFileImport();
       });
     });
     describe("Failure", () => {
@@ -271,25 +311,10 @@ describe("runScript and runScriptFromScript", () => {
 
     describe("Success", () => {
       test("Normal", async () => {
-        Player.getHomeComputer().writeToScriptFile(
-          testScriptPath,
-          `export async function main(ns) {
-             const server = ns.getServer("home");
-             ns.print(server.hostname);
-           }`,
-        );
-        runScriptFromScript("run", Player.getHomeComputer(), testScriptPath, [], parentWorkerScript, runOptions);
-        const workerScript = workerScripts.get(1);
-        if (!workerScript) {
-          throw new Error(`Invalid worker script`);
-        }
-        const result = await Promise.race([
-          alerted,
-          new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
-        ]);
-
-        expect(result).not.toBeDefined();
-        expect(workerScript.scriptRef.logs[0]).toStrictEqual(SpecialServers.Home);
+        await testBasicCase(parentWorkerScript);
+      });
+      test("Import HTTPS URL", async () => {
+        await testHttpsImportAndInGameFileImport(parentWorkerScript);
       });
     });
     describe("Failure", () => {

@@ -146,7 +146,7 @@ function Root(props: IProps): React.ReactElement {
         ast as acorn.Node, // Pretend that ast is an acorn node
         {
           ImportDeclaration: (node: acorn.ImportDeclaration) => {
-            if (typeof node.source.value !== "string" || !currentScript) {
+            if (typeof node.source.value !== "string" || node.source.value.startsWith("https://") || !currentScript) {
               return;
             }
             const importedScript = getModuleScript(

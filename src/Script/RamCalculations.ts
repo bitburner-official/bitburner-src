@@ -451,6 +451,9 @@ function parseOnlyCalculateDeps(
             console.error("Invalid node when walking ImportDeclaration in parseOnlyCalculateDeps. node:", node);
             return;
           }
+          if (rawImportModuleName.startsWith("https://")) {
+            return;
+          }
           // Skip these modules. They are popular path aliases of NetscriptDefinitions.d.ts.
           if (fileTypeFeature.isTypeScript && (rawImportModuleName === "@nsdefs" || rawImportModuleName === "@ns")) {
             return;
