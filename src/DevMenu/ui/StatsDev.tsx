@@ -174,9 +174,7 @@ function StatRow({ stat }: { stat: string }): React.ReactElement {
         <Adjuster
           label={"exp"}
           placeholder={"exp"}
-          tons={() => {
-            modifyExp(stat, 1)(bigNumber);
-          }}
+          tons={() => modifyExp(stat, 1)(bigNumber)}
           add={modifyExp(stat, 1)}
           subtract={modifyExp(stat, -1)}
           reset={resetExperience(stat)}
@@ -199,13 +197,7 @@ function StatRow({ stat }: { stat: string }): React.ReactElement {
             // Without startAdornment, label and placeholder are only shown when TextField is focused
             startAdornment: <></>,
             endAdornment: (
-              <Button
-                onClick={() => {
-                  setStatLevel(stat, typeof level !== "string" ? level : 0);
-                }}
-              >
-                Set
-              </Button>
+              <Button onClick={() => setStatLevel(stat, typeof level !== "string" ? level : 0)}>Set</Button>
             ),
           }}
           style={{ marginLeft: "20px" }}
@@ -298,9 +290,7 @@ export function StatsDev(): React.ReactElement {
                 <Adjuster
                   label="karma"
                   placeholder="amt"
-                  tons={() => {
-                    modifyKarma(1)(-54000);
-                  }}
+                  tons={() => modifyKarma(1)(-54000)}
                   add={modifyKarma(1)}
                   subtract={modifyKarma(-1)}
                   reset={resetKarma()}

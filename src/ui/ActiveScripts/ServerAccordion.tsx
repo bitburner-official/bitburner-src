@@ -35,11 +35,7 @@ export function ServerAccordion({ server, scripts, startOpen }: ServerAccordionP
 
   return (
     <Paper>
-      <ListItemButton
-        onClick={() => {
-          setOpen((old) => !old);
-        }}
-      >
+      <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText primary={<Typography style={{ whiteSpace: "pre-wrap" }}>{headerTxt}</Typography>} />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>

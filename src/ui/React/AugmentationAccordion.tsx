@@ -34,11 +34,7 @@ export function AugmentationAccordion(props: IProps): React.ReactElement {
   if (typeof props.aug.info === "string") {
     return (
       <Box component={Paper}>
-        <ListItemButton
-          onClick={() => {
-            setOpen((old) => !old);
-          }}
-        >
+        <ListItemButton onClick={() => setOpen((old) => !old)}>
           <ListItemText primary={<Typography style={{ whiteSpace: "pre-wrap" }}>{displayName}</Typography>} />
           {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
         </ListItemButton>
@@ -60,11 +56,7 @@ export function AugmentationAccordion(props: IProps): React.ReactElement {
 
   return (
     <Box component={Paper}>
-      <ListItemButton
-        onClick={() => {
-          setOpen((old) => !old);
-        }}
-      >
+      <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText primary={<Typography style={{ whiteSpace: "pre-wrap" }}>{displayName}</Typography>} />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>

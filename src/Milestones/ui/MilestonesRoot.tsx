@@ -14,7 +14,7 @@ function highestMilestone(milestones: Milestone[]): number {
   return n;
 }
 
-export function MilestonesRoot(): React.JSX.Element {
+export function MilestonesRoot(): JSX.Element {
   const n = highestMilestone(Milestones);
   const milestones = Milestones.map((milestone: Milestone, i: number) => {
     if (i <= n + 1) {

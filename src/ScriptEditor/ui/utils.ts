@@ -95,8 +95,6 @@ export function saveScript(scriptToSave: OpenScript): void {
   EditorEvents.emit(scriptToSave.hostname, scriptToSave.path);
 
   if (Settings.SaveGameOnFileSave) {
-    saveGame().catch((error) => {
-      exceptionAlert(error);
-    });
+    saveGame().catch((error) => exceptionAlert(error));
   }
 }

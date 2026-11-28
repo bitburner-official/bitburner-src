@@ -15,17 +15,11 @@ interface IProps {
   setMultiplier: (mult: PositiveInteger | "MAX") => void;
 }
 
-export function MultiplierButtons({ selectedMultiplier, setMultiplier }: IProps): React.JSX.Element {
+export function MultiplierButtons({ selectedMultiplier, setMultiplier }: IProps): JSX.Element {
   return (
     <>
       {getRecordEntries<string, PositiveInteger | "MAX">(PurchaseMultipliers).map(([text, mult]) => (
-        <Button
-          key={text}
-          onClick={() => {
-            setMultiplier(mult);
-          }}
-          disabled={mult === selectedMultiplier}
-        >
+        <Button key={text} onClick={() => setMultiplier(mult)} disabled={mult === selectedMultiplier}>
           {text}
         </Button>
       ))}

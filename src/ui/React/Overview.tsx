@@ -52,9 +52,7 @@ const useStyles = makeStyles()({
 });
 
 interface IProps {
-  children: (
-    parentOpen: boolean,
-  ) => React.JSX.Element[] | React.JSX.Element | React.ReactElement[] | React.ReactElement;
+  children: (parentOpen: boolean) => JSX.Element[] | JSX.Element | React.ReactElement[] | React.ReactElement;
   mode: "tutorial" | "overview";
 }
 
@@ -125,13 +123,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
   return (
     <Draggable handle=".drag" bounds="body" onStop={handleStop} defaultPosition={{ x, y }}>
       <Paper className={classes.overviewContainer} square style={{ maxHeight: "100vh", overflowY: "auto" }}>
-        <Box
-          className="drag"
-          onDoubleClick={() => {
-            setOpen((old) => !old);
-          }}
-          ref={draggableRef}
-        >
+        <Box className="drag" onDoubleClick={() => setOpen((old) => !old)} ref={draggableRef}>
           <Box className={classes.header}>
             <LeftIcon color="secondary" className={classes.icon} sx={{ padding: "2px" }} />
             <Typography flexGrow={1} color="secondary">
@@ -147,12 +139,8 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
                 <CurrentIcon
                   className={classes.icon}
                   color="secondary"
-                  onClick={() => {
-                    setOpen((old) => !old);
-                  }}
-                  onTouchEnd={() => {
-                    setOpen((old) => !old);
-                  }}
+                  onClick={() => setOpen((old) => !old)}
+                  onTouchEnd={() => setOpen((old) => !old)}
                 />
               }
             </Button>

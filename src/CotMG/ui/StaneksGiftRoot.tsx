@@ -27,7 +27,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
         <Info
           sx={{ ml: 1, mb: 0 }}
           color="info"
-          onClick={() => {
+          onClick={() =>
             dialogBoxCreate(
               <>
                 <Typography>
@@ -178,8 +178,8 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   augmentations.
                 </Typography>
               </>,
-            );
-          }}
+            )
+          }
         />
       </Typography>
 

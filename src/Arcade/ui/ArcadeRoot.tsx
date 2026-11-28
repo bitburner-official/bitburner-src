@@ -35,13 +35,7 @@ export function ArcadeRoot(): React.ReactElement {
   }
   return (
     <>
-      <Button
-        onClick={() => {
-          setPage(Page.None);
-        }}
-      >
-        Back
-      </Button>
+      <Button onClick={() => setPage(Page.None)}>Back</Button>
       {currentGame}
     </>
   );

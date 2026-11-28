@@ -51,13 +51,7 @@ export function RecentErrorsPage(): React.ReactElement {
           </thead>
           <tbody>
             {ErrorState.Errors.map((e, i) => (
-              <tr
-                key={i}
-                className={classes.errorRow}
-                onClick={() => {
-                  showError(e);
-                }}
-              >
+              <tr key={i} className={classes.errorRow} onClick={() => showError(e)}>
                 <td className={classes.cellText}>
                   <div className={classes.xsmall}>{e.occurrences}</div>
                 </td>

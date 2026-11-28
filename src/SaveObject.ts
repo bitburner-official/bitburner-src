@@ -295,9 +295,7 @@ export async function importGame(
     dialogBoxCreate(`Cannot import save data: ${error}`);
     return;
   }
-  setTimeout(() => {
-    location.reload();
-  }, 0);
+  setTimeout(() => location.reload(), 0);
 }
 
 export async function getSaveDataFromFile(files: FileList | null): Promise<SaveData> {
@@ -572,24 +570,28 @@ function createScamUpdateText(): void {
 }
 
 function createNewUpdateText() {
-  setTimeout(() => {
-    dialogBoxCreate(
-      "New update!\n" +
-        "Please report any bugs/issues through the GitHub repository (https://github.com/bitburner-official/bitburner-src/issues) " +
-        "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
-        CONSTANTS.LatestUpdate,
-    );
-  }, 1000);
+  setTimeout(
+    () =>
+      dialogBoxCreate(
+        "New update!\n" +
+          "Please report any bugs/issues through the GitHub repository (https://github.com/bitburner-official/bitburner-src/issues) " +
+          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
+          CONSTANTS.LatestUpdate,
+      ),
+    1000,
+  );
 }
 
 function createBetaUpdateText() {
-  setTimeout(() => {
-    dialogBoxCreate(
-      "You are playing on the beta environment! This branch of the game " +
-        "features the latest developments in the game. This version may be unstable.\n" +
-        "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
-        "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
-        CONSTANTS.LatestUpdate,
-    );
-  }, 1000);
+  setTimeout(
+    () =>
+      dialogBoxCreate(
+        "You are playing on the beta environment! This branch of the game " +
+          "features the latest developments in the game. This version may be unstable.\n" +
+          "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
+          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
+          CONSTANTS.LatestUpdate,
+      ),
+    1000,
+  );
 }

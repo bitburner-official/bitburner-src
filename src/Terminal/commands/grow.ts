@@ -9,24 +9,12 @@ import { calculateHackingExpGain, calculateGrowTime } from "../../Hacking";
 import { processSingleServerGrowth } from "../../Server/ServerHelpers";
 
 export function grow(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
-  if (args.length !== 0) {
-    Terminal.error("Incorrect usage of grow command. Usage: grow");
-    return;
-  }
+  if (args.length !== 0) return Terminal.error("Incorrect usage of grow command. Usage: grow");
 
-  if (server.purchasedByPlayer) {
-    Terminal.error("Cannot grow your own machines!");
-    return;
-  }
-  if (!server.hasAdminRights) {
-    Terminal.error("You do not have admin rights for this machine!");
-    return;
-  }
+  if (server.purchasedByPlayer) return Terminal.error("Cannot grow your own machines!");
+  if (!server.hasAdminRights) return Terminal.error("You do not have admin rights for this machine!");
   // Grow does not require meeting the hacking level, but undefined requiredHackingSkill indicates the wrong type of server.
-  if (server.requiredHackingSkill === undefined) {
-    Terminal.error("Cannot grow this server.");
-    return;
-  }
+  if (server.requiredHackingSkill === undefined) return Terminal.error("Cannot grow this server.");
 
   if (server instanceof HacknetServer) {
     Terminal.error("Cannot grow this kind of server");

@@ -79,16 +79,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   }, [rerender, labDepth]);
 
   useEffect(() => {
-    const clearSubscription = DarknetEvents.subscribe(() => {
-      updateDisplay();
-    });
-    draggableBackground.current?.addEventListener(
-      "wheel",
-      (e) => {
-        e.preventDefault();
-      },
-      { passive: false },
-    );
+    const clearSubscription = DarknetEvents.subscribe(() => updateDisplay());
+    draggableBackground.current?.addEventListener("wheel", (e) => e.preventDefault(), { passive: false });
     scrollTo(DarknetState.netViewTopScroll, DarknetState.netViewLeftScroll);
     updateDisplay();
 
@@ -226,9 +218,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
       {serverOpened ? (
         <ServerDetailsModal
           open={!!serverOpened}
-          onClose={() => {
-            setServerOpened(null);
-          }}
+          onClose={() => setServerOpened(null)}
           server={serverOpened}
           classes={classes}
         />
@@ -306,20 +296,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </div>
       </div>
       <div className={classes.zoomContainer}>
-        <Button
-          className={classes.button}
-          onClick={() => {
-            changeZoom(false);
-          }}
-        >
+        <Button className={classes.button} onClick={() => changeZoom(false)}>
           <ZoomIn />
         </Button>
-        <Button
-          className={classes.button}
-          onClick={() => {
-            changeZoom();
-          }}
-        >
+        <Button className={classes.button} onClick={() => changeZoom()}>
           <ZoomOut />
         </Button>
       </div>

@@ -7,9 +7,7 @@ export function help(args: (string | number | boolean)[]): undefined {
     return;
   }
   if (args.length === 0) {
-    TerminalHelpText.forEach((line) => {
-      Terminal.print(line);
-    });
+    TerminalHelpText.forEach((line) => Terminal.print(line));
   } else {
     const cmd = args[0] + "";
     const txt = HelpTexts[cmd];
@@ -17,8 +15,6 @@ export function help(args: (string | number | boolean)[]): undefined {
       Terminal.error("No help topics match '" + cmd + "'");
       return;
     }
-    txt.forEach((t) => {
-      Terminal.print(t);
-    });
+    txt.forEach((t) => Terminal.print(t));
   }
 }

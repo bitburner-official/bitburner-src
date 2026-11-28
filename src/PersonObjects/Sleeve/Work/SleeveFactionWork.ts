@@ -44,10 +44,7 @@ export class SleeveFactionWork extends SleeveBaseWork {
   }
 
   process(sleeve: Sleeve, cycles: number) {
-    if (this.factionName === Player.gang?.facName) {
-      sleeve.stopWork();
-      return;
-    }
+    if (this.factionName === Player.gang?.facName) return sleeve.stopWork();
 
     const exp = this.getExpRates(sleeve);
     applySleeveGains(sleeve, exp, cycles);

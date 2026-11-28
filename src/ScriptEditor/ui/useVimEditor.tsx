@@ -42,9 +42,7 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
         setVimEditor(MonacoVim.initVimMode(editor, statusBarRef, StatusBar, rerender));
         MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
           // your own implementation on what you want to do when :w is pressed
-          actionsRef.current.save().catch((error) => {
-            console.error(error);
-          });
+          actionsRef.current.save().catch((error) => console.error(error));
         });
         MonacoVim.VimMode.Vim.defineEx("quit", "q", function () {
           Router.toPage(Page.Terminal);
@@ -60,9 +58,7 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
             .then(() => {
               Router.toPage(Page.Terminal);
             })
-            .catch((error) => {
-              console.error(error);
-            });
+            .catch((error) => console.error(error));
         };
         // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
         MonacoVim.VimMode.Vim.defineEx("wqriteandquit", "wq", saveNQuit);

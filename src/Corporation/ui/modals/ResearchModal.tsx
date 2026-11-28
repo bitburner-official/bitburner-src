@@ -112,9 +112,7 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
           </span>,
         )}
         <Button
-          onClick={() => {
-            setOpen((old) => !old);
-          }}
+          onClick={() => setOpen((old) => !old)}
           sx={{ borderColor: Settings.theme.button, minWidth: "fit-content" }}
         >
           {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}

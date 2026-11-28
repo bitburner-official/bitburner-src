@@ -43,18 +43,12 @@ function ColorEditor({ label, themePath, onColorChange, color, defaultColor }: C
                 hideTextfield
                 deferred
                 value={"#" + color}
-                onChange={(newColor: Color) => {
-                  onColorChange(themePath, newColor.hex);
-                }}
+                onChange={(newColor: Color) => onColorChange(themePath, newColor.hex)}
                 disableAlpha
               />
             ),
             endAdornment: (
-              <IconButton
-                onClick={() => {
-                  onColorChange(themePath, defaultColor);
-                }}
-              >
+              <IconButton onClick={() => onColorChange(themePath, defaultColor)}>
                 <Reply color="primary" />
               </IconButton>
             ),

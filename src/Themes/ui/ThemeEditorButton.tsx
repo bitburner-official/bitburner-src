@@ -9,22 +9,11 @@ export function ThemeEditorButton(): React.ReactElement {
   return (
     <>
       <Tooltip title="The theme editor allows you to modify the colors the game uses.">
-        <Button
-          id="bb-theme-editor-button"
-          startIcon={<ColorizeIcon />}
-          onClick={() => {
-            setThemeEditorOpen(true);
-          }}
-        >
+        <Button id="bb-theme-editor-button" startIcon={<ColorizeIcon />} onClick={() => setThemeEditorOpen(true)}>
           Theme Editor
         </Button>
       </Tooltip>
-      <ThemeEditorModal
-        open={themeEditorOpen}
-        onClose={() => {
-          setThemeEditorOpen(false);
-        }}
-      />
+      <ThemeEditorModal open={themeEditorOpen} onClose={() => setThemeEditorOpen(false)} />
     </>
   );
 }

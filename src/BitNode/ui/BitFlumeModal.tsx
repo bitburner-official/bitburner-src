@@ -15,21 +15,10 @@ export function BitFlumeModal(): React.ReactElement {
     setOpen(false);
   }
 
-  useEffect(
-    () =>
-      BitFlumeEvent.subscribe(() => {
-        setOpen(true);
-      }),
-    [],
-  );
+  useEffect(() => BitFlumeEvent.subscribe(() => setOpen(true)), []);
 
   return (
-    <Modal
-      open={open}
-      onClose={() => {
-        setOpen(false);
-      }}
-    >
+    <Modal open={open} onClose={() => setOpen(false)}>
       <Typography>
         WARNING: USING THIS PROGRAM WILL CAUSE YOU TO LOSE ALL OF YOUR PROGRESS ON THE CURRENT BITNODE.
         <br />

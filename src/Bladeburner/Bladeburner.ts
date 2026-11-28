@@ -452,8 +452,7 @@ export class Bladeburner implements OperationTeam {
         );
       } else if (flag.toLowerCase().includes("en")) {
         if (!this.automateActionLow || !this.automateActionHigh) {
-          this.log("Failed to enable automation. Actions were not set");
-          return;
+          return this.log("Failed to enable automation. Actions were not set");
         }
         this.automateEnabled = true;
         this.log("Bladeburner automation enabled");
@@ -1297,10 +1296,7 @@ export class Bladeburner implements OperationTeam {
     if (!this.action) return; // Idle
     const action = this.getActionObject(this.action);
     // If the action is no longer valid, discontinue the action
-    if (!action.getAvailability(this).available) {
-      this.resetAction();
-      return;
-    }
+    if (!action.getAvailability(this).available) return this.resetAction();
 
     // If the previous action went past its completion time, add to the next action
     // This is not added immediately in case the automation changes the action

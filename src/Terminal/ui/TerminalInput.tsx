@@ -151,9 +151,7 @@ export function TerminalInput(): React.ReactElement {
         saveValue(inputText.substr(0, start));
         break;
       case "clearbefore": // Deletes everything before cursor
-        saveValue(inputText.substr(start), () => {
-          moveTextCursor("home");
-        });
+        saveValue(inputText.substr(start), () => moveTextCursor("home"));
         break;
       case "clearall": // Deletes everything in the input
         saveValue("");
@@ -234,9 +232,7 @@ export function TerminalInput(): React.ReactElement {
       if (ref) ref.focus();
     }
     document.addEventListener("keydown", keyDown);
-    return () => {
-      document.removeEventListener("keydown", keyDown);
-    };
+    return () => document.removeEventListener("keydown", keyDown);
   }, []);
 
   async function handleTerminalInputKeyDown(

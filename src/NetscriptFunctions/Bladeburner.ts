@@ -115,7 +115,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     stopBladeburnerAction: (ctx) => {
       const bladeburner = getBladeburner(ctx);
       helpers.log(ctx, () => `Stopping current Bladeburner action.`);
-      bladeburner.resetAction();
+      return bladeburner.resetAction();
     },
     getCurrentAction: (ctx) => {
       const bladeburner = getBladeburner(ctx);

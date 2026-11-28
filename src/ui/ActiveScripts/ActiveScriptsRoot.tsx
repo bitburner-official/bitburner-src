@@ -77,9 +77,7 @@ export function ActiveScriptsRoot({ page, serverName }: ComponentProps): React.R
         ) : (
           <OptionSwitch
             checked={errorModalsAreSuppressed()}
-            onChange={(newValue) => {
-              toggleSuppressErrorModals(newValue);
-            }}
+            onChange={(newValue) => toggleSuppressErrorModals(newValue)}
             text="Suppress error modals (5 min)"
             tooltip={
               <>

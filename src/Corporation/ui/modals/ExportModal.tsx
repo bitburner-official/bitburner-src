@@ -134,12 +134,7 @@ export function ExportModal(props: ExportModalProps): React.ReactElement {
       </Typography>
       {props.mat.exports.map((exp: Export, index: number) => (
         <Box display="flex" alignItems="center" key={index}>
-          <Button
-            sx={{ mx: 2 }}
-            onClick={() => {
-              removeExport(exp);
-            }}
-          >
+          <Button sx={{ mx: 2 }} onClick={() => removeExport(exp)}>
             delete
           </Button>
           <Typography>

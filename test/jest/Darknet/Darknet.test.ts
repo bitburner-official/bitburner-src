@@ -1050,12 +1050,7 @@ test("authentication preserves generated server logs", () => {
 
 describe("do not assign a new array to serverState.serverLogs", () => {
   test.each([
-    [
-      "restartServer",
-      (server: DarknetServer) => {
-        restartServer(server);
-      },
-    ],
+    ["restartServer", (server: DarknetServer) => restartServer(server)],
     [
       "logPasswordAttempt with undefined lastLogTime",
       (server: DarknetServer) => {
@@ -1072,12 +1067,7 @@ describe("do not assign a new array to serverState.serverLogs", () => {
         logPasswordAttempt(server, { code: 200, message: "", passwordAttempted: "" }, 1);
       },
     ],
-    [
-      "populateServerLogsWithNoise",
-      (server: DarknetServer) => {
-        populateServerLogsWithNoise(server);
-      },
-    ],
+    ["populateServerLogsWithNoise", (server: DarknetServer) => populateServerLogsWithNoise(server)],
     ["getServerLogs with peek = false", (server: DarknetServer) => getServerLogs(server, 1, false)],
     ["getServerLogs with peek = true", (server: DarknetServer) => getServerLogs(server, 1, true)],
   ])("%s", (__, callback) => {

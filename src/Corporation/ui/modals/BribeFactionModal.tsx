@@ -92,13 +92,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
         placeholder="Corporation funds"
         defaultValue={!disabled ? money.toExponential() : ""}
       />
-      <Button
-        disabled={disabled}
-        sx={{ mx: 1 }}
-        onClick={() => {
-          bribe(money ? money : 0);
-        }}
-      >
+      <Button disabled={disabled} sx={{ mx: 1 }} onClick={() => bribe(money ? money : 0)}>
         Bribe
       </Button>
     </Modal>

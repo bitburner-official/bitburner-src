@@ -65,30 +65,17 @@ function initAppNotifier(): void {
   const funcs = {
     terminal: (message: string, type?: string) => {
       const typesFn: Record<string, (s: string) => void> = {
-        info: (s) => {
-          Terminal.info(s);
-        },
-        warn: (s) => {
-          Terminal.warn(s);
-        },
-        error: (s) => {
-          Terminal.error(s);
-        },
-        success: (s) => {
-          Terminal.success(s);
-        },
+        info: (s) => Terminal.info(s),
+        warn: (s) => Terminal.warn(s),
+        error: (s) => Terminal.error(s),
+        success: (s) => Terminal.success(s),
       };
       let fn;
       if (type) fn = typesFn[type];
-      if (!fn)
-        fn = (s: string) => {
-          Terminal.print(s);
-        };
+      if (!fn) fn = (s: string) => Terminal.print(s);
       fn.bind(Terminal)(message);
     },
-    toast: (message: string, type: ToastVariant, duration = 2000) => {
-      SnackbarEvents.emit(message, type, duration);
-    },
+    toast: (message: string, type: ToastVariant, duration = 2000) => SnackbarEvents.emit(message, type, duration),
   };
 
   // Will be consumed by the electron wrapper.
@@ -104,9 +91,7 @@ function initSaveFunctions(): void {
         SnackbarEvents.emit("Could not export game.", ToastVariant.ERROR, 2000);
       });
     },
-    triggerScriptsExport: (): void => {
-      exportScripts("*", Player.getHomeComputer());
-    },
+    triggerScriptsExport: (): void => exportScripts("*", Player.getHomeComputer()),
     getSaveData: async (): Promise<{ save: SaveData; fileName: string }> => {
       return {
         save: await getSaveData(),
@@ -122,9 +107,8 @@ function initSaveFunctions(): void {
         return;
       }
     },
-    pushSaveData: (saveData: SaveData, automatic = false): void => {
-      Router.toPage(Page.ImportSave, { saveData, automatic });
-    },
+    pushSaveData: (saveData: SaveData, automatic = false): void =>
+      Router.toPage(Page.ImportSave, { saveData, automatic }),
   };
 
   // Will be consumed by the electron wrapper.

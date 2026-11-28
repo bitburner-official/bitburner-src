@@ -36,9 +36,7 @@ test("Edge cases of disableLog", function () {
   ns.ftpcrack("home");
   ns.print("before disableLog ALL");
 
-  expect(() => {
-    ns.disableLog("all");
-  }).toThrow("Invalid argument: all.");
+  expect(() => ns.disableLog("all")).toThrow("Invalid argument: all.");
   ns.disableLog("ALL");
 
   ns.brutessh("home");

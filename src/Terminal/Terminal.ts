@@ -487,10 +487,7 @@ export class Terminal {
     /* Command parser */
 
     const commandName = commandArray[0];
-    if (typeof commandName !== "string") {
-      this.error(`${commandName} is not a valid command.`);
-      return;
-    }
+    if (typeof commandName !== "string") return this.error(`${commandName} is not a valid command.`);
     // run by path command
     if (isBasicFilePath(commandName)) return run(commandArray, currentServer);
 
@@ -501,8 +498,7 @@ export class Terminal {
     if (!f) {
       const similarCommands = findSimilarCommands(commandName);
       const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
-      this.error(`Command ${commandName} not found.${didYouMeanString}`);
-      return;
+      return this.error(`Command ${commandName} not found.${didYouMeanString}`);
     }
 
     return f(commandArray, currentServer);

@@ -451,7 +451,7 @@ document.adoptedStyleSheets.push(themeStyleSheet);
 refreshTheme();
 
 interface IProps {
-  children: React.JSX.Element[] | React.JSX.Element;
+  children: JSX.Element[] | JSX.Element;
 }
 
 export const TTheme = ({ children }: IProps): React.ReactElement => (

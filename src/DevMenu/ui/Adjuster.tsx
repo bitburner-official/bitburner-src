@@ -46,12 +46,7 @@ export function Adjuster(props: IProps): React.ReactElement {
                 </IconButton>
               </Tooltip>
               <Tooltip title="Add">
-                <IconButton
-                  onClick={() => {
-                    add(typeof value !== "string" ? value : 0);
-                  }}
-                  size="large"
-                >
+                <IconButton onClick={() => add(typeof value !== "string" ? value : 0)} size="large">
                   <AddIcon />
                 </IconButton>
               </Tooltip>
@@ -60,12 +55,7 @@ export function Adjuster(props: IProps): React.ReactElement {
           endAdornment: (
             <>
               <Tooltip title="Subtract">
-                <IconButton
-                  onClick={() => {
-                    subtract(typeof value !== "string" ? value : 0);
-                  }}
-                  size="large"
-                >
+                <IconButton onClick={() => subtract(typeof value !== "string" ? value : 0)} size="large">
                   <RemoveIcon />
                 </IconButton>
               </Tooltip>

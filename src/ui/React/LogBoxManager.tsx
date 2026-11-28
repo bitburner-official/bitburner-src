@@ -150,14 +150,7 @@ export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactEleme
   return (
     <>
       {logs.map((log) => (
-        <LogWindow
-          hidden={hidden}
-          key={log.id}
-          script={log.script}
-          onClose={() => {
-            close(log.id);
-          }}
-        />
+        <LogWindow hidden={hidden} key={log.id} script={log.script} onClose={() => close(log.id)} />
       ))}
     </>
   );
@@ -241,15 +234,13 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     if (s === null) {
       const baseScript = server.scripts.get(script.filename);
       if (!baseScript) {
-        dialogBoxCreate(
+        return dialogBoxCreate(
           `Could not launch script. The script ${script.filename} no longer exists on the server ${server.hostname}.`,
         );
-        return;
       }
       const ramUsage = baseScript.getRamUsage(server.scripts);
       if (!ramUsage) {
-        dialogBoxCreate(`Could not calculate ram usage for ${script.filename} on ${server.hostname}.`);
-        return;
+        return dialogBoxCreate(`Could not calculate ram usage for ${script.filename} on ${server.hostname}.`);
       }
       // Reset some things, because we're reusing the RunningScript instance
       script.ramUsage = ramUsage;

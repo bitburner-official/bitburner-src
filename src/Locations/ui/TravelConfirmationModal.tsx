@@ -29,13 +29,7 @@ export function TravelConfirmationModal(props: IProps): React.ReactElement {
       <Button onClick={travel}>
         <Typography>Travel</Typography>
       </Button>
-      <Button
-        onClick={() => {
-          props.onClose();
-        }}
-      >
-        Cancel
-      </Button>
+      <Button onClick={() => props.onClose()}>Cancel</Button>
     </Modal>
   );
 }

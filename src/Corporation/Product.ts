@@ -213,8 +213,7 @@ export class Product {
   calculateRating(industry: Division): void {
     const weights = IndustriesData[industry.industry].product?.ratingWeights;
     if (!weights) {
-      console.error(`Could not find product rating weights for: ${industry.name}`);
-      return;
+      return console.error(`Could not find product rating weights for: ${industry.name}`);
     }
     this.rating = getRecordEntries(weights).reduce(
       (total, [statName, weight]) => total + this.stats[statName] * weight,

@@ -37,7 +37,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   const totalGain = cityData.productionAmount - cityData.actualSellAmount;
 
   // Sell button
-  let sellButtonText: React.JSX.Element;
+  let sellButtonText: JSX.Element;
   const desiredSellAmount = cityData.desiredSellAmount;
   if (desiredSellAmount !== null) {
     if (typeof desiredSellAmount === "string") {
@@ -76,20 +76,12 @@ export function ProductElem(props: IProductProps): React.ReactElement {
           </Typography>
           <br />
           <Typography>{formatPercent(product.developmentProgress / 100, 2)} complete</Typography>
-          <Button
-            onClick={() => {
-              setCancelOpen(true);
-            }}
-          >
-            Cancel
-          </Button>
+          <Button onClick={() => setCancelOpen(true)}>Cancel</Button>
           <CancelProductModal
             product={product}
             rerender={props.rerender}
             open={cancelOpen}
-            onClose={() => {
-              setCancelOpen(false);
-            }}
+            onClose={() => setCancelOpen(false)}
           />
         </>
       ) : (
@@ -162,58 +154,34 @@ export function ProductElem(props: IProductProps): React.ReactElement {
               </Typography>
             </Tooltip>
           </Box>
-          <Button
-            onClick={() => {
-              setDiscontinueOpen(true);
-            }}
-          >
-            Discontinue
-          </Button>
+          <Button onClick={() => setDiscontinueOpen(true)}>Discontinue</Button>
           <DiscontinueProductModal
             product={product}
             rerender={props.rerender}
             open={discontinueOpen}
-            onClose={() => {
-              setDiscontinueOpen(false);
-            }}
+            onClose={() => setDiscontinueOpen(false)}
           />
         </>
       )}
 
       {(hasUpgradeDashboard || product.finished) && (
         <>
-          <Button
-            onClick={() => {
-              setSellOpen(true);
-            }}
-          >
-            {sellButtonText}
-          </Button>
+          <Button onClick={() => setSellOpen(true)}>{sellButtonText}</Button>
           <SellProductModal
             key={`SellProductModal-${division.name}-${city}-${product.name}`}
             product={product}
             div={division}
             city={city}
             open={sellOpen}
-            onClose={() => {
-              setSellOpen(false);
-            }}
+            onClose={() => setSellOpen(false)}
           />
           <br />
-          <Button
-            onClick={() => {
-              setLimitOpen(true);
-            }}
-          >
-            {limitProductionButtonText}
-          </Button>
+          <Button onClick={() => setLimitOpen(true)}>{limitProductionButtonText}</Button>
           <LimitProductProductionModal
             product={product}
             city={city}
             open={limitOpen}
-            onClose={() => {
-              setLimitOpen(false);
-            }}
+            onClose={() => setLimitOpen(false)}
           />
         </>
       )}

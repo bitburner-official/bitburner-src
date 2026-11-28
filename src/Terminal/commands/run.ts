@@ -16,18 +16,13 @@ import { getRewardFromCache } from "../../DarkNet/effects/cacheFiles";
 export function run(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
   // Run a program or a script
   const arg = args.shift();
-  if (!arg) {
-    Terminal.error(
+  if (!arg)
+    return Terminal.error(
       "Usage: run [program/script] [-t num_threads] [--tail] [--ram-override ram_in_GBs] [--temporary] [args...]",
     );
-    return;
-  }
 
   const path = Terminal.getFilepath(String(arg));
-  if (!path) {
-    Terminal.error(`${arg} is not a valid filepath.`);
-    return;
-  }
+  if (!path) return Terminal.error(`${arg} is not a valid filepath.`);
   if (hasScriptExtension(path)) {
     runScript(path, args, server);
     return;
@@ -35,15 +30,13 @@ export function run(args: (string | number | boolean)[], server: BaseServer): un
     (async () => {
       // There's already an opened contract
       if (Terminal.contractOpen) {
-        Terminal.error("There's already a Coding Contract in Progress");
-        return;
+        return Terminal.error("There's already a Coding Contract in Progress");
       }
 
       const server = Player.getCurrentServer();
       const contract = server.getContract(path);
       if (!contract) {
-        Terminal.error("No such contract");
-        return;
+        return Terminal.error("No such contract");
       }
 
       Terminal.contractOpen = true;
@@ -55,8 +48,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer): un
       // Check if the contract still exists by the time the promise is fulfilled
       if (postPromptServer?.getContract(path) == null) {
         Terminal.contractOpen = false;
-        Terminal.error("Contract no longer exists (Was it solved by a script?)");
-        return;
+        return Terminal.error("Contract no longer exists (Was it solved by a script?)");
       }
 
       switch (promptResult.result) {

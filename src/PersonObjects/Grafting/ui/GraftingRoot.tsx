@@ -104,13 +104,7 @@ export const GraftingRoot = (): React.ReactElement => {
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
-      <Button
-        onClick={() => {
-          Router.back();
-        }}
-      >
-        Back
-      </Button>
+      <Button onClick={() => Router.back()}>Back</Button>
       <Typography variant="h4">Grafting Laboratory</Typography>
       <Typography>
         You find yourself in a secret laboratory, owned by a mysterious researcher.
@@ -133,20 +127,10 @@ export const GraftingRoot = (): React.ReactElement => {
         <Paper sx={{ p: 1 }}>
           <Typography variant="h5">Graft Augmentations</Typography>
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-            <Button
-              sx={{ width: "100%" }}
-              onClick={() => {
-                switchSortOrder(PurchaseAugmentationsOrderSetting.Cost);
-              }}
-            >
+            <Button sx={{ width: "100%" }} onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Cost)}>
               Sort by Cost
             </Button>
-            <Button
-              sx={{ width: "100%" }}
-              onClick={() => {
-                switchSortOrder(PurchaseAugmentationsOrderSetting.Default);
-              }}
-            >
+            <Button sx={{ width: "100%" }} onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Default)}>
               Sort by Default Order
             </Button>
           </Box>
@@ -164,13 +148,7 @@ export const GraftingRoot = (): React.ReactElement => {
               />
               <List sx={{ height: 400, overflowY: "scroll", borderRight: `1px solid ${Settings.theme.welllight}` }}>
                 {getAugsSorted().map((k, i) => (
-                  <ListItemButton
-                    key={i + 1}
-                    onClick={() => {
-                      setSelectedAug(k);
-                    }}
-                    selected={selectedAug === k}
-                  >
+                  <ListItemButton key={i + 1} onClick={() => setSelectedAug(k)} selected={selectedAug === k}>
                     <Typography
                       sx={{
                         color: canGraft(graftableAugmentations[k]).success
@@ -190,13 +168,7 @@ export const GraftingRoot = (): React.ReactElement => {
               </Typography>
               <Tooltip title={checkResult.message}>
                 <span>
-                  <Button
-                    onClick={() => {
-                      setGraftOpen(true);
-                    }}
-                    sx={{ width: "100%" }}
-                    disabled={!checkResult.success}
-                  >
+                  <Button onClick={() => setGraftOpen(true)} sx={{ width: "100%" }} disabled={!checkResult.success}>
                     Graft Augmentation (
                     <Typography>
                       <Money money={graftableAugmentations[selectedAug].cost} forPurchase={true} />
@@ -207,9 +179,7 @@ export const GraftingRoot = (): React.ReactElement => {
               </Tooltip>
               <ConfirmationModal
                 open={graftOpen}
-                onClose={() => {
-                  setGraftOpen(false);
-                }}
+                onClose={() => setGraftOpen(false)}
                 onConfirm={() => {
                   const checkResult = canGraft(graftableAugmentations[selectedAug]);
                   if (!checkResult.success) {

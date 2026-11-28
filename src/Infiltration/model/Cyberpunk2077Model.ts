@@ -77,13 +77,11 @@ export class Cyberpunk2077Model implements InfiltrationStage {
       const selected = this.grid[this.y][this.x];
       const expected = this.answers[this.currentAnswerIndex];
       if (selected !== expected) {
-        this.state.onFailure();
-        return;
+        return this.state.onFailure();
       }
       this.currentAnswerIndex += 1;
       if (this.currentAnswerIndex >= this.answers.length) {
-        this.state.onSuccess();
-        return;
+        return this.state.onSuccess();
       }
     }
     this.state.updateEvent.emit();

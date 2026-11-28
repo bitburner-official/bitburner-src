@@ -39,13 +39,11 @@ export class CheatCodeModel implements InfiltrationStage {
   onKey(event: KeyboardLikeEvent): void {
     event.preventDefault?.();
     if (this.code[this.index] !== getArrow(event)) {
-      this.state.onFailure();
-      return;
+      return this.state.onFailure();
     }
     this.index += 1;
     if (this.index >= this.code.length) {
-      this.state.onSuccess();
-      return;
+      return this.state.onSuccess();
     }
     this.state.updateEvent.emit();
   }

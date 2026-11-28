@@ -66,18 +66,10 @@ export function HacknetRoot(): React.ReactElement {
 
   // onClick event handlers for purchase multiplier buttons
   const purchaseMultiplierOnClicks = [
-    () => {
-      setPurchaseMultiplier(PurchaseMultipliers.x1);
-    },
-    () => {
-      setPurchaseMultiplier(PurchaseMultipliers.x5);
-    },
-    () => {
-      setPurchaseMultiplier(PurchaseMultipliers.x10);
-    },
-    () => {
-      setPurchaseMultiplier(PurchaseMultipliers.MAX);
-    },
+    () => setPurchaseMultiplier(PurchaseMultipliers.x1),
+    () => setPurchaseMultiplier(PurchaseMultipliers.x5),
+    () => setPurchaseMultiplier(PurchaseMultipliers.x10),
+    () => setPurchaseMultiplier(PurchaseMultipliers.MAX),
   ];
 
   // HacknetNode components
@@ -124,12 +116,7 @@ export function HacknetRoot(): React.ReactElement {
           The documentation says that focusRipple is false by default, but I have to explicitly set it to false to fix
           this weird ripple effect.
           */}
-          <Button
-            focusRipple={false}
-            onClick={() => {
-              setOpen(true);
-            }}
-          >
+          <Button focusRipple={false} onClick={() => setOpen(true)}>
             Spend Hashes on Upgrades
           </Button>
           <br />
@@ -146,12 +133,7 @@ export function HacknetRoot(): React.ReactElement {
       </Grid>
 
       <Box sx={{ display: "grid", width: "100%", gridTemplateColumns: "repeat(auto-fit, 30em)" }}>{nodes}</Box>
-      <HashUpgradeModal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      />
+      <HashUpgradeModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

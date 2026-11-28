@@ -61,13 +61,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
       }
 
       return (
-        <RecoveryRoot
-          softReset={this.props.softReset}
-          crashReport={crashReport}
-          resetError={() => {
-            this.reset();
-          }}
-        />
+        <RecoveryRoot softReset={this.props.softReset} crashReport={crashReport} resetError={() => this.reset()} />
       );
     }
     return this.props.children;

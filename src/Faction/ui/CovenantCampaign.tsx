@@ -13,16 +13,9 @@ function CovenantIncompleteCampaign() {
       <Option
         buttonText={"Research"}
         infoText={"The Beginning of True Immortality"}
-        onClick={() => {
-          setOpen(true);
-        }}
+        onClick={() => setOpen(true)}
       ></Option>
-      <Modal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
+      <Modal open={open} onClose={() => setOpen(false)}>
         <Typography component="div">
           You tried your best to help the research team, but this research isn't making any progress.
           <br />
@@ -62,16 +55,9 @@ export function CovenantCampaign() {
       <Option
         buttonText={"Purchase & Upgrade Duplicate Sleeves"}
         infoText={"Purchase Duplicate Sleeves and upgrades. These are permanent!"}
-        onClick={() => {
-          setOpen(true);
-        }}
+        onClick={() => setOpen(true)}
       ></Option>
-      <CovenantPurchasesRoot
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      />
+      <CovenantPurchasesRoot open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

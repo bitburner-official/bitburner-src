@@ -143,13 +143,11 @@ export function SlotMachine(): React.ReactElement {
   const [locks, setLocks] = useState<number[]>([0, 0, 0, 0, 0]);
   const [investment, setInvestment] = useState(initialBet);
   const [canPlay, setCanPlay] = useState(true);
-  const [status, setStatus] = useState<string | React.JSX.Element>("waiting");
+  const [status, setStatus] = useState<string | JSX.Element>("waiting");
 
   useEffect(() => {
     const i = window.setInterval(step, 50);
-    return () => {
-      clearInterval(i);
-    };
+    return () => clearInterval(i);
   });
 
   function step(): void {

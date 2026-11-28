@@ -9,24 +9,12 @@ import { formatExp, formatSecurity } from "../../ui/formatNumber";
 import { getWeakenEffect } from "../../Server/ServerHelpers";
 
 export function weaken(args: (string | number | boolean)[], server: BaseServer): undefined | TerminalAction {
-  if (args.length !== 0) {
-    Terminal.error("Incorrect usage of weaken command. Usage: weaken");
-    return;
-  }
+  if (args.length !== 0) return Terminal.error("Incorrect usage of weaken command. Usage: weaken");
 
-  if (server.purchasedByPlayer) {
-    Terminal.error("Cannot weaken your own machines!");
-    return;
-  }
-  if (!server.hasAdminRights) {
-    Terminal.error("You do not have admin rights for this machine!");
-    return;
-  }
+  if (server.purchasedByPlayer) return Terminal.error("Cannot weaken your own machines!");
+  if (!server.hasAdminRights) return Terminal.error("You do not have admin rights for this machine!");
   // Weaken does not require meeting the hacking level, but undefined requiredHackingSkill indicates the wrong type of server.
-  if (server.requiredHackingSkill === undefined) {
-    Terminal.error("Cannot weaken this server.");
-    return;
-  }
+  if (server.requiredHackingSkill === undefined) return Terminal.error("Cannot weaken this server.");
 
   if (server instanceof HacknetServer) {
     Terminal.error("Cannot weaken this kind of server");

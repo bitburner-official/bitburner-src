@@ -181,9 +181,7 @@ function Root(props: IProps): React.ReactElement {
     if (action == null) {
       return;
     }
-    return action.run().catch((error) => {
-      console.error(error);
-    });
+    return action.run().catch((error) => console.error(error));
   }, []);
 
   const save = useCallback(async () => {
@@ -274,14 +272,10 @@ function Root(props: IProps): React.ReactElement {
       }
     }
     const listener = (event: KeyboardEvent) => {
-      keydown(event).catch((error) => {
-        console.error(error);
-      });
+      keydown(event).catch((error) => console.error(error));
     };
     document.addEventListener("keydown", listener);
-    return () => {
-      document.removeEventListener("keydown", listener);
-    };
+    return () => document.removeEventListener("keydown", listener);
   }, [save, run]);
 
   function infLoop(ast: AST, code: string): void {

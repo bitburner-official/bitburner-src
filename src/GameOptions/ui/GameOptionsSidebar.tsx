@@ -47,9 +47,7 @@ const SideBarTab = (props: ITabProps): React.ReactElement => {
   return (
     <ListItemButton
       selected={props.sideBarProps.tab === props.tabName}
-      onClick={() => {
-        props.sideBarProps.setTab(props.tabName);
-      }}
+      onClick={() => props.sideBarProps.setTab(props.tabName)}
     >
       <Typography>{props.tabName}</Typography>
     </ListItemButton>
@@ -146,26 +144,14 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           gridTemplateColumns: "1fr 1fr",
         }}
       >
-        <Button
-          onClick={() => {
-            props.save();
-          }}
-          startIcon={<Save />}
-          sx={{ gridArea: "save" }}
-        >
+        <Button onClick={() => props.save()} startIcon={<Save />} sx={{ gridArea: "save" }}>
           Save Game
         </Button>
         <Box sx={{ gridArea: "delete", "& .MuiButton-root": { height: "100%", width: "100%" } }}>
           <DeleteGameButton />
         </Box>
         <Tooltip title={<Typography>Export your game to a text file.</Typography>}>
-          <Button
-            onClick={() => {
-              props.export();
-            }}
-            startIcon={<Download />}
-            sx={{ gridArea: "export" }}
-          >
+          <Button onClick={() => props.export()} startIcon={<Download />} sx={{ gridArea: "export" }}>
             Export Game
           </Button>
         </Tooltip>
@@ -195,9 +181,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         </Tooltip>
         <ConfirmationModal
           open={importSaveOpen}
-          onClose={() => {
-            setImportSaveOpen(false);
-          }}
+          onClose={() => setImportSaveOpen(false)}
           onConfirm={() => {
             confirmedImportGame().catch((error) => {
               console.error(error);
@@ -232,9 +216,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
               <br />
               <OptionSwitch
                 checked={syncSteamAchievements}
-                onChange={(newValue) => {
-                  setSyncSteamAchievements(newValue);
-                }}
+                onChange={(newValue) => setSyncSteamAchievements(newValue)}
                 text="Sync Steam achievements"
                 tooltip={
                   <>
@@ -258,12 +240,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             </Typography>
           }
         >
-          <Button
-            onClick={() => {
-              props.forceKill();
-            }}
-            sx={{ gridArea: "kill" }}
-          >
+          <Button onClick={() => props.forceKill()} sx={{ gridArea: "kill" }}>
             Force kill all active scripts
           </Button>
         </Tooltip>
@@ -278,23 +255,12 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             </Typography>
           }
         >
-          <Button
-            onClick={() => {
-              setDiagnosticOpen(true);
-            }}
-            sx={{ gridArea: "diagnose" }}
-          >
+          <Button onClick={() => setDiagnosticOpen(true)} sx={{ gridArea: "diagnose" }}>
             Diagnose Files
           </Button>
         </Tooltip>
         <Tooltip title="Head to the theme browser to see a collection of prebuilt themes.">
-          <Button
-            startIcon={<Palette />}
-            onClick={() => {
-              Router.toPage(Page.ThemeBrowser);
-            }}
-            sx={{ gridArea: "browse" }}
-          >
+          <Button startIcon={<Palette />} onClick={() => Router.toPage(Page.ThemeBrowser)} sx={{ gridArea: "browse" }}>
             Theme Browser
           </Button>
         </Tooltip>
@@ -327,28 +293,11 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
               Report Bug
             </Button>
           </Tooltip>
-          <Button
-            startIcon={<Fingerprint />}
-            onClick={() => {
-              setCreditsOpen(true);
-            }}
-            sx={{ gridArea: "credits" }}
-          >
+          <Button startIcon={<Fingerprint />} onClick={() => setCreditsOpen(true)} sx={{ gridArea: "credits" }}>
             Credits
           </Button>
-          <CreditsModal
-            open={creditsOpen}
-            onClose={() => {
-              setCreditsOpen(false);
-            }}
-          />
-          <Button
-            startIcon={<LibraryBooks />}
-            onClick={() => {
-              setConfirmResetOpen(true);
-            }}
-            sx={{ gridArea: "tut" }}
-          >
+          <CreditsModal open={creditsOpen} onClose={() => setCreditsOpen(false)} />
+          <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
             Repeat Tutorial
           </Button>
           <Button startIcon={<Chat />} href={CONSTANTS.DiscordURL} target="_blank" sx={{ gridArea: "discord" }}>
@@ -365,29 +314,14 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         </Box>
       </Box>
       <Typography>Save ID: {Player.identifier}</Typography>
-      <FileDiagnosticModal
-        open={diagnosticOpen}
-        onClose={() => {
-          setDiagnosticOpen(false);
-        }}
-      />
+      <FileDiagnosticModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
 
       <ConfirmationModal
         open={confirmResetOpen}
-        onClose={() => {
-          setConfirmResetOpen(false);
-        }}
+        onClose={() => setConfirmResetOpen(false)}
         onConfirm={props.reactivateTutorial}
         confirmationText={"Restart the tutorial? Running scripts will be killed."}
-        additionalButton={
-          <Button
-            onClick={() => {
-              setConfirmResetOpen(false);
-            }}
-          >
-            Cancel
-          </Button>
-        }
+        additionalButton={<Button onClick={() => setConfirmResetOpen(false)}>Cancel</Button>}
       />
     </Box>
   );

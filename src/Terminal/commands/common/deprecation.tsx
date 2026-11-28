@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 import { DocumentationLink } from "../../../ui/React/DocumentationLink";
 
 export function sendDeprecationNotice() {
-  Terminal.printRaw(
+  return Terminal.printRaw(
     <Typography sx={{ color: Settings.theme.error }}>
       Running .script files is unsupported.{" "}
       <DocumentationLink page="migrations/ns2.md" color="inherit">

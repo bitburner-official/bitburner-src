@@ -28,12 +28,7 @@ export function TravelModal({ bladeburner, open, onClose }: TravelModalProps): R
         </Typography>
         {Settings.DisableASCIIArt ? (
           Object.values(CityName).map((city) => (
-            <Button
-              key={city}
-              onClick={() => {
-                travel(city);
-              }}
-            >
+            <Button key={city} onClick={() => travel(city)}>
               {city}
             </Button>
           ))

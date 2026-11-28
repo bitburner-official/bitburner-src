@@ -38,9 +38,7 @@ import { Settings } from "./Settings/Settings";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
-  setTimeout(() => {
-    dialogBoxCreate(message, { html: false, canBeDismissedEasily });
-  }, 200);
+  setTimeout(() => dialogBoxCreate(message, { html: false, canBeDismissedEasily }), 200);
 }
 
 function setInitialExpForPlayer() {

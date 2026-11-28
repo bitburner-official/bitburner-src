@@ -144,9 +144,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
           </Typography>
           <ConfirmationModal
             open={installOpen}
-            onClose={() => {
-              setInstallOpen(false);
-            }}
+            onClose={() => setInstallOpen(false)}
             onConfirm={props.installAugmentationsFn}
             confirmationText={
               <>

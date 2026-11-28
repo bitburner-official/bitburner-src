@@ -402,40 +402,24 @@ function grabTerminal(): string[] {
 }
 
 export function grep(args: (string | number | boolean)[], server: BaseServer): undefined {
-  if (!args.length) {
-    Terminal.error(ERR.noArgs);
-    return;
-  }
+  if (!args.length) return Terminal.error(ERR.noArgs);
 
   const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();
-  if (options.isHelp) {
-    help(["grep"]);
-    return;
-  }
+  if (options.isHelp) return help(["grep"]);
   options.hasContextFlag = !!params.context || !!params.preContext || !!params.postContext;
 
   const nContext = Math.max(Number(params.preContext), Number(params.context), Number(params.postContext));
   const nLimit = Number(params.maxMatches);
 
-  if (options.hasContextFlag && (!nContext || isNaN(Number(params.context)))) {
-    Terminal.error(ERR.badParameter("context", params.context));
-    return;
-  }
-  if (params.maxMatches && (!nLimit || isNaN(Number(params.maxMatches)))) {
-    Terminal.error(ERR.badParameter("limit", params.maxMatches));
-    return;
-  }
+  if (options.hasContextFlag && (!nContext || isNaN(Number(params.context))))
+    return Terminal.error(ERR.badParameter("context", params.context));
+  if (params.maxMatches && (!nLimit || isNaN(Number(params.maxMatches))))
+    return Terminal.error(ERR.badParameter("limit", params.maxMatches));
 
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
 
-  if (notFiles.length) {
-    Terminal.error(ERR.badArgs(notFiles));
-    return;
-  }
-  if (!options.isPipeIn && !options.isSearchAll && !files.length) {
-    Terminal.error(ERR.noSearchArg);
-    return;
-  }
+  if (notFiles.length) return Terminal.error(ERR.badArgs(notFiles));
+  if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
 
   options.isMultiFile = files.length > 1;
   const outFilePath = checkOutFile(params.outfile, options, server);

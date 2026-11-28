@@ -63,12 +63,7 @@ export function ErrorModal(): React.ReactElement {
   };
 
   return (
-    <Modal
-      open={!!error}
-      onClose={() => {
-        onClose();
-      }}
-    >
+    <Modal open={!!error} onClose={() => onClose()}>
       {error && (
         <>
           <Typography component="div">
@@ -83,9 +78,7 @@ export function ErrorModal(): React.ReactElement {
             {!Settings.SuppressErrorModals && (
               <OptionSwitch
                 checked={errorModalsAreSuppressed()}
-                onChange={(newValue) => {
-                  toggleSuppressErrorModals(newValue);
-                }}
+                onChange={(newValue) => toggleSuppressErrorModals(newValue)}
                 text="Suppress error modals (5 min)"
                 tooltip={
                   <>
@@ -97,13 +90,7 @@ export function ErrorModal(): React.ReactElement {
             )}
           </Typography>
           <Box className={classes.inlineFlexBox}>
-            <Button
-              onClick={() => {
-                onClose();
-              }}
-            >
-              Close
-            </Button>
+            <Button onClick={() => onClose()}>Close</Button>
             <div>
               <Button disabled={error.pid === undefined} onClick={viewLogs}>
                 View Script Logs

@@ -55,12 +55,8 @@ export function GeneralDev({ parentRerender }: { parentRerender: () => void }): 
   };
 
   // Node-clearing functions
-  const quickB1tFlum3 = () => {
-    Router.toPage(Page.BitVerse, { flume: true, quick: true });
-  };
-  const b1tflum3 = () => {
-    Router.toPage(Page.BitVerse, { flume: true, quick: false });
-  };
+  const quickB1tFlum3 = () => Router.toPage(Page.BitVerse, { flume: true, quick: true });
+  const b1tflum3 = () => Router.toPage(Page.BitVerse, { flume: true, quick: false });
   const quickHackW0r1dD43m0n = () => {
     finishBitNode();
     Router.toPage(Page.BitVerse, { flume: false, quick: true });
@@ -108,9 +104,7 @@ export function GeneralDev({ parentRerender }: { parentRerender: () => void }): 
   };
 
   // Misc functions
-  const checkMessages = () => {
-    checkForMessagesToSend();
-  };
+  const checkMessages = () => checkForMessagesToSend();
   useEffect(() => {
     if (error) throw new ReferenceError("Manually thrown error");
   }, [error]);
@@ -173,9 +167,7 @@ export function GeneralDev({ parentRerender }: { parentRerender: () => void }): 
             <TextField
               placeholder="Enter Corp Name"
               value={corporationName}
-              onChange={(x) => {
-                setCorporationName(x.target.value);
-              }}
+              onChange={(x) => setCorporationName(x.target.value)}
             />
             <Button onClick={createCorporation}>Create Corporation</Button>
           </>
@@ -214,13 +206,7 @@ export function GeneralDev({ parentRerender }: { parentRerender: () => void }): 
         <Button onClick={quickHackW0r1dD43m0n}>Quick w0rld_d34m0n</Button>
         <Button onClick={hackW0r1dD43m0n}>Hack w0rld_d34m0n</Button>
         <br />
-        <Button
-          onClick={() => {
-            setError(true);
-          }}
-        >
-          Throw Error
-        </Button>
+        <Button onClick={() => setError(true)}>Throw Error</Button>
         <Button onClick={checkMessages}>Check Messages</Button>
       </AccordionDetails>
     </AutoExpandAccordion>

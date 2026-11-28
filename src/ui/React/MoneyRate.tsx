@@ -15,7 +15,7 @@ export function MoneyRate({
 }: {
   money: number;
   useExponentialFormForSmallValue?: boolean;
-}): React.JSX.Element {
+}): JSX.Element {
   const { classes } = useStyles();
   return <span className={classes.money}>{formatMoney(money, useExponentialFormForSmallValue)} / sec</span>;
 }

@@ -25,9 +25,7 @@ export function ThemeBrowser(): React.ReactElement {
       <ThemeEntry
         key={key}
         theme={templateTheme}
-        onActivated={() => {
-          setTheme(templateTheme);
-        }}
+        onActivated={() => setTheme(templateTheme)}
         onImageClick={handleZoom}
       />
     ))) || <></>;
@@ -69,9 +67,7 @@ export function ThemeBrowser(): React.ReactElement {
   }
 
   useEffect(() => {
-    requestAnimationFrame(() => {
-      window.scrollTo(0, previousScrollY);
-    });
+    requestAnimationFrame(() => window.scrollTo(0, previousScrollY));
   });
 
   return (

@@ -236,11 +236,7 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
       <Typography>
         {FactionName.FourSigma}'s (4S) Market Data Feed provides information about stocks that will help your trading
         strategies.
-        <IconButton
-          onClick={() => {
-            setHelpOpen(true);
-          }}
-        >
+        <IconButton onClick={() => setHelpOpen(true)}>
           <HelpIcon />
         </IconButton>
       </Typography>
@@ -257,12 +253,7 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
         Account, access to the TIX API, and 4S Market Data access. However, all of your stock positions are lost, so
         make sure to sell your stocks before installing Augmentations!
       </Typography>
-      <StaticModal
-        open={helpOpen}
-        onClose={() => {
-          setHelpOpen(false);
-        }}
-      >
+      <StaticModal open={helpOpen} onClose={() => setHelpOpen(false)}>
         <Typography>
           Access to the 4S Market Data feed will display two additional pieces of information about each stock: Price
           Forecast & Volatility

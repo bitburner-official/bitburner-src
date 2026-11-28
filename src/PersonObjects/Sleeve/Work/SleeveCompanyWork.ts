@@ -41,10 +41,7 @@ export class SleeveCompanyWork extends SleeveBaseWork {
   process(sleeve: Sleeve, cycles: number) {
     const company = this.getCompany();
     const job = Player.jobs[this.companyName];
-    if (!job) {
-      sleeve.stopWork();
-      return;
-    }
+    if (!job) return sleeve.stopWork();
     const gains = this.getGainRates(sleeve, job);
     applySleeveGains(sleeve, gains, cycles);
     company.playerReputation += gains.reputation * cycles;

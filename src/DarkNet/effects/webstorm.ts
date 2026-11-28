@@ -85,7 +85,5 @@ export const launchWebstorm = async (suppressToast = false) => {
 export const handleStormSeed = (server: BaseServer) => {
   server.programs = server.programs.filter((p) => p !== CompletedProgramName.stormSeed);
   DarknetState.lastStormTime = new Date();
-  launchWebstorm().catch((error) => {
-    console.error(error);
-  });
+  launchWebstorm().catch((error) => console.error(error));
 };

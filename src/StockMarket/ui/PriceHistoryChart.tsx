@@ -59,9 +59,7 @@ export function PriceHistoryChart({
           style={{
             background: Settings.theme.backgroundprimary,
           }}
-          onMouseLeave={() => {
-            setHoveredDataPoint(null);
-          }}
+          onMouseLeave={() => setHoveredDataPoint(null)}
         >
           <polyline
             points={points.map(({ x, y }) => `${x},${y}`).join(" ")}
@@ -115,9 +113,7 @@ export function PriceHistoryChart({
                   cx={x}
                   cy={y}
                   r={10}
-                  onMouseEnter={() => {
-                    setHoveredDataPoint(entry);
-                  }}
+                  onMouseEnter={() => setHoveredDataPoint(entry)}
                 />
               </Tooltip>
             );

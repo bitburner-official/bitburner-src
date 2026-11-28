@@ -15,7 +15,7 @@ interface IProps {
   playerAchievements: PlayerAchievement[];
 }
 
-export function AchievementList({ achievements, playerAchievements }: IProps) {
+export function AchievementList({ achievements, playerAchievements }: IProps): JSX.Element {
   // Need to transform the primary color into css filters to change the color of the SVG.
   const cssPrimary = getFiltersFromHex(Settings.theme.primary);
   const cssSecondary = getFiltersFromHex(Settings.theme.secondary);

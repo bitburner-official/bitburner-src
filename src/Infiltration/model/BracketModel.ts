@@ -61,12 +61,10 @@ export class BracketModel implements InfiltrationStage {
     if (!char) return;
     this.right += char;
     if (!match(this.left[this.left.length - this.right.length], char)) {
-      this.state.onFailure();
-      return;
+      return this.state.onFailure();
     }
     if (this.left.length === this.right.length) {
-      this.state.onSuccess();
-      return;
+      return this.state.onSuccess();
     }
     this.state.updateEvent.emit();
   }

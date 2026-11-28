@@ -15,7 +15,7 @@ interface SourceFileData {
   maxLevel: number;
   activeLevel: number;
   name: string;
-  info: React.JSX.Element;
+  info: JSX.Element;
 }
 
 const getSourceFileData = (sfNumber: number): SourceFileData | null => {
@@ -116,9 +116,7 @@ export function SourceFilesElement(): React.ReactElement {
               return (
                 <ListItemButton
                   key={i + 1}
-                  onClick={() => {
-                    setSelectedSfData(sourceFileData);
-                  }}
+                  onClick={() => setSelectedSfData(sourceFileData)}
                   selected={selectedSfData.n === sourceFileData.n}
                   sx={{ py: 0 }}
                 >

@@ -140,9 +140,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
               throw new Error("Missing ramcost for " + fnName);
             }
             const expectedRam = grabCost(ramLayer[key]);
-            it(`${fnName}()`, () => {
-              combinedRamCheck(fn, newPath, expectedRam, extraLayerCost);
-            });
+            it(`${fnName}()`, () => combinedRamCheck(fn, newPath, expectedRam, extraLayerCost));
           }
           // A layer should be the only other option, but we don't have any of those with a cost.
           // Other things like args, enums, etc. have no cost.

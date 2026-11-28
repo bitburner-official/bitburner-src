@@ -41,7 +41,7 @@ import { SaveData } from "../../types";
 import { handleGetSaveDataInfoError } from "../../utils/ErrorHandler";
 import { OptionSwitch } from "./OptionSwitch";
 
-const ComparisonIcon = ({ isBetter }: { isBetter: boolean }): React.JSX.Element => {
+const ComparisonIcon = ({ isBetter }: { isBetter: boolean }): JSX.Element => {
   const title = isBetter ? "Imported value is larger!" : "Imported value is smaller!";
   const icon = isBetter ? <ThumbUpAlt color="success" /> : <ThumbDownAlt color="error" />;
 
@@ -100,7 +100,7 @@ const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexte
 
 let initialAutosave = 0;
 
-export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boolean }): React.JSX.Element => {
+export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boolean }): JSX.Element => {
   const { classes } = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
@@ -405,9 +405,7 @@ export const ImportSaveComparison = (props: { saveData: SaveData; automatic: boo
       <br />
       <OptionSwitch
         checked={syncSteamAchievements}
-        onChange={(newValue) => {
-          setSyncSteamAchievements(newValue);
-        }}
+        onChange={(newValue) => setSyncSteamAchievements(newValue)}
         text="Sync Steam achievements"
         tooltip={
           <>

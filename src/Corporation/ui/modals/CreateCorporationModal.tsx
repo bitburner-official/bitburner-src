@@ -74,19 +74,12 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
       <br />
       <TextField autoFocus={true} placeholder="Corporation Name" onChange={onChange} value={name} />
       {Player.bitNodeN === 3 && (
-        <ButtonWithTooltip
-          onClick={() => {
-            createCorporationWithUI(name, false);
-          }}
-          disabledTooltip={disabledTextForNoName}
-        >
+        <ButtonWithTooltip onClick={() => createCorporationWithUI(name, false)} disabledTooltip={disabledTextForNoName}>
           Use seed money
         </ButtonWithTooltip>
       )}
       <ButtonWithTooltip
-        onClick={() => {
-          createCorporationWithUI(name, true);
-        }}
+        onClick={() => createCorporationWithUI(name, true)}
         disabledTooltip={disabledTextForNoName || (canSelfFund ? "" : "Insufficient player funds")}
       >
         Self-Fund (<Money money={cost} forPurchase={true} />)

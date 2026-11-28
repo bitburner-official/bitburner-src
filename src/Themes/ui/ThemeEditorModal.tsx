@@ -51,20 +51,14 @@ function ColorEditor({ name, onColorChange, color, defaultColor }: IColorEditorP
                 hideTextfield
                 deferred
                 value={color}
-                onChange={(newColor: Color) => {
-                  onColorChange(name, "#" + newColor.hex);
-                }}
+                onChange={(newColor: Color) => onColorChange(name, "#" + newColor.hex)}
                 disableAlpha
               />
             </>
           ),
           endAdornment: (
             <>
-              <IconButton
-                onClick={() => {
-                  onColorChange(name, defaultColor);
-                }}
-              >
+              <IconButton onClick={() => onColorChange(name, defaultColor)}>
                 <ReplyIcon color="primary" />
               </IconButton>
             </>
@@ -399,22 +393,12 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
           <ThemeCollaborate />
           <ButtonGroup>
             <Tooltip title="Reverts all modification back to the default theme. This is permanent.">
-              <Button
-                onClick={() => {
-                  setTemplateTheme(defaultTheme);
-                }}
-                startIcon={<HistoryIcon />}
-              >
+              <Button onClick={() => setTemplateTheme(defaultTheme)} startIcon={<HistoryIcon />}>
                 Revert to Default
               </Button>
             </Tooltip>
             <Tooltip title="Move over to the theme browser's page to use one of our predefined themes.">
-              <Button
-                startIcon={<PaletteSharpIcon />}
-                onClick={() => {
-                  Router.toPage(Page.ThemeBrowser);
-                }}
-              >
+              <Button startIcon={<PaletteSharpIcon />} onClick={() => Router.toPage(Page.ThemeBrowser)}>
                 See more themes
               </Button>
             </Tooltip>

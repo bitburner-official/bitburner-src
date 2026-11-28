@@ -38,32 +38,16 @@ export function GymLocation(props: IProps): React.ReactElement {
 
   return (
     <Box sx={{ display: "grid", width: "fit-content" }}>
-      <Button
-        onClick={() => {
-          train(GymType.strength);
-        }}
-      >
+      <Button onClick={() => train(GymType.strength)}>
         Train Strength (<Money money={cost} forPurchase={true} /> / sec)
       </Button>
-      <Button
-        onClick={() => {
-          train(GymType.defense);
-        }}
-      >
+      <Button onClick={() => train(GymType.defense)}>
         Train Defense (<Money money={cost} forPurchase={true} /> / sec)
       </Button>
-      <Button
-        onClick={() => {
-          train(GymType.dexterity);
-        }}
-      >
+      <Button onClick={() => train(GymType.dexterity)}>
         Train Dexterity (<Money money={cost} forPurchase={true} /> / sec)
       </Button>
-      <Button
-        onClick={() => {
-          train(GymType.agility);
-        }}
-      >
+      <Button onClick={() => train(GymType.agility)}>
         Train Agility (<Money money={cost} forPurchase={true} /> / sec)
       </Button>
     </Box>

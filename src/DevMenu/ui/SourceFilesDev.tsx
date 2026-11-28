@@ -75,14 +75,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
     [parentRerender],
   );
 
-  const setAllSF = useCallback(
-    (sfLvl: number) => () => {
-      validBitNodes.forEach((sfN) => {
-        setSF(sfN, sfLvl)();
-      });
-    },
-    [setSF],
-  );
+  const setAllSF = useCallback((sfLvl: number) => () => validBitNodes.forEach((sfN) => setSF(sfN, sfLvl)()), [setSF]);
   const clearExploits = () => (Player.exploits = []);
 
   const addSleeve = useCallback(() => {
@@ -122,9 +115,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
                 <TextField
                   style={{ maxWidth: "90px" }}
                   value={newSf12Level}
-                  onChange={(x) => {
-                    setNewSf12Level(Number(x.target.value));
-                  }}
+                  onChange={(x) => setNewSf12Level(Number(x.target.value))}
                 />
                 <Button onClick={setSF(12, newSf12Level)}>Set</Button>
               </>

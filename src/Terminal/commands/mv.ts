@@ -11,36 +11,25 @@ export function mv(args: (string | number | boolean)[], server: BaseServer): und
   const [source, destination] = args.map((arg) => arg + "");
 
   const sourcePath = Terminal.getFilepath(source);
-  if (!sourcePath) {
-    Terminal.error(`Invalid source filename: ${source}`);
-    return;
-  }
+  if (!sourcePath) return Terminal.error(`Invalid source filename: ${source}`);
   const destinationPath = Terminal.getFilepath(destination);
-  if (!destinationPath) {
-    Terminal.error(`Invalid destination filename: ${destinationPath}`);
-    return;
-  }
+  if (!destinationPath) return Terminal.error(`Invalid destination filename: ${destinationPath}`);
 
   if (
     (!hasScriptExtension(sourcePath) && !hasTextExtension(sourcePath)) ||
     (!hasScriptExtension(destinationPath) && !hasTextExtension(destinationPath))
   ) {
-    Terminal.error(`'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css)`);
-    return;
+    return Terminal.error(`'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json, .css)`);
   }
 
   // Allow content to be moved between scripts and textfiles, no need to limit this.
   const sourceContentFile = server.getContentFile(sourcePath);
-  if (!sourceContentFile) {
-    Terminal.error(`Source file ${sourcePath} does not exist`);
-    return;
-  }
+  if (!sourceContentFile) return Terminal.error(`Source file ${sourcePath} does not exist`);
 
   if (!sourceContentFile.deleteFromServer(server)) {
-    Terminal.error(
+    return Terminal.error(
       `Could not remove source file ${sourcePath} from existing location. If ${sourcePath} is a script, make sure that it is NOT running before trying to use 'mv' on it.`,
     );
-    return;
   }
   Terminal.print(`Moved ${sourcePath} to ${destinationPath}`);
   const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);

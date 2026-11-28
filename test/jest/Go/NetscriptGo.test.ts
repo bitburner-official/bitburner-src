@@ -312,12 +312,12 @@ describe("Netscript Go API unit tests", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
-      expect(() => {
+      expect(() =>
         validateMove(mockCtx, 0, 0, "playTwoMoves", {
           repeat: false,
           suicide: false,
-        });
-      }).toThrow("The point 0,0 is occupied by a router, so you cannot place a router there");
+        }),
+      ).toThrow("The point 0,0 is occupied by a router, so you cannot place a router there");
     });
 
     it("should update the board with both player moves if nodes are unoccupied and cheat is successful", async () => {
@@ -360,14 +360,14 @@ describe("Netscript Go API unit tests", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
-      expect(() => {
+      expect(() =>
         validateMove(mockCtx, 1, 0, "removeRouter", {
           emptyNode: false,
           requireNonEmptyNode: true,
           repeat: false,
           suicide: false,
-        });
-      }).toThrow("The point 1,0 does not have a router on it, so you cannot clear this point with removeRouter().");
+        }),
+      ).toThrow("The point 1,0 does not have a router on it, so you cannot clear this point with removeRouter().");
     });
 
     it("should remove the router if the move is valid", async () => {
@@ -397,15 +397,15 @@ describe("Netscript Go API unit tests", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....#"];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       resetAI();
-      expect(() => {
+      expect(() =>
         validateMove(mockCtx, 0, 0, "repairOfflineNode", {
           emptyNode: false,
           repeat: false,
           onlineNode: false,
           requireOfflineNode: true,
           suicide: false,
-        });
-      }).toThrow("The node 0,0 is not offline, so you cannot repair the node.");
+        }),
+      ).toThrow("The node 0,0 is not offline, so you cannot repair the node.");
     });
 
     it("should update the board with the repaired node if the cheat is successful", async () => {

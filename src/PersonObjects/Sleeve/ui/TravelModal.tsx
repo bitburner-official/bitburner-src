@@ -36,12 +36,7 @@ export function TravelModal(props: TravelModalProps): React.ReactElement {
         </Typography>
         {Settings.DisableASCIIArt ? (
           Object.values(CityName).map((city) => (
-            <Button
-              key={city}
-              onClick={() => {
-                travel(city);
-              }}
-            >
+            <Button key={city} onClick={() => travel(city)}>
               {city}
             </Button>
           ))

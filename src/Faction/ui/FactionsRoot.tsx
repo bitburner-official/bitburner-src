@@ -113,28 +113,11 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
               "& .MuiButton-root": { height: "48px" },
             }}
           >
-            <Button
-              onClick={() => {
-                openFaction(props.faction);
-              }}
-            >
-              Details
-            </Button>
-            <Button
-              onClick={() => {
-                openFactionAugPage(props.faction);
-              }}
-            >
-              Augments
-            </Button>
+            <Button onClick={() => openFaction(props.faction)}>Details</Button>
+            <Button onClick={() => openFactionAugPage(props.faction)}>Augments</Button>
           </Box>
         ) : props.faction.alreadyInvited ? (
-          <Button
-            sx={{ height: "48px", mr: 1 }}
-            onClick={(e) => {
-              acceptInvitation(e, props.faction.name);
-            }}
-          >
+          <Button sx={{ height: "48px", mr: 1 }} onClick={(e) => acceptInvitation(e, props.faction.name)}>
             Join!
           </Button>
         ) : null}

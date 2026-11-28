@@ -35,22 +35,10 @@ export function RecruitButton(props: IProps): React.ReactElement {
   return (
     <>
       <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
-        <Button
-          onClick={() => {
-            setOpen(true);
-          }}
-        >
-          Recruit Gang Member
-        </Button>
+        <Button onClick={() => setOpen(true)}>Recruit Gang Member</Button>
         <Typography sx={{ ml: 1 }}>Can recruit {pluralize(recruitsAvailable, "more gang member")}</Typography>
       </Box>
-      <RecruitModal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-        onRecruit={props.onRecruit}
-      />
+      <RecruitModal open={open} onClose={() => setOpen(false)} onRecruit={props.onRecruit} />
     </>
   );
 }

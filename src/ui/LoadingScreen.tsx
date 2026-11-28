@@ -30,9 +30,7 @@ export function LoadingScreen(): React.ReactElement {
     const id = setTimeout(() => {
       if (!loaded) setShow(true);
     }, 2000);
-    return () => {
-      clearTimeout(id);
-    };
+    return () => clearTimeout(id);
   });
 
   useEffect(() => {

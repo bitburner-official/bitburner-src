@@ -63,9 +63,7 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
         </Button>
         <Button
           onClick={() => {
-            onBeautify().catch((error) => {
-              console.error(error);
-            });
+            onBeautify().catch((error) => console.error(error));
           }}
         >
           Beautify
@@ -80,21 +78,14 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Save])}>
           <Button
             onClick={() => {
-              onSave().catch((error) => {
-                console.error(error);
-              });
+              onSave().catch((error) => console.error(error));
             }}
           >
             Save
           </Button>
         </Tooltip>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.GoToTerminal])}>
-          <Button
-            sx={{ mx: 1 }}
-            onClick={() => {
-              Router.toPage(Page.Terminal);
-            }}
-          >
+          <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
             Terminal
           </Button>
         </Tooltip>
@@ -102,9 +93,7 @@ export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
           <Button
             sx={{ mr: 1 }}
             onClick={() => {
-              onRun().catch((error) => {
-                console.error(error);
-              });
+              onRun().catch((error) => console.error(error));
             }}
           >
             Run

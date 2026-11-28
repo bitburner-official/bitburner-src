@@ -17,13 +17,7 @@ export function DeleteGameButton({ color = "primary" }: IProps): React.ReactElem
   return (
     <>
       <Tooltip title="This will permanently delete your local save game. Did you export it before?">
-        <Button
-          startIcon={<DeleteIcon />}
-          color={color}
-          onClick={() => {
-            setModalOpened(true);
-          }}
-        >
+        <Button startIcon={<DeleteIcon />} color={color} onClick={() => setModalOpened(true)}>
           Delete Save
         </Button>
       </Tooltip>
@@ -33,28 +27,14 @@ export function DeleteGameButton({ color = "primary" }: IProps): React.ReactElem
           deleteGame()
             .then(() => {
               pushDisableRestore();
-              setTimeout(() => {
-                location.reload();
-              }, 0);
+              setTimeout(() => location.reload(), 0);
             })
-            .catch((r) => {
-              console.error("Could not delete game: %o", r);
-            });
+            .catch((r) => console.error("Could not delete game: %o", r));
         }}
         open={modalOpened}
-        onClose={() => {
-          setModalOpened(false);
-        }}
+        onClose={() => setModalOpened(false)}
         confirmationText={"Really delete your game? (It's permanent!)"}
-        additionalButton={
-          <Button
-            onClick={() => {
-              setModalOpened(false);
-            }}
-          >
-            Cancel
-          </Button>
-        }
+        additionalButton={<Button onClick={() => setModalOpened(false)}>Cancel</Button>}
       />
     </>
   );

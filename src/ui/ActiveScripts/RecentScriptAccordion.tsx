@@ -52,12 +52,7 @@ export function RecentScriptAccordion(props: IProps): React.ReactElement {
   }
   return (
     <>
-      <ListItemButton
-        onClick={() => {
-          setOpen((old) => !old);
-        }}
-        component={Paper}
-      >
+      <ListItemButton onClick={() => setOpen((old) => !old)} component={Paper}>
         <ListItemText
           primary={
             <Typography>

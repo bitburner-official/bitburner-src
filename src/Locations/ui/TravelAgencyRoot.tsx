@@ -66,12 +66,7 @@ export function TravelAgencyRoot(): React.ReactElement {
                 if (match === undefined) throw new Error(`could not find key for city '${city}'`);
                 return (
                   <React.Fragment key={city}>
-                    <Button
-                      onClick={() => {
-                        startTravel(city as CityName);
-                      }}
-                      sx={{ m: 2 }}
-                    >
+                    <Button onClick={() => startTravel(city as CityName)} sx={{ m: 2 }}>
                       <Typography>Travel to {city}</Typography>
                     </Button>
                     <br />
@@ -80,23 +75,14 @@ export function TravelAgencyRoot(): React.ReactElement {
               })}
           </>
         ) : (
-          <WorldMap
-            currentCity={Player.city}
-            onTravel={(city: CityName) => {
-              startTravel(city);
-            }}
-          />
+          <WorldMap currentCity={Player.city} onTravel={(city: CityName) => startTravel(city)} />
         )}
       </Box>
       <TravelConfirmationModal
         city={destination}
-        travel={() => {
-          travel(destination);
-        }}
+        travel={() => travel(destination)}
         open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
+        onClose={() => setOpen(false)}
       />
     </>
   );

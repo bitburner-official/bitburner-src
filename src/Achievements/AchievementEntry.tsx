@@ -14,7 +14,12 @@ interface IProps {
   cssFiltersLocked: string;
 }
 
-export function AchievementEntry({ achievement, unlockedOn, cssFiltersUnlocked, cssFiltersLocked }: IProps) {
+export function AchievementEntry({
+  achievement,
+  unlockedOn,
+  cssFiltersUnlocked,
+  cssFiltersLocked,
+}: IProps): JSX.Element {
   if (!achievement) return <></>;
   const isUnlocked = !!unlockedOn;
 

@@ -122,10 +122,7 @@ export function v1APIBreak(): void {
   if (txt !== "") {
     const home = Player.getHomeComputer();
     const textPath = resolveTextFilePath("v1_DETECTED_CHANGES.txt");
-    if (!textPath) {
-      console.error("Filepath unexpectedly failed to parse");
-      return;
-    }
+    if (!textPath) return console.error("Filepath unexpectedly failed to parse");
     home.writeToTextFile(textPath, txt);
   }
 

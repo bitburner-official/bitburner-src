@@ -49,19 +49,9 @@ Are you sure?
       <ConfirmationModal
         onConfirm={onTriggered}
         open={modalOpened}
-        onClose={() => {
-          setModalOpened(false);
-        }}
+        onClose={() => setModalOpened(false)}
         confirmationText={<span style={{ whiteSpace: "pre-wrap" }}>{confirmationMessage}</span>}
-        additionalButton={
-          <Button
-            onClick={() => {
-              setModalOpened(false);
-            }}
-          >
-            Cancel
-          </Button>
-        }
+        additionalButton={<Button onClick={() => setModalOpened(false)}>Cancel</Button>}
       />
     </>
   );

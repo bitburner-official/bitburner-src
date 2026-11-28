@@ -26,14 +26,8 @@ export function kill(args: (string | number | boolean)[], server: BaseServer): u
     }
 
     const path = Terminal.getFilepath(args[0]);
-    if (!path) {
-      Terminal.error(`Invalid filename: ${args[0]}`);
-      return;
-    }
-    if (!hasScriptExtension(path)) {
-      Terminal.error(`Invalid file extension. Kill can only be used on scripts.`);
-      return;
-    }
+    if (!path) return Terminal.error(`Invalid filename: ${args[0]}`);
+    if (!hasScriptExtension(path)) return Terminal.error(`Invalid file extension. Kill can only be used on scripts.`);
     const runningScripts = findRunningScripts(path, args.slice(1), server);
     if (runningScripts === null) {
       Terminal.error("No such script is running. Nothing to kill");

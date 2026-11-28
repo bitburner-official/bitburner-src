@@ -163,18 +163,10 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
       </Typography>
       {corp.unlocks.has(CorpUnlockName.SmartSupply) && (
         <>
-          <Button
-            onClick={() => {
-              setSmartSupplyOpen(true);
-            }}
-          >
-            Configure Smart Supply
-          </Button>
+          <Button onClick={() => setSmartSupplyOpen(true)}>Configure Smart Supply</Button>
           <SmartSupplyModal
             open={smartSupplyOpen}
-            onClose={() => {
-              setSmartSupplyOpen(false);
-            }}
+            onClose={() => setSmartSupplyOpen(false)}
             warehouse={props.warehouse}
           />
         </>

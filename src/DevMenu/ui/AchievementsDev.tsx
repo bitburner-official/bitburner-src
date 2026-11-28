@@ -25,9 +25,7 @@ export function AchievementsDev(): React.ReactElement {
   }
 
   function grantAllAchievements(): void {
-    Object.values(achievements).forEach((a) => {
-      Player.giveAchievement(a.ID);
-    });
+    Object.values(achievements).forEach((a) => Player.giveAchievement(a.ID));
     setPlayerAchievements(Player.achievements.map((m) => m.ID));
   }
 
@@ -101,20 +99,8 @@ export function AchievementsDev(): React.ReactElement {
                   </td>
                   <td>
                     <ButtonGroup>
-                      <Button
-                        onClick={() => {
-                          grantAchievement(i.ID);
-                        }}
-                      >
-                        Grant
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          removeAchievement(i.ID);
-                        }}
-                      >
-                        Clear
-                      </Button>
+                      <Button onClick={() => grantAchievement(i.ID)}>Grant</Button>
+                      <Button onClick={() => removeAchievement(i.ID)}>Clear</Button>
                     </ButtonGroup>
                   </td>
                 </tr>

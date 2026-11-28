@@ -115,7 +115,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
           throw errorMessage(ctx, "Invalid board state passed to setTestingBoardState()");
         }
         const komi = helpers.number(ctx, "komi", _komi ?? 5.5);
-        setTestingBoardState(ctx, State, komi);
+        return setTestingBoardState(ctx, State, komi);
       },
       highlightPoint: (ctx, _x, _y, _color, _text) => {
         const x = helpers.number(ctx, "x", _x);
@@ -129,9 +129,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         const y = helpers.number(ctx, "y", _y);
         clearPointHighlight(Go.currentGame, x, y);
       },
-      clearAllPointHighlights: () => {
-        clearAllPointHighlights(Go.currentGame);
-      },
+      clearAllPointHighlights: () => clearAllPointHighlights(Go.currentGame),
     },
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext, _cheatCount, _playAsWhite) => {

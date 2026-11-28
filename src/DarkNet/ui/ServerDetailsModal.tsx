@@ -58,9 +58,7 @@ export const ServerDetailsModal = ({
     </pre>
   ));
 
-  const copyHostname = () => {
-    copyToClipboard(server.hostname);
-  };
+  const copyHostname = () => copyToClipboard(server.hostname);
 
   return (
     <Modal open={open} onClose={onClose} removeFocus={false} sx={{ zIndex: logBoxBaseZIndex - 1 }}>

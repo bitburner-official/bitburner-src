@@ -7,16 +7,12 @@ import { GameCycleEvents } from "../../GameCycleEvents";
 export function useRerender(autoRerenderTime?: number) {
   const [__, setRerender] = useState(0);
 
-  const rerender = useCallback(() => {
-    setRerender((currentValue) => currentValue + 1);
-  }, []);
+  const rerender = useCallback(() => setRerender((currentValue) => currentValue + 1), []);
 
   useEffect(() => {
     if (!autoRerenderTime) return;
     const intervalID = setInterval(rerender, autoRerenderTime);
-    return () => {
-      clearInterval(intervalID);
-    };
+    return () => clearInterval(intervalID);
   }, [rerender, autoRerenderTime]);
 
   return rerender;

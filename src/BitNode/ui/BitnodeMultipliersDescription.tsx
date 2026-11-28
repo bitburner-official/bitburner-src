@@ -36,13 +36,7 @@ export function BitNodeMultiplierDescription({ n, level, hideMultsIfCannotAccess
 
   return (
     <Box component={Paper} sx={{ mt: 1, p: 1 }}>
-      <ListItemButton
-        disableGutters
-        onClick={() => {
-          setOpen((old) => !old);
-        }}
-        sx={{ padding: "4px 8px" }}
-      >
+      <ListItemButton disableGutters onClick={() => setOpen((old) => !old)} sx={{ padding: "4px 8px" }}>
         <ListItemText primary={<Typography variant="h6">Bitnode Multipliers</Typography>} />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>

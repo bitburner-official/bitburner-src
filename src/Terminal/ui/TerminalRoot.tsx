@@ -42,13 +42,7 @@ export function TerminalRoot(): React.ReactElement {
   const [key, setKey] = useState(0);
 
   useEffect(() => {
-    const debounced = _.debounce(
-      () => {
-        rerender();
-      },
-      25,
-      { maxWait: 50 },
-    );
+    const debounced = _.debounce(() => rerender(), 25, { maxWait: 50 });
     const unsubscribe = TerminalEvents.subscribe(debounced);
     return () => {
       debounced.cancel();
@@ -57,16 +51,8 @@ export function TerminalRoot(): React.ReactElement {
   }, [rerender]);
 
   useEffect(() => {
-    const clear = () => {
-      setKey((key) => key + 1);
-    };
-    const debounced = _.debounce(
-      () => {
-        clear();
-      },
-      25,
-      { maxWait: 50 },
-    );
+    const clear = () => setKey((key) => key + 1);
+    const debounced = _.debounce(() => clear(), 25, { maxWait: 50 });
     const unsubscribe = TerminalClearEvents.subscribe(debounced);
     return () => {
       debounced.cancel();

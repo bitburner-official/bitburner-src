@@ -188,13 +188,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
   return (
     <>
       <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
-        <Button
-          onClick={() => {
-            Router.back();
-          }}
-        >
-          Back
-        </Button>
+        <Button onClick={() => Router.back()}>Back</Button>
         <Typography variant="h4">Faction Augmentations - {faction.name}</Typography>
         <Paper sx={{ p: 1, mb: 1 }}>
           <Typography>
@@ -218,32 +212,14 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
             </Box>
           </Box>
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
-            <Button
-              onClick={() => {
-                switchSortOrder(PurchaseAugmentationsOrderSetting.Cost);
-              }}
-            >
-              Sort by Cost
-            </Button>
-            <Button
-              onClick={() => {
-                switchSortOrder(PurchaseAugmentationsOrderSetting.Reputation);
-              }}
-            >
+            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Cost)}>Sort by Cost</Button>
+            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Reputation)}>
               Sort by Reputation
             </Button>
-            <Button
-              onClick={() => {
-                switchSortOrder(PurchaseAugmentationsOrderSetting.Default);
-              }}
-            >
+            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Default)}>
               Sort by Default Order
             </Button>
-            <Button
-              onClick={() => {
-                switchSortOrder(PurchaseAugmentationsOrderSetting.Purchasable);
-              }}
-            >
+            <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Purchasable)}>
               Sort by Purchasable
             </Button>
           </Box>

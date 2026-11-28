@@ -44,12 +44,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <ThemeEditorModal open={themeEditorOpen} onChange={props.onThemeChange} onClose={closeThemeEditor} />
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography>Theme: </Typography>
-        <Select
-          onChange={(event) => {
-            props.onOptionChange("theme", event.target.value);
-          }}
-          value={props.options.theme}
-        >
+        <Select onChange={(event) => props.onOptionChange("theme", event.target.value)} value={props.options.theme}>
           <MenuItem value="monokai">monokai</MenuItem>
           <MenuItem value="solarized-dark">solarized-dark</MenuItem>
           <MenuItem value="solarized-light">solarized-light</MenuItem>
@@ -67,9 +62,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Indent using spaces: </Typography>
         <Switch
-          onChange={(e) => {
-            props.onOptionChange("insertSpaces", e.target.checked);
-          }}
+          onChange={(e) => props.onOptionChange("insertSpaces", e.target.checked)}
           checked={props.options.insertSpaces}
         />
       </div>
@@ -82,9 +75,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Auto-detect indentation: </Typography>
         <Switch
-          onChange={(e) => {
-            props.onOptionChange("detectIndentation", e.target.checked);
-          }}
+          onChange={(e) => props.onOptionChange("detectIndentation", e.target.checked)}
           checked={props.options.detectIndentation}
         />
       </div>
@@ -92,9 +83,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Word wrap: </Typography>
         <Select
-          onChange={(event) => {
-            props.onOptionChange("wordWrap", event.target.value);
-          }}
+          onChange={(event) => props.onOptionChange("wordWrap", event.target.value)}
           value={props.options.wordWrap}
         >
           <MenuItem value={"off"}>Off</MenuItem>
@@ -109,9 +98,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
         <TextField
           type="text"
           value={props.options.fontFamily}
-          onChange={(e) => {
-            props.onOptionChange("fontFamily", e.target.value);
-          }}
+          onChange={(e) => props.onOptionChange("fontFamily", e.target.value)}
         />
       </div>
 
@@ -123,9 +110,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Enable font ligatures: </Typography>
         <Switch
-          onChange={(e) => {
-            props.onOptionChange("fontLigatures", e.target.checked);
-          }}
+          onChange={(e) => props.onOptionChange("fontLigatures", e.target.checked)}
           checked={props.options.fontLigatures}
         />
       </div>
@@ -133,9 +118,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Cursor style: </Typography>
         <Select
-          onChange={(event) => {
-            props.onOptionChange("cursorStyle", event.target.value);
-          }}
+          onChange={(event) => props.onOptionChange("cursorStyle", event.target.value)}
           value={props.options.cursorStyle}
         >
           {CURSOR_STYLES.map((cursorStyle) => (
@@ -149,9 +132,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Cursor blinking: </Typography>
         <Select
-          onChange={(event) => {
-            props.onOptionChange("cursorBlinking", event.target.value);
-          }}
+          onChange={(event) => props.onOptionChange("cursorBlinking", event.target.value)}
           value={props.options.cursorBlinking}
         >
           {CURSOR_BLINKING_MODES.map((cursorBlinking) => (
@@ -165,9 +146,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Run Beautify on Save: </Typography>
         <Switch
-          onChange={(e) => {
-            props.onOptionChange("beautifyOnSave", e.target.checked);
-          }}
+          onChange={(e) => props.onOptionChange("beautifyOnSave", e.target.checked)}
           checked={props.options.beautifyOnSave}
         />
       </div>
@@ -175,9 +154,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Enable Sticky Scroll: </Typography>
         <Switch
-          onChange={(e) => {
-            props.onOptionChange("stickyScroll", { enabled: e.target.checked });
-          }}
+          onChange={(e) => props.onOptionChange("stickyScroll", { enabled: e.target.checked })}
           checked={props.options.stickyScroll?.enabled}
         />
       </div>
@@ -185,9 +162,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Enable Minimap: </Typography>
         <Switch
-          onChange={(e) => {
-            props.onOptionChange("minimap", { enabled: e.target.checked });
-          }}
+          onChange={(e) => props.onOptionChange("minimap", { enabled: e.target.checked })}
           checked={props.options.minimap?.enabled}
         />
       </div>
@@ -195,9 +170,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Autosave on focus change: </Typography>
         <Switch
-          onChange={(e) => {
-            props.onOptionChange("autoSaveOnFocusChange", e.target.checked);
-          }}
+          onChange={(e) => props.onOptionChange("autoSaveOnFocusChange", e.target.checked)}
           checked={props.options.autoSaveOnFocusChange}
         />
       </div>

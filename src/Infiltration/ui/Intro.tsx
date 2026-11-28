@@ -19,7 +19,7 @@ interface IProps {
   state: Infiltration;
 }
 
-function arrowPart(color: string, length: number): React.JSX.Element {
+function arrowPart(color: string, length: number): JSX.Element {
   let arrow = "";
   if (length <= 0) length = 0;
   else if (length > 13) length = 13;
@@ -36,7 +36,7 @@ function arrowPart(color: string, length: number): React.JSX.Element {
   );
 }
 
-function coloredArrow(difficulty: number): React.JSX.Element {
+function coloredArrow(difficulty: number): JSX.Element {
   const cappedDifficulty = Math.min(difficulty, MaxDifficultyForInfiltration);
   if (cappedDifficulty === 0) {
     return (
@@ -80,12 +80,8 @@ export function Intro({ state }: IProps): React.ReactElement {
   );
   const marketRateMultiplier = calculateMarketDemandMultiplier(timestampNow, false);
 
-  const start = useCallback(() => {
-    state.startInfiltration();
-  }, [state]);
-  const cancel = useCallback(() => {
-    state.cancel();
-  }, [state]);
+  const start = useCallback(() => state.startInfiltration(), [state]);
+  const cancel = useCallback(() => state.cancel(), [state]);
 
   let warningMessage;
   if (state.startingDifficulty >= MaxDifficultyForInfiltration) {

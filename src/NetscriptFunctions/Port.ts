@@ -38,7 +38,7 @@ export function NetscriptPort(): InternalAPI<IPort> {
     },
     clear: (ctx, _portNumber) => {
       const portHandle = helpers.portHandle(ctx, _portNumber);
-      portHandle.clear();
+      return portHandle.clear();
     },
   };
 }

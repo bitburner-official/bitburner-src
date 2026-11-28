@@ -52,7 +52,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   const purchaseButtonText = `Buy (${formatBigNumber(mat.buyAmount)})`;
 
   // Sell material button
-  let sellButtonText: React.JSX.Element;
+  let sellButtonText: JSX.Element;
   if (mat.desiredSellAmount) {
     if (typeof mat.desiredSellAmount === "string") {
       sellButtonText = (
@@ -127,12 +127,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           <Tooltip
             title={tutorial ? <Typography>Purchase your required materials to get production started!</Typography> : ""}
           >
-            <Button
-              color={tutorial ? "error" : "primary"}
-              onClick={() => {
-                setPurchaseMaterialOpen(true);
-              }}
-            >
+            <Button color={tutorial ? "error" : "primary"} onClick={() => setPurchaseMaterialOpen(true)}>
               {purchaseButtonText}
             </Button>
           </Tooltip>
@@ -142,37 +137,25 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             warehouse={warehouse}
             open={purchaseMaterialOpen}
             disablePurchaseLimit={props.warehouse.smartSupplyEnabled && props.mat.name in division.requiredMaterials}
-            onClose={() => {
-              setPurchaseMaterialOpen(false);
-            }}
+            onClose={() => setPurchaseMaterialOpen(false)}
           />
 
           {corp.unlocks.has(CorpUnlockName.Export) && (
             <>
-              <Button
-                onClick={() => {
-                  setExportOpen(true);
-                }}
-              >
-                Export
-              </Button>
+              <Button onClick={() => setExportOpen(true)}>Export</Button>
 
               <ExportModal
                 key={`ExportModal-${division.name}-${city}-${mat.name}`}
                 mat={mat}
                 open={exportOpen}
-                onClose={() => {
-                  setExportOpen(false);
-                }}
+                onClose={() => setExportOpen(false)}
               />
             </>
           )}
 
           <Button
             color={division.producedMaterials.includes(props.mat.name) && !mat.desiredSellAmount ? "error" : "primary"}
-            onClick={() => {
-              setSellMaterialOpen(true);
-            }}
+            onClick={() => setSellMaterialOpen(true)}
           >
             {sellButtonText}
           </Button>
@@ -181,26 +164,17 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             mat={mat}
             div={division}
             open={sellMaterialOpen}
-            onClose={() => {
-              setSellMaterialOpen(false);
-            }}
+            onClose={() => setSellMaterialOpen(false)}
           />
           {props.isOutputMaterial && (
             <>
-              <Button
-                color={tutorial ? "error" : "primary"}
-                onClick={() => {
-                  setLimitProductionOpen(true);
-                }}
-              >
+              <Button color={tutorial ? "error" : "primary"} onClick={() => setLimitProductionOpen(true)}>
                 {limitMaterialButtonText}
               </Button>
               <LimitMaterialProductionModal
                 material={mat}
                 open={limitProductionOpen}
-                onClose={() => {
-                  setLimitProductionOpen(false);
-                }}
+                onClose={() => setLimitProductionOpen(false)}
               />
             </>
           )}

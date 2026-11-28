@@ -48,12 +48,8 @@ export function Apr1(): React.ReactElement {
     if (!open) {
       return;
     }
-    const id = setInterval(() => {
-      setN((n) => (n + 1) % frames.length);
-    }, 100);
-    return () => {
-      clearInterval(id);
-    };
+    const id = setInterval(() => setN((n) => (n + 1) % frames.length), 100);
+    return () => clearInterval(id);
   }, [open]);
 
   useEffect(
@@ -67,12 +63,7 @@ export function Apr1(): React.ReactElement {
   if (!open) return <></>;
 
   return (
-    <Modal
-      open={open}
-      onClose={() => {
-        setOpen(false);
-      }}
-    >
+    <Modal open={open} onClose={() => setOpen(false)}>
       <pre style={{ color: "#0f0" }}>{frames[n]}</pre>
     </Modal>
   );

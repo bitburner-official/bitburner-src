@@ -118,9 +118,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
               helping you get started with managing it.
             </>
           }
-          onClick={() => {
-            corp.getStarterGuide();
-          }}
+          onClick={() => corp.getStarterGuide()}
         >
           Getting Started Guide
         </ButtonWithTooltip>
@@ -154,9 +152,7 @@ function PrivateButtons({ rerender }: IPrivateButtonsProps): React.ReactElement 
       <ButtonWithTooltip
         normalTooltip={findInvestorsTooltip}
         disabledTooltip={fundingAvailable ? "" : "Max funding rounds already reached"}
-        onClick={() => {
-          setFindInvestorsopen(true);
-        }}
+        onClick={() => setFindInvestorsopen(true)}
       >
         Find Investors
       </ButtonWithTooltip>
@@ -167,26 +163,12 @@ function PrivateButtons({ rerender }: IPrivateButtonsProps): React.ReactElement 
             public company, your shares will be traded on the stock market.
           </>
         }
-        onClick={() => {
-          setGoPublicopen(true);
-        }}
+        onClick={() => setGoPublicopen(true)}
       >
         Go Public
       </ButtonWithTooltip>
-      <FindInvestorsModal
-        open={findInvestorsopen}
-        onClose={() => {
-          setFindInvestorsopen(false);
-        }}
-        rerender={rerender}
-      />
-      <GoPublicModal
-        open={goPublicopen}
-        onClose={() => {
-          setGoPublicopen(false);
-        }}
-        rerender={rerender}
-      />
+      <FindInvestorsModal open={findInvestorsopen} onClose={() => setFindInvestorsopen(false)} rerender={rerender} />
+      <GoPublicModal open={goPublicopen} onClose={() => setGoPublicopen(false)} rerender={rerender} />
     </>
   );
 }
@@ -262,67 +244,36 @@ function PublicButtons({ rerender }: IPublicButtonsProps): React.ReactElement {
         disabledTooltip={
           sellSharesOnCd ? "Cannot sell shares for " + corp.convertCooldownToString(corp.shareSaleCooldown) : ""
         }
-        onClick={() => {
-          setSellSharesOpen(true);
-        }}
+        onClick={() => setSellSharesOpen(true)}
       >
         Sell Shares
       </ButtonWithTooltip>
-      <SellSharesModal
-        open={sellSharesOpen}
-        onClose={() => {
-          setSellSharesOpen(false);
-        }}
-        rerender={rerender}
-      />
+      <SellSharesModal open={sellSharesOpen} onClose={() => setSellSharesOpen(false)} rerender={rerender} />
       <ButtonWithTooltip
         normalTooltip={"Buy back outstanding shares that you previously issued or sold on the market"}
         disabledTooltip={corp.issuedShares < 1 ? "No shares available to buy back" : ""}
-        onClick={() => {
-          setBuybackSharesOpen(true);
-        }}
+        onClick={() => setBuybackSharesOpen(true)}
       >
         Buyback shares
       </ButtonWithTooltip>
-      <BuybackSharesModal
-        open={buybackSharesOpen}
-        onClose={() => {
-          setBuybackSharesOpen(false);
-        }}
-        rerender={rerender}
-      />
+      <BuybackSharesModal open={buybackSharesOpen} onClose={() => setBuybackSharesOpen(false)} rerender={rerender} />
       <ButtonWithTooltip
         normalTooltip={"Issue new equity shares to raise capital"}
         disabledTooltip={
           issueNewSharesOnCd ? `On cooldown for ${corp.convertCooldownToString(corp.issueNewSharesCooldown)}` : ""
         }
-        onClick={() => {
-          setIssueNewSharesOpen(true);
-        }}
+        onClick={() => setIssueNewSharesOpen(true)}
       >
         Issue New Shares
       </ButtonWithTooltip>
-      <IssueNewSharesModal
-        open={issueNewSharesOpen}
-        onClose={() => {
-          setIssueNewSharesOpen(false);
-        }}
-        rerender={rerender}
-      />
+      <IssueNewSharesModal open={issueNewSharesOpen} onClose={() => setIssueNewSharesOpen(false)} rerender={rerender} />
       <ButtonWithTooltip
         normalTooltip={"Manage the dividends that are paid out to shareholders (including yourself)"}
-        onClick={() => {
-          setIssueDividendsOpen(true);
-        }}
+        onClick={() => setIssueDividendsOpen(true)}
       >
         Issue Dividends
       </ButtonWithTooltip>
-      <IssueDividendsModal
-        open={issueDividendsOpen}
-        onClose={() => {
-          setIssueDividendsOpen(false);
-        }}
-      />
+      <IssueDividendsModal open={issueDividendsOpen} onClose={() => setIssueDividendsOpen(false)} />
     </>
   );
 }
@@ -365,12 +316,7 @@ function BribeButton(): React.ReactElement {
       >
         Bribe Factions
       </ButtonWithTooltip>
-      <BribeFactionModal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      />
+      <BribeFactionModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 }
@@ -386,12 +332,7 @@ function SellDivisionButton(): React.ReactElement {
       <ButtonWithTooltip normalTooltip={"Sell a division to make room for other divisions"} onClick={sellDiv}>
         Sell division
       </ButtonWithTooltip>
-      <SellDivisionModal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      />
+      <SellDivisionModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 }
@@ -401,21 +342,10 @@ function RestartButton(): React.ReactElement {
 
   return (
     <>
-      <ButtonWithTooltip
-        normalTooltip={"Sell corporation and start over"}
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
+      <ButtonWithTooltip normalTooltip={"Sell corporation and start over"} onClick={() => setOpen(true)}>
         Sell CEO position
       </ButtonWithTooltip>
-      <CreateCorporationModal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-        restart={true}
-      />
+      <CreateCorporationModal open={open} onClose={() => setOpen(false)} restart={true} />
     </>
   );
 }

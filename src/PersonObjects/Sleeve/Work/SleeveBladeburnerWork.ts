@@ -50,26 +50,17 @@ export class SleeveBladeburnerWork extends SleeveBaseWork {
   }
 
   process(sleeve: Sleeve, cycles: number) {
-    if (!Player.bladeburner) {
-      sleeve.stopWork();
-      return;
-    }
+    if (!Player.bladeburner) return sleeve.stopWork();
     this.cyclesWorked += cycles;
     if (this.actionId.type === BladeburnerActionType.Contract) {
       const action = Player.bladeburner.getActionObject(this.actionId);
-      if (action.count < 1) {
-        sleeve.stopWork();
-        return;
-      }
+      if (action.count < 1) return sleeve.stopWork();
     }
 
     while (this.cyclesWorked >= this.cyclesNeeded(sleeve)) {
       if (this.actionId.type === BladeburnerActionType.Contract) {
         const action = Player.bladeburner.getActionObject(this.actionId);
-        if (action.count < 1) {
-          sleeve.stopWork();
-          return;
-        }
+        if (action.count < 1) return sleeve.stopWork();
       }
       const retValue = Player.bladeburner.completeAction(sleeve, this.actionId, false);
       applySleeveGains(sleeve, scaleWorkStats(retValue, sleeve.shockBonus(), false));

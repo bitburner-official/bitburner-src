@@ -95,7 +95,7 @@ export class Corporation {
   }
 
   loseFunds(amt: number, source: FundsSource): void {
-    this.gainFunds(-amt, source);
+    return this.gainFunds(-amt, source);
   }
 
   getNextState(): CorpStateName {

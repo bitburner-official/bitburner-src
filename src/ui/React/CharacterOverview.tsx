@@ -66,9 +66,7 @@ export function Val({ name, color }: ValProps): React.ReactElement {
   //val isn't actually used here, the update of val just forces a refresh of the formattedVal that gets shown
   const [__, setVal] = useState(valUpdaters[name]());
   useEffect(() => {
-    const clearSubscription = OverviewEventEmitter.subscribe(() => {
-      setVal(valUpdaters[name]());
-    });
+    const clearSubscription = OverviewEventEmitter.subscribe(() => setVal(valUpdaters[name]()));
     return clearSubscription;
   }, [name]);
 
@@ -135,9 +133,7 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
       setShowBars(!Settings.DisableOverviewProgressBars);
       OverviewEventEmitter.emit(); // Tell every other updating component to update as well
     }, 600);
-    return () => {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, [parentOpen]);
   const { classes } = useStyles();
   const theme = useTheme();
@@ -189,25 +185,14 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
         </Box>
         <RemoteFileApiConnectionStatus showIcon={true} />
         <Box sx={{ display: "flex", flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
-          <IconButton
-            aria-label="kill all scripts"
-            onClick={() => {
-              setKillOpen(true);
-            }}
-          >
+          <IconButton aria-label="kill all scripts" onClick={() => setKillOpen(true)}>
             <Tooltip title="Kill all running scripts">
               <ClearAllIcon color="error" />
             </Tooltip>
           </IconButton>
         </Box>
       </Box>
-      <KillScriptsModal
-        open={killOpen}
-        onClose={() => {
-          setKillOpen(false);
-        }}
-        killScripts={killScripts}
-      />
+      <KillScriptsModal open={killOpen} onClose={() => setKillOpen(false)} killScripts={killScripts} />
     </>
   );
 }
