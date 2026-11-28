@@ -5,7 +5,7 @@ import { achievements } from "./Achievements";
 import { Box, Typography } from "@mui/material";
 import { Player } from "@player";
 
-export function AchievementsRoot(): JSX.Element {
+export function AchievementsRoot() {
   return (
     <div style={{ width: "100%" }}>
       <Typography variant="h4">Achievements</Typography>

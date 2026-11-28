@@ -52,7 +52,9 @@ const useStyles = makeStyles()({
 });
 
 interface IProps {
-  children: (parentOpen: boolean) => JSX.Element[] | JSX.Element | React.ReactElement[] | React.ReactElement;
+  children: (
+    parentOpen: boolean,
+  ) => React.JSX.Element[] | React.JSX.Element | React.ReactElement[] | React.ReactElement;
   mode: "tutorial" | "overview";
 }
 

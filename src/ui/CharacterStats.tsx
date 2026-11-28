@@ -139,7 +139,7 @@ interface IMoneyModalProps {
 
 function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
   function convertMoneySourceTrackerToString(src: MoneySourceTracker): React.ReactElement {
-    const parts: [string, JSX.Element][] = [[`Total:`, <Money key="total" money={src.total} />]];
+    const parts: [string, React.JSX.Element][] = [[`Total:`, <Money key="total" money={src.total} />]];
     if (src.augmentations) {
       parts.push([`Augmentations:`, <Money key="aug" money={src.augmentations} />]);
     }

@@ -8,13 +8,13 @@ class BitNode {
   tagline: string;
 
   // Overview of the BitNode
-  description: JSX.Element;
+  description: React.JSX.Element;
 
   // SF description
-  sfDescription: JSX.Element;
+  sfDescription: React.JSX.Element;
 
   // Full detail of this BitNode. This property is a combination of description and sfDescription.
-  info: JSX.Element;
+  info: React.JSX.Element;
 
   // Name of BitNode
   name: string;
@@ -22,7 +22,7 @@ class BitNode {
   // BitNode number
   number: number;
 
-  constructor(n: number, name: string, tagline = "", description: JSX.Element, sfDescription: JSX.Element) {
+  constructor(n: number, name: string, tagline = "", description: React.JSX.Element, sfDescription: React.JSX.Element) {
     this.number = n;
     this.name = name;
     this.tagline = tagline;

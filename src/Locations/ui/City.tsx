@@ -118,7 +118,7 @@ function ASCIICity(props: IProps): React.ReactElement {
     return elems;
   };
 
-  const elems: JSX.Element[] = [];
+  const elems: React.JSX.Element[] = [];
   const lines = props.city.asciiArt.split("\n");
   let i = 0;
   for (const line of lines) {

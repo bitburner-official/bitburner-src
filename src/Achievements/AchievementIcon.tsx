@@ -12,7 +12,7 @@ interface IProps {
   size: string;
 }
 
-export function AchievementIcon({ achievement, unlocked, colorFilters, size }: IProps): JSX.Element {
+export function AchievementIcon({ achievement, unlocked, colorFilters, size }: IProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const mainColor = unlocked ? Settings.theme.primarydark : Settings.theme.secondarydark;
 

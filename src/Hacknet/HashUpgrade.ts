@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 import type { HacknetServerHashUpgrade } from "@nsdefs";
 
 /** Object representing an upgrade that can be purchased with hashes */

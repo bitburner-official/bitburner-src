@@ -61,7 +61,7 @@ export function StockTicker(props: IProps): React.ReactElement {
     place: () => false,
   });
 
-  function getBuyTransactionCostContent(): JSX.Element | null {
+  function getBuyTransactionCostContent() {
     const stock = props.stock;
     const qty: number = getQuantity();
     if (isNaN(qty)) {
@@ -85,7 +85,7 @@ export function StockTicker(props: IProps): React.ReactElement {
     return Math.round(parseFloat(qty));
   }
 
-  function getSellTransactionCostContent(): JSX.Element | null {
+  function getSellTransactionCostContent() {
     const stock = props.stock;
     const qty: number = getQuantity();
     if (isNaN(qty)) {

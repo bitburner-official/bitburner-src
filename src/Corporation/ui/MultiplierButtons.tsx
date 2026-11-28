@@ -15,7 +15,7 @@ interface IProps {
   setMultiplier: (mult: PositiveInteger | "MAX") => void;
 }
 
-export function MultiplierButtons({ selectedMultiplier, setMultiplier }: IProps): JSX.Element {
+export function MultiplierButtons({ selectedMultiplier, setMultiplier }: IProps) {
   return (
     <>
       {getRecordEntries<string, PositiveInteger | "MAX">(PurchaseMultipliers).map(([text, mult]) => (

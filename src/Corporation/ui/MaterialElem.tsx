@@ -52,7 +52,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   const purchaseButtonText = `Buy (${formatBigNumber(mat.buyAmount)})`;
 
   // Sell material button
-  let sellButtonText: JSX.Element;
+  let sellButtonText: React.JSX.Element;
   if (mat.desiredSellAmount) {
     if (typeof mat.desiredSellAmount === "string") {
       sellButtonText = (

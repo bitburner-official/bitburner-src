@@ -19,7 +19,7 @@ interface IProps {
   state: Infiltration;
 }
 
-function arrowPart(color: string, length: number): JSX.Element {
+function arrowPart(color: string, length: number) {
   let arrow = "";
   if (length <= 0) length = 0;
   else if (length > 13) length = 13;
@@ -36,7 +36,7 @@ function arrowPart(color: string, length: number): JSX.Element {
   );
 }
 
-function coloredArrow(difficulty: number): JSX.Element {
+function coloredArrow(difficulty: number) {
   const cappedDifficulty = Math.min(difficulty, MaxDifficultyForInfiltration);
   if (cappedDifficulty === 0) {
     return (
