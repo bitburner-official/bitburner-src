@@ -2,7 +2,7 @@ export const mkdirHelpText =
   `Bitburner has a "flat" filesystem where directories do not really exist. They are simply part of the file path.\n\n` +
   "Unlike with real-world CLI commands, you do not need to create a directory before working with files at that path.\n" +
   "For example: `mv bar.txt /foo/bar.txt` will move `bar.txt` to `/foo/bar.txt`.\n" +
-  "In the real world, you would need to create the `/foo` directory first, but you do not need to do that in Bitburner.\n\n" +
+  "In other environments, you would need to create the `/foo` directory first, but you do not need to do that in Bitburner.\n\n" +
   "Some commands, such as ls and cd, display and handle directories only for convenience.\n" +
   "For example, ls groups files by their paths to avoid cluttering the output.\n\n" +
   "The mkdir command exists only to display this help message; it does not do anything.";
