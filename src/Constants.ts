@@ -174,6 +174,7 @@ export const CONSTANTS = {
 - ELECTRON: Show confirmation dialog before leaving (#3230) (@catloversg)
 - Limit error log content to a number of lines without requiring experimental flags (#3229) (@catloversg)
 - Add option to skip many pop-ups on load (#3232) (@ficocelliguy)
+- Fix: ns.ui.openCodeEditor does not work while opening Script Editor page (#3254) (@catloversg)
 
 ### API
 
@@ -203,6 +204,7 @@ export const CONSTANTS = {
 - Log successful attempts of dnet.induceServerMigration() regardless of depth change (#3169) (@VashCowaii)
 - Create the ns.port namespace (#3184) (@NagaOuroboros)
 - Unify method naming across both Port APIs (#3226) (@NagaOuroboros)
+- Remove ns.isEmptyPort and ns.isFullPort (#3253) (@catloversg)
 
 ### MISC
 
@@ -252,6 +254,8 @@ export const CONSTANTS = {
 - Allow terminal input keydown errors to bubble up to global error handler (#3238) (@catloversg)
 - Improve error check and handling when server.serversOnNetwork contains invalid data (#3239) (@catloversg)
 - Remove accidental "$" in darknet literature file (#3245) (@catloversg)
+- Fix typo in Literatures.tsx (#3255) (@catloversg)
+- Update informative message of mkdir and add help text entry for this command (#3247) (@catloversg)
 
 ### DOCUMENTATION
 
@@ -283,6 +287,7 @@ export const CONSTANTS = {
 - Standardize darknet/darkweb terms, clarify dnet APIs, improve dnet main documentation (#3156) (@VashCowaii)
 - Remove unnecessary whitespace in TSDoc (#3217) (@catloversg)
 - Document MoneySource.darknet (#3234) (@catloversg)
+- Explain how to render HTML strings with ns.printRaw and ns.tprintRaw (#3248) (@catloversg)
 
 ### SPOILER CHANGES - UI
 
@@ -301,6 +306,7 @@ export const CONSTANTS = {
 - Fix: Augmentations page crashes after grafting an aug if player has not installed any augs (#3094) (@catloversg)
 - Update text of Church of the Machine God location (#3100) (@branchtheory)
 - Tweak label of Bladeburner Field Analysis multiplier (#3194) (@branchtheory)
+- Fix: Grafting UI crashes when there is no graftable aug (#3252) (@catloversg)
 
 ### SPOILER CHANGES - API
 
